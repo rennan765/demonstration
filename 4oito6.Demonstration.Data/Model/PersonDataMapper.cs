@@ -1,16 +1,17 @@
 ﻿using _4oito6.Demonstration.Domain.Model.Entities;
 using _4oito6.Demonstration.Domain.Model.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Data.Model
 {
-    public static class Mapper
+    public static class PersonDataMapper
     {
         private static Dictionary<int, Gender> _genders;
         private static Dictionary<int, PhoneType> _phoneTypes;
 
-        static Mapper()
+        static PersonDataMapper()
         {
             _genders = new Dictionary<int, Gender>
             {
@@ -90,7 +91,9 @@ namespace _4oito6.Demonstration.Data.Model
                         id: dto.Id,
                         name: dto.Name,
 
+                        email: dto.Email,
                         document: dto.Document,
+
                         gender: _genders[dto.Gender],
                         birthDate: dto.BirthDate,
 
@@ -99,6 +102,47 @@ namespace _4oito6.Demonstration.Data.Model
                         address: dto.Address?.ToAddress()
                     )
                 ).FirstOrDefault();
+        }
+
+        public static Person ToPerson(this PersonDto dto, AddressDto? addressDto, IEnumerable<PhoneDto> phoneDtos)
+        {
+            if (dto is null)
+            {
+                throw new ArgumentNullException(nameof(dto));
+            }
+
+            var phones = phoneDtos.ToDictionary(x => x.Id, x => x.ToPhone());
+            var address = addressDto?.ToAddress();
+
+            return new Person
+            (
+                id: dto.Id,
+                name: dto.Name,
+                email: dto.Email,
+
+                document: dto.Document,
+                gender: _genders[dto.Gender],
+                birthDate: dto.BirthDate,
+
+                phones: phones.Values,
+                mainPhone: phones[dto.MainPhoneId],
+                address: address
+            );
+        }
+
+        public static PersonDto ToPersonDto(this Person person)
+        {
+            return new PersonDto
+            {
+                AddressId = person.Address?.Id,
+                BirthDate = person.BirthDate,
+                Document = person.Document,
+                Id = person.Id,
+                Name = person.Name,
+                Gender = (int)person.Gender,
+                MainPhoneId = person.MainPhone.Id,
+                Email = person.Email
+            };
         }
     }
 }

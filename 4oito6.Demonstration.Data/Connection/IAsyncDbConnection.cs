@@ -25,6 +25,8 @@ namespace _4oito6.Demonstration.Data.Connection
 
         Task<IEnumerable<T>> QueryAsync<T>(CommandDefinition command);
 
+        Task<IEnumerable<TReturn>> QueryAsync<TFirst, TSecond, TThird, TReturn>(CommandDefinition command, Func<TFirst, TSecond, TThird, TReturn> map, string splitOn = "Id");
+
         Task<IEnumerable<dynamic>> QueryAsync(string sql, object parameters);
 
         Task<IEnumerable<dynamic>> QueryAsync(string sql, object parameters, IDbTransaction transaction);

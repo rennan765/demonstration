@@ -34,6 +34,9 @@ namespace _4oito6.Demonstration.Data.Connection
         public Task<IEnumerable<T>> QueryAsync<T>(CommandDefinition command)
             => _conn.QueryAsync<T>(command);
 
+        public Task<IEnumerable<TReturn>> QueryAsync<TFirst, TSecond, TThird, TReturn>(CommandDefinition command, Func<TFirst, TSecond, TThird, TReturn> map, string splitOn = "Id")
+            => _conn.QueryAsync(command, map, splitOn);
+
         public Task<IEnumerable<dynamic>> QueryAsync(string sql, object parameters)
             => _conn.QueryAsync(sql, parameters);
 
@@ -51,22 +54,30 @@ namespace _4oito6.Demonstration.Data.Connection
 
         public Task<int> InsertAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.InsertAsync<T>(entity, transaction);
+            return _conn.InsertAsync(entity, transaction);
         }
 
         public Task<bool> UpdateAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.UpdateAsync<T>(entity, transaction);
+            return _conn.UpdateAsync(entity, transaction);
         }
 
         public Task<bool> DeleteAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.DeleteAsync<T>(entity, transaction);
+            return _conn.DeleteAsync(entity, transaction);
         }
 
-        public IDbTransaction BeginTransaction() => _conn.BeginTransaction();
+        public IDbTransaction BeginTransaction()
+        {
+            Transaction = _conn.BeginTransaction();
+            return Transaction;
+        }
 
-        public IDbTransaction BeginTransaction(IsolationLevel level) => _conn.BeginTransaction(level);
+        public IDbTransaction BeginTransaction(IsolationLevel level)
+        {
+            Transaction = _conn.BeginTransaction(level);
+            return Transaction;
+        }
 
         public void ChangeDatabase(string databaseName)
         {

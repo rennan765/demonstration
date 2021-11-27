@@ -5,3 +5,4 @@
 *launchSettings.json
 *.csproj.user
 *.csproj.user
+/.editorconfig

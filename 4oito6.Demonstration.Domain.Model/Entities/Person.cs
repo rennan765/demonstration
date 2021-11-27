@@ -13,14 +13,16 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// Private constructor, used to encapsulate main properties
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
         /// <param name="birthDate"></param>
-        private Person(string name, string document, Gender gender, DateTime birthDate)
+        private Person(string name, string email, string document, Gender gender, DateTime birthDate)
         {
             _phones = new Dictionary<string, Phone>();
 
             Name = name;
+            Email = email;
             Document = document;
             Gender = gender;
             BirthDate = birthDate;
@@ -30,6 +32,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// Create constructor
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
         /// <param name="birthDate"></param>
@@ -37,12 +40,13 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public Person
         (
             string name,
+            string email,
             string document,
 
             Gender gender,
             DateTime birthDate,
             Address? address = null
-        ) : this(name, document, gender, birthDate)
+        ) : this(name, email, document, gender, birthDate)
         {
             if (address != null)
             {
@@ -54,6 +58,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// Create constructor (with phone info)
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
         /// <param name="birthDate"></param>
@@ -63,14 +68,16 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public Person
         (
             string name,
+            string email,
             string document,
+
             Gender gender,
             DateTime birthDate,
 
             IEnumerable<Phone> phones,
             Phone? mainPhone = null,
             Address? address = null
-        ) : this(name, document, gender, birthDate, address)
+        ) : this(name, email, document, gender, birthDate, address)
         {
             if (phones != null)
             {
@@ -88,6 +95,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
+        /// <param name="email"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
         /// <param name="birthDate"></param>
@@ -98,6 +106,8 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         (
             int id,
             string name,
+
+            string email,
             string document,
 
             Gender gender,
@@ -106,20 +116,21 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             IEnumerable<Phone> phones,
             Phone? mainPhone = null,
             Address? address = null
-        ) : this(name, document, gender, birthDate, phones, mainPhone, address)
+        ) : this(name, email, document, gender, birthDate, phones, mainPhone, address)
         {
             Id = id;
         }
 
         public int Id { get; private set; }
         public string Name { get; private set; }
+        public string Email { get; private set; }
         public string Document { get; private set; }
         public Gender Gender { get; private set; }
         public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
         public IEnumerable<Phone> Phones => _phones.Select(p => p.Value);
-        public Phone? MainPhone { get; private set; }
+        public Phone MainPhone { get; private set; }
 
         public void Attach(Address address)
         {
@@ -129,6 +140,11 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             }
 
             Address = address;
+        }
+
+        public void RemoveAddress()
+        {
+            Address = null;
         }
 
         public void Attach(Phone phone, bool isMainPhone = false)

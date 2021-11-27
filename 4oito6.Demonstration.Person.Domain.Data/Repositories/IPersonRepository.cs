@@ -7,6 +7,8 @@ namespace _4oito6.Demonstration.Person.Domain.Data.Repositories
 
     public interface IPersonRepository : IDisposable
     {
+        Task<Person> GetByIdAsync(int id);
+
         Task<Person> GetByEmailOrDocumentAsync(string email, string document);
 
         Task<Person> InsertAsync(Person person);
