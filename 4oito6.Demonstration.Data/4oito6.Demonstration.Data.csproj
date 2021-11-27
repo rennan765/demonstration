@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Domain.Data\4oito6.Demonstration.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Domain.Model\4oito6.Demonstration.Domain.Model.csproj" />
   </ItemGroup>
 
