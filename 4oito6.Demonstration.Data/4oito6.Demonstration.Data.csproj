@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>_4oito6.Demonstration.Data</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Domain.Model\4oito6.Demonstration.Domain.Model.csproj" />
+  </ItemGroup>
+
+</Project>

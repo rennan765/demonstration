@@ -15,13 +15,15 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="name"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
-        private Person(string name, string document, Gender gender)
+        /// <param name="birthDate"></param>
+        private Person(string name, string document, Gender gender, DateTime birthDate)
         {
             _phones = new Dictionary<string, Phone>();
 
             Name = name;
             Document = document;
             Gender = gender;
+            BirthDate = birthDate;
         }
 
         /// <summary>
@@ -30,14 +32,17 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="name"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
+        /// <param name="birthDate"></param>
         /// <param name="address"></param>
         public Person
         (
             string name,
             string document,
+
             Gender gender,
+            DateTime birthDate,
             Address? address = null
-        ) : this(name, document, gender)
+        ) : this(name, document, gender, birthDate)
         {
             if (address != null)
             {
@@ -51,6 +56,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="name"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
+        /// <param name="birthDate"></param>
         /// <param name="phones"></param>
         /// <param name="mainPhone"></param>
         /// <param name="address"></param>
@@ -59,11 +65,12 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             string name,
             string document,
             Gender gender,
+            DateTime birthDate,
 
             IEnumerable<Phone> phones,
             Phone? mainPhone = null,
             Address? address = null
-        ) : this(name, document, gender, address)
+        ) : this(name, document, gender, birthDate, address)
         {
             if (phones != null)
             {
@@ -83,6 +90,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="name"></param>
         /// <param name="document"></param>
         /// <param name="gender"></param>
+        /// <param name="birthDate"></param>
         /// <param name="phones"></param>
         /// <param name="mainPhone"></param>
         /// <param name="address"></param>
@@ -91,12 +99,14 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             int id,
             string name,
             string document,
+
             Gender gender,
+            DateTime birthDate,
 
             IEnumerable<Phone> phones,
             Phone? mainPhone = null,
             Address? address = null
-        ) : this(name, document, gender, phones, mainPhone, address)
+        ) : this(name, document, gender, birthDate, phones, mainPhone, address)
         {
             Id = id;
         }
@@ -105,6 +115,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public string Name { get; private set; }
         public string Document { get; private set; }
         public Gender Gender { get; private set; }
+        public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
         public IEnumerable<Phone> Phones => _phones.Select(p => p.Value);
