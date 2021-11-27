@@ -14,5 +14,6 @@ namespace _4oito6.Demonstration.Data.Model
         public string District { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        public string PostalCode { get; set; }
     }
 }

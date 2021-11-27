@@ -1,8 +1,10 @@
-﻿using System;
+﻿using _4oito6.Demonstration.Domain.Model.Entities.Base;
+using _4oito6.Demonstration.Domain.Model.Validators;
+using System;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
 {
-    public class Address : ICloneable
+    public class Address : EntityBase, ICloneable
     {
         /// <summary>
         /// Create constructor
@@ -13,7 +15,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="district"></param>
         /// <param name="city"></param>
         /// <param name="state"></param>
-        public Address(string street, string number, string complement, string district, string city, string state)
+        public Address(string street, string number, string complement, string district, string city, string state, string postalCode)
         {
             Street = street;
             Number = number;
@@ -21,6 +23,9 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             District = district;
             City = city;
             State = state;
+            PostalCode = postalCode.Replace("-", "");
+
+            Validate(this, new CreateAddressValidator());
         }
 
         /// <summary>
@@ -33,8 +38,8 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="district"></param>
         /// <param name="city"></param>
         /// <param name="state"></param>
-        public Address(int id, string street, string number, string complement, string district, string city, string state)
-            : this(street, number, complement, district, city, state)
+        public Address(int id, string street, string number, string complement, string district, string city, string state, string postalCode)
+            : this(street, number, complement, district, city, state, postalCode)
         {
             Id = id;
         }
@@ -46,10 +51,11 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public string District { get; private set; }
         public string City { get; private set; }
         public string State { get; private set; }
+        public string PostalCode { get; private set; }
 
         public object Clone()
         {
-            return new Address(Id, Street, Number, Complement, District, City, State);
+            return new Address(Id, Street, Number, Complement, District, City, State, PostalCode);
         }
     }
 }

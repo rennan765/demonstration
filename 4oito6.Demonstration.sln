@@ -17,17 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Common
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{312C1D97-69B0-4D6B-89A4-0A2205E98506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Domain.Data", "4oito6.Demonstration.Domain.Data\4oito6.Demonstration.Domain.Data.csproj", "{86041E64-353E-4870-A436-0CF1940643F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Domain.Data", "4oito6.Demonstration.Domain.Data\4oito6.Demonstration.Domain.Data.csproj", "{86041E64-353E-4870-A436-0CF1940643F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Person", "Person", "{F127B804-43DA-4065-99C7-18AA7CF72818}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{17FA4084-4E12-41C8-9404-C73CAC88939F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Person.Domain.Data", "4oito6.Demonstration.Person.Domain.Data\4oito6.Demonstration.Person.Domain.Data.csproj", "{E8594476-1574-4BE5-9B17-C42C48EF6F97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person.Domain.Data", "4oito6.Demonstration.Person.Domain.Data\4oito6.Demonstration.Person.Domain.Data.csproj", "{E8594476-1574-4BE5-9B17-C42C48EF6F97}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5CAD5E38-39CD-4E2E-A939-6AF0D3E8A3D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Person.Data", "4oito6.Demonstration.Person.Data\4oito6.Demonstration.Person.Data.csproj", "{60D07A15-1B45-42DC-9BFC-78BD95424E43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person.Data", "4oito6.Demonstration.Person.Data\4oito6.Demonstration.Person.Data.csproj", "{60D07A15-1B45-42DC-9BFC-78BD95424E43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3532BD6A-AE76-4409-A57E-778480DD2FDD}"
 	ProjectSection(SolutionItems) = preProject

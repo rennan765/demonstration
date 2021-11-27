@@ -9,7 +9,7 @@ namespace _4oito6.Demonstration.Data.Model
         public int Id { get; set; }
 
         public int Type { get; set; }
-        public int Code { get; set; }
-        public int Number { get; set; }
+        public string Code { get; set; }
+        public string Number { get; set; }
     }
 }

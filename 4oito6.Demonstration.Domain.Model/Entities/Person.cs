@@ -1,11 +1,13 @@
-﻿using _4oito6.Demonstration.Domain.Model.Enum;
+﻿using _4oito6.Demonstration.Domain.Model.Entities.Base;
+using _4oito6.Demonstration.Domain.Model.Enum;
+using _4oito6.Demonstration.Domain.Model.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
 {
-    public class Person
+    public class Person : EntityBase
     {
         private readonly Dictionary<string, Phone> _phones;
 
@@ -23,7 +25,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
             Name = name;
             Email = email;
-            Document = document;
+            Document = document.Replace("-", "").Replace(".", "");
             Gender = gender;
             BirthDate = birthDate;
         }
@@ -37,7 +39,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         /// <param name="gender"></param>
         /// <param name="birthDate"></param>
         /// <param name="address"></param>
-        public Person
+        private Person
         (
             string name,
             string email,
@@ -88,6 +90,8 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             {
                 Attach(mainPhone, isMainPhone: true);
             }
+
+            ValidateToCreate();
         }
 
         /// <summary>
@@ -182,5 +186,9 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 Attach(phone);
             }
         }
+
+        public bool ValidateToCreate() => Validate(this, new CreatePersonValidator());
+
+        public bool ValidateToUpdate() => Validate(this, new UpdatePersonValidator());
     }
 }

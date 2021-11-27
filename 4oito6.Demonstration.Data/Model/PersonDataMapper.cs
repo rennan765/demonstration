@@ -56,7 +56,9 @@ namespace _4oito6.Demonstration.Data.Model
 
                 district: dto.District,
                 city: dto.City,
-                state: dto.State
+
+                state: dto.State,
+                postalCode: dto.PostalCode
             );
         }
 
@@ -70,7 +72,8 @@ namespace _4oito6.Demonstration.Data.Model
                 City = address.City,
                 State = address.State,
                 Complement = address.Complement,
-                District = address.District
+                District = address.District,
+                PostalCode = address.PostalCode
             };
         }
 
