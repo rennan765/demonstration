@@ -6,7 +6,7 @@ namespace _4oito6.Demonstration.Data.Model
     public class AddressDto
     {
         [Key]
-        public int id { get; set; }
+        public int addressid { get; set; }
 
         public string street { get; set; }
         public string number { get; set; }

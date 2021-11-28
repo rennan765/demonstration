@@ -6,7 +6,7 @@ namespace _4oito6.Demonstration.Data.Model
     public class PhoneDto
     {
         [Key]
-        public int id { get; set; }
+        public int phoneid { get; set; }
 
         public int type { get; set; }
         public string code { get; set; }

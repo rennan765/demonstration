@@ -9,6 +9,8 @@ namespace _4oito6.Demonstration.Person.Domain.Data.Repositories
     {
         Task<Person> GetByIdAsync(int id);
 
+        Task<Person> GetByEmailAsync(string email);
+
         Task<Person> GetByEmailOrDocumentAsync(string email, string document);
 
         Task<Person> InsertAsync(Person person);

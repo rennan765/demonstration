@@ -21,6 +21,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
 
         public static string Get { get; private set; }
         public static string GetById { get; private set; }
+
+        public static string GetByEmail { get; private set; }
         public static string GetByEmailOrDocument { get; private set; }
 
         public static string GetPhonesByPersonId { get; private set; }
@@ -38,16 +40,19 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 {string.Join(",", addressProperties.Select(a => $"a.{a}"))},
                 {string.Join(",", phoneProperties.Select(ph => $"ph.{ph}"))}
             FROM tb_person p
-            LEFT JOIN tb_address a ON a.{nameof(AddressDto.id)} = p.{nameof(PersonDto.addressid)}
-            INNER JOIN tb_person_phone pp ON pp.{nameof(PersonPhoneDto.personid)} = p.{nameof(PersonDto.id)}
-            INNER JOIN tb_phone ph ON ph.{nameof(PhoneDto.id)} = pp.{nameof(PersonPhoneDto.phoneid)}
+            LEFT JOIN tb_address a ON a.{nameof(AddressDto.addressid)} = p.{nameof(PersonDto.addressid)}
+            INNER JOIN tb_person_phone pp ON pp.{nameof(PersonPhoneDto.personid)} = p.{nameof(PersonDto.personid)}
+            INNER JOIN tb_phone ph ON ph.{nameof(PhoneDto.phoneid)} = pp.{nameof(PersonPhoneDto.phoneid)}
             ";
 
             GetById = $@"{Get}
-            WHERE p.{nameof(PersonDto.id)} = @{nameof(PersonDto.id)}";
+            WHERE p.{nameof(PersonDto.personid)} = @{nameof(PersonDto.personid)}";
 
-            GetByEmailOrDocument = $@"{Get}
+            GetByEmail = $@"{Get}
             WHERE p.{nameof(PersonDto.email)} = @{nameof(PersonDto.email)}
+            ";
+
+            GetByEmailOrDocument = $@"{GetByEmail}
             OR p.{nameof(PersonDto.document)} = @{nameof(PersonDto.document)}
             ";
 
@@ -57,8 +62,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             FROM tb_phone ph
             WHERE EXISTS (SELECT 1
                           FROM tb_person_phone pp
-                          WHERE pp.{nameof(PersonPhoneDto.phoneid)} = ph.{nameof(PhoneDto.id)}
-                          AND pp.{nameof(PersonPhoneDto.personid)} = @{nameof(PersonDto.id)})
+                          WHERE pp.{nameof(PersonPhoneDto.phoneid)} = ph.{nameof(PhoneDto.phoneid)}
+                          AND pp.{nameof(PersonPhoneDto.personid)} = @{nameof(PersonDto.personid)})
             ";
 
             MaintainPersonPhone = $@"
@@ -74,7 +79,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
 
             WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) ({{0}})
             INSERT INTO tb_person_phone ({nameof(PersonPhoneDto.personid)}, {nameof(PersonPhoneDto.phoneid)})
-            SELECT @({nameof(PersonPhoneDto.personid)}, p.({nameof(PhoneDto.id)}
+            SELECT @({nameof(PersonPhoneDto.personid)}, p.({nameof(PhoneDto.phoneid)}
             FROM tb_phone p
             WHERE NOT EXISTS (SELECT 1
                               FROM Phones TEMP
@@ -86,8 +91,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             DELETE FROM tb_person_phone pp1
             WHERE NOT EXISTS (SELECT 1
                               FROM tb_person_phone pp2
-                              INNER JOIN tb_phone p ON p.{nameof(PhoneDto.id)} = pp2.{nameof(PersonPhoneDto.phoneid)}
-                              WHERE pp2.{nameof(PersonPhoneDto.id)} = pp1.{nameof(PersonPhoneDto.id)}
+                              INNER JOIN tb_phone p ON p.{nameof(PhoneDto.phoneid)} = pp2.{nameof(PersonPhoneDto.phoneid)}
+                              WHERE pp2.{nameof(PersonPhoneDto.personphoneid)} = pp1.{nameof(PersonPhoneDto.personphoneid)}
                               AND EXISTS (SELECT 1
                                           FROM Phones TEMP
                                           WHERE p.{nameof(PhoneDto.type)} = TEMP.{nameof(PhoneDto.type)}
@@ -112,7 +117,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 commandText: GetById,
                 parameters: new Dictionary<string, object>
                 {
-                    { $"{nameof(PersonDto.id)}", id }
+                    { $"{nameof(PersonDto.personid)}", id }
                 },
                 transaction: _conn.Transaction
             );
@@ -122,7 +127,31 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 (
                     command: command,
                     map: PersonDataMapper.MapPersonDtoProperties,
-                    splitOn: $"{nameof(PersonDto.id)}, {nameof(PersonDto.addressid)}, {nameof(PersonDto.mainphoneid)}"
+                    splitOn: $"{nameof(PersonDto.personid)}, {nameof(AddressDto.addressid)}, {nameof(PhoneDto.phoneid)}"
+                )
+                .ConfigureAwait(false))?.ToPerson();
+        }
+
+        public async Task<Person> GetByEmailAsync(string email)
+        {
+            _handler.NotifyDataOperation(DataOperation.RelationalDatabaseRead);
+
+            var command = new CommandDefinition
+            (
+                commandText: GetByEmail,
+                parameters: new Dictionary<string, object>
+                {
+                    { $"{nameof(PersonDto.email)}", email }
+                },
+                transaction: _conn.Transaction
+            );
+
+            return (await _conn
+                .QueryAsync<CompletePersonDto, AddressDto, PhoneDto, CompletePersonDto>
+                (
+                    command: command,
+                    map: PersonDataMapper.MapPersonDtoProperties,
+                    splitOn: $"{nameof(PersonDto.personid)}, {nameof(AddressDto.addressid)}, {nameof(PhoneDto.phoneid)}"
                 )
                 .ConfigureAwait(false))?.ToPerson();
         }
@@ -147,7 +176,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 (
                     command: command,
                     map: PersonDataMapper.MapPersonDtoProperties,
-                    splitOn: $"{nameof(PersonDto.id)}, {nameof(PersonDto.addressid)}, {nameof(PersonDto.mainphoneid)}"
+                    splitOn: $"{nameof(PersonDto.personid)}, {nameof(AddressDto.addressid)}, {nameof(PhoneDto.phoneid)}"
                 )
                 .ConfigureAwait(false))?.ToPerson();
         }
@@ -162,21 +191,21 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             if (person.Address != null)
             {
                 addressDto = person.Address.ToAddress();
-                addressDto.id = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
-                personDto.addressid = addressDto.id;
+                addressDto.addressid = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
+                personDto.addressid = addressDto.addressid;
             }
 
             //inserting phones
             var phoneDtos = person.Phones.ToDictionary(x => x.ToString(), x => x.ToPhoneDto());
             foreach (var dto in phoneDtos)
             {
-                dto.Value.id = await _conn.InsertAsync(dto.Value, _conn.Transaction).ConfigureAwait(false);
+                dto.Value.phoneid = await _conn.InsertAsync(dto.Value, _conn.Transaction).ConfigureAwait(false);
             }
 
-            personDto.mainphoneid = phoneDtos[person.MainPhone.ToString()].id;
+            personDto.mainphoneid = phoneDtos[person.MainPhone.ToString()].phoneid;
 
             //inserting person:
-            personDto.id = await _conn.InsertAsync(personDto, _conn.Transaction).ConfigureAwait(false);
+            personDto.personid = await _conn.InsertAsync(personDto, _conn.Transaction).ConfigureAwait(false);
 
             //inserting phone join
             foreach (var phoneDto in phoneDtos.Values)
@@ -184,8 +213,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 await _conn
                     .InsertAsync(new PersonPhoneDto
                     {
-                        personid = personDto.id,
-                        phoneid = phoneDto.id
+                        personid = personDto.personid,
+                        phoneid = phoneDto.phoneid
                     }, _conn.Transaction)
                     .ConfigureAwait(false);
             }
@@ -203,8 +232,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             if (person.Address != null)
             {
                 addressDto = person.Address.ToAddress();
-                addressDto.id = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
-                personDto.addressid = addressDto.id;
+                addressDto.addressid = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
+                personDto.addressid = addressDto.addressid;
             }
 
             //maintain phones:
@@ -228,7 +257,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 i++;
             }
 
-            parameters.Add($"@{nameof(PersonPhoneDto.personid)}", personDto.id);
+            parameters.Add($"@{nameof(PersonPhoneDto.personid)}", personDto.personid);
 
             var command = new CommandDefinition
             (
@@ -241,7 +270,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
 
             parameters = new Dictionary<string, object>
             {
-                { $"@{nameof(PersonDto.id)})", personDto.id }
+                { $"@{nameof(PersonDto.personid)})", personDto.personid }
             };
 
             command = new CommandDefinition
@@ -255,7 +284,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                 .ToDictionary(x => $"{x.type}|{x.code}|{x.number}");
 
             var mainPhoneDto = person.MainPhone.ToPhoneDto();
-            personDto.mainphoneid = phoneDtos[$"{mainPhoneDto.type}|{mainPhoneDto.code}|{mainPhoneDto.number}"].id;
+            personDto.mainphoneid = phoneDtos[$"{mainPhoneDto.type}|{mainPhoneDto.code}|{mainPhoneDto.number}"].phoneid;
 
             //updating person:
             await _conn.UpdateAsync(personDto, _conn.Transaction).ConfigureAwait(false);

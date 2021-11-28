@@ -1,11 +1,18 @@
 ﻿using _4oito6.Demonstration.Application.Interfaces;
 using _4oito6.Demonstration.Application.Model;
+using _4oito6.Demonstration.Config.Model;
 using _4oito6.Demonstration.Person.Application.Interfaces;
 using _4oito6.Demonstration.Person.Application.Model.Person;
 using _4oito6.Demonstration.Person.EntryPoint.Controllers.Base;
+using _4oito6.Demonstration.Person.EntryPoint.IoC.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
 {
@@ -13,12 +20,51 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
     [Route("person")]
     public class PersonController : MainController
     {
+        private readonly TokenConfig _tokenConfig;
         private readonly IPersonAppServices _appServices;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PersonController(IPersonAppServices appServices)
+        public PersonController(IPersonAppServices appServices, IHttpContextAccessor httpContextAccessor, IPersonConfig config)
             : base(new IAppServiceBase[] { appServices })
         {
             _appServices = appServices ?? throw new ArgumentNullException(nameof(appServices));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _tokenConfig = config?.TokenConfig ?? throw new ArgumentNullException(nameof(config.TokenConfig));
+        }
+
+        [NonAction]
+        public object GenerateToken(PersonResponse model)
+        {
+            var createDate = DateTime.UtcNow;
+            var expirationDate = createDate + TimeSpan.FromSeconds(_tokenConfig.TokenTime);
+
+            var identity = new ClaimsIdentity
+            (
+                new GenericIdentity(model.Id.ToString(), "Id"),
+                new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+                    new Claim(typeof(PersonResponse).ToString(), JsonConvert.SerializeObject(model))
+                }
+            );
+
+            _httpContextAccessor.HttpContext.User.AddIdentity(identity);
+
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.CreateToken
+            (
+                new SecurityTokenDescriptor
+                {
+                    Issuer = _tokenConfig.Issuer,
+                    Audience = _tokenConfig.Audience,
+                    SigningCredentials = _tokenConfig.SigningCredentials,
+                    Subject = identity,
+                    NotBefore = createDate,
+                    Expires = expirationDate
+                }
+            );
+
+            return handler.WriteToken(securityToken);
         }
 
         /// <summary>
@@ -35,6 +81,30 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
         {
             var response = await _appServices.CreateAsync(request).ConfigureAwait(false);
             return Result(response);
+        }
+
+        /// <summary>
+        /// Log using an e-mail
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>JWT token</returns>
+        [ProducesResponseType(typeof(PersonResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<Notification>), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] string email)
+        {
+            var response = await _appServices
+                .GetByEmailAsync(email)
+                .ConfigureAwait(false);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(GenerateToken(response));
         }
 
         /// <summary>

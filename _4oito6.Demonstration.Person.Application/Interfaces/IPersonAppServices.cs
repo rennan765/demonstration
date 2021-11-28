@@ -6,6 +6,8 @@ namespace _4oito6.Demonstration.Person.Application.Interfaces
 {
     public interface IPersonAppServices : IAppServiceBase
     {
+        Task<PersonResponse> GetByEmailAsync(string email);
+
         Task<PersonResponse> GetByIdAsync(int id);
 
         Task<PersonResponse> CreateAsync(PersonRequest request);

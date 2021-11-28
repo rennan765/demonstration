@@ -6,7 +6,7 @@ namespace _4oito6.Demonstration.Data.Model
     public class PersonPhoneDto
     {
         [Key]
-        public long id { get; set; }
+        public long personphoneid { get; set; }
 
         public int personid { get; set; }
         public int phoneid { get; set; }

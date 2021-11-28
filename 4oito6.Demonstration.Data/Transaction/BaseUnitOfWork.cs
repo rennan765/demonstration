@@ -40,7 +40,7 @@ namespace _4oito6.Demonstration.Data.Transaction
 
         public void NotifyDataOperation(DataOperation dataOperation)
         {
-            if (_connections.ContainsKey(dataOperation.DataSource))
+            if (_connections.ContainsKey(dataOperation.DataSource) && _connections[dataOperation.DataSource].State == ConnectionState.Closed)
             {
                 _connections[dataOperation.DataSource].Open();
             }

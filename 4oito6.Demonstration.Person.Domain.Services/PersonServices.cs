@@ -43,6 +43,9 @@ namespace _4oito6.Demonstration.Person.Domain.Services
             return await _repoRoot.Person.InsertAsync(person).ConfigureAwait(false);
         }
 
+        public Task<Person> GetByEmailAsync(string email) 
+            => _repoRoot.Person.GetByEmailAsync(email);
+
         public Task<Person> GetByIdAsync(int id)
             => _repoRoot.Person.GetByIdAsync(id);
 

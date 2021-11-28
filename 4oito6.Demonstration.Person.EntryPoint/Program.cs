@@ -36,6 +36,7 @@ builder.Services.AddControllers(config =>
 });
 
 builder.Services.AddSingleton<IConfiguration>(sp => builder.Configuration);
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddPersonApi();
 builder.Services.AddSwagger();

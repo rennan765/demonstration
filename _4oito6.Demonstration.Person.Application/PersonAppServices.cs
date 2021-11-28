@@ -49,6 +49,13 @@ namespace _4oito6.Demonstration.Person.Application
             return person?.ToPersonResponse();
         }
 
+        public async Task<PersonResponse> GetByEmailAsync(string email)
+        {
+            var person = await _services.GetByEmailAsync(email).ConfigureAwait(false);
+            _uow.CloseConnections();
+            return person?.ToPersonResponse();
+        }
+
         public async Task<PersonResponse> GetByIdAsync(int id)
         {
             var person = await _services.GetByIdAsync(id).ConfigureAwait(false);

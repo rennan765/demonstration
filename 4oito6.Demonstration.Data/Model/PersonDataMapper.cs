@@ -30,7 +30,7 @@ namespace _4oito6.Demonstration.Data.Model
 
         public static Phone ToPhone(this PhoneDto dto)
         {
-            return new Phone(dto.id, _phoneTypes[dto.type], dto.code, dto.number);
+            return new Phone(dto.phoneid, _phoneTypes[dto.type], dto.code, dto.number);
         }
 
         public static PhoneDto ToPhoneDto(this Phone phone)
@@ -39,7 +39,7 @@ namespace _4oito6.Demonstration.Data.Model
             {
                 code = phone.Code,
                 number = phone.Number,
-                id = phone.Id,
+                phoneid = phone.Id,
                 type = (int)phone.Type
             };
         }
@@ -48,7 +48,7 @@ namespace _4oito6.Demonstration.Data.Model
         {
             return new Address
             (
-                id: dto.id,
+                id: dto.addressid,
                 street: dto.street,
 
                 number: dto.number,
@@ -66,7 +66,7 @@ namespace _4oito6.Demonstration.Data.Model
         {
             return new AddressDto
             {
-                id = address.Id,
+                addressid = address.Id,
                 street = address.Street,
                 number = address.Number,
                 city = address.City,
@@ -86,12 +86,12 @@ namespace _4oito6.Demonstration.Data.Model
 
         public static Person ToPerson(this IEnumerable<CompletePersonDto> dtos)
         {
-            return dtos.GroupBy(dto => dto.id).Select(g => g.First())
+            return dtos.GroupBy(dto => dto.personid).Select(g => g.First())
                 .Select
                 (
                     dto => new Person
                     (
-                        id: dto.id,
+                        id: dto.personid,
                         name: dto.name,
 
                         email: dto.email,
@@ -101,7 +101,7 @@ namespace _4oito6.Demonstration.Data.Model
                         birthDate: dto.birthdate,
 
                         phones: dtos.Select(d => d.Phone.ToPhone()).ToList(),
-                        mainPhone: dtos.Select(d => d.Phone).FirstOrDefault(d => d.id == dto.mainphoneid).ToPhone(),
+                        mainPhone: dtos.Select(d => d.Phone).FirstOrDefault(d => d.phoneid == dto.mainphoneid).ToPhone(),
                         address: dto.Address?.ToAddress()
                     )
                 ).FirstOrDefault();
@@ -114,12 +114,12 @@ namespace _4oito6.Demonstration.Data.Model
                 throw new ArgumentNullException(nameof(dto));
             }
 
-            var phones = phoneDtos.ToDictionary(x => x.id, x => x.ToPhone());
+            var phones = phoneDtos.ToDictionary(x => x.phoneid, x => x.ToPhone());
             var address = addressDto?.ToAddress();
 
             return new Person
             (
-                id: dto.id,
+                id: dto.personid,
                 name: dto.name,
                 email: dto.email,
 
@@ -140,7 +140,7 @@ namespace _4oito6.Demonstration.Data.Model
                 addressid = person.Address?.Id,
                 birthdate = person.BirthDate,
                 document = person.Document,
-                id = person.Id,
+                personid = person.Id,
                 name = person.Name,
                 gender = (int)person.Gender,
                 mainphoneid = person.MainPhone.Id,

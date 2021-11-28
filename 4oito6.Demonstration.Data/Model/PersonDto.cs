@@ -7,7 +7,7 @@ namespace _4oito6.Demonstration.Data.Model
     public class PersonDto
     {
         [Key]
-        public int id { get; set; }
+        public int personid { get; set; }
 
         public string name { get; set; }
         public string document { get; set; }

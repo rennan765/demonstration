@@ -19,10 +19,10 @@ namespace _4oito6.Demonstration.Config.Model
             );
         }
 
-        public string Issuer { get; set; }
-        public string Audience { get; set; }
-        public string SecretKey { get; set; }
-        public int TokenTime { get; set; }
+        public string Issuer { get; private set; }
+        public string Audience { get; private set; }
+        private string SecretKey { get; set; }
+        public int TokenTime { get; private set; }
         public SigningCredentials SigningCredentials { get; private set; }
     }
 }
