@@ -17,9 +17,11 @@ namespace _4oito6.Demonstration.Application
         protected AppServiceBase(ILog log, IEnumerable<IDisposable> composition)
             : base(composition)
         {
-            IsValid = true;
             _notifications = new List<Notification>();
             Log = log ?? throw new ArgumentNullException(nameof(log));
+
+            IsValid = true;
+            HttpStatusCode = HttpStatusCode.OK;
         }
 
         public IEnumerable<Notification> Notifications => _notifications;
