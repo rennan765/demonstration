@@ -25,8 +25,6 @@ builder.Services.AddLogging();
 builder.Services.AddSingleton<ILoggerFactory, LoggerFactory>();
 builder.Services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
-builder.Services.AddAuthentication();
-
 builder.Services.AddControllers(config =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -41,6 +39,7 @@ builder.Services.AddSingleton<IConfiguration>(sp => builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddPersonApi();
 builder.Services.AddSwagger();
+builder.Services.AddJwtAuthentication();
 
 var app = builder.Build();
 

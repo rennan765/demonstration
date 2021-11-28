@@ -11,6 +11,8 @@ namespace _4oito6.Demonstration.Config
 
         SwaggerConfig SwaggerConfig { get; }
 
+        TokenConfig TokenConfig { get; }
+
         Task<string> GetRelationalDatabaseConnectionString();
     }
 }

@@ -10,6 +10,7 @@ namespace _4oito6.Demonstration.Config
     {
         private readonly IConfiguration _configuration;
         private SwaggerConfig _swaggerConfig;
+        private TokenConfig _tokenConfig;
 
         public CommonConfig(IConfiguration configuration)
         {
@@ -31,6 +32,26 @@ namespace _4oito6.Demonstration.Config
                 }
 
                 return _swaggerConfig;
+            }
+        }
+
+        public TokenConfig TokenConfig
+        {
+            get
+            {
+                if (_tokenConfig is null)
+                {
+                    _tokenConfig = new TokenConfig
+                    (
+                        issuer: Environment.GetEnvironmentVariable("Issuer"),
+                        audience: Environment.GetEnvironmentVariable("Audience"),
+
+                        secretKey: Environment.GetEnvironmentVariable("SecretKey"),
+                        tokenTime: Convert.ToInt32(Environment.GetEnvironmentVariable("TokenTime"))
+                    );
+                }
+
+                return _tokenConfig;
             }
         }
 

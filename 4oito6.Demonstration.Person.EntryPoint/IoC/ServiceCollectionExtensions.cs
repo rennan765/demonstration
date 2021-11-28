@@ -9,6 +9,8 @@ using _4oito6.Demonstration.Person.Domain.Services;
 using _4oito6.Demonstration.Person.Domain.Services.Interfaces;
 using _4oito6.Demonstration.Person.EntryPoint.Filters;
 using _4oito6.Demonstration.Person.EntryPoint.IoC.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -118,6 +120,61 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        {
+            var config = services.BuildServiceProvider().GetService<IPersonConfig>().TokenConfig;
+            if (config is null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            services.AddAuthentication
+            (
+                authOptions =>
+                {
+                    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+            )
+            .AddJwtBearer
+            (
+                bearerOptions =>
+                {
+                    var paramsValidation = bearerOptions.TokenValidationParameters;
+
+                    paramsValidation.IssuerSigningKey = config.SigningCredentials.Key;
+                    paramsValidation.ValidAudience = config.Audience;
+                    paramsValidation.ValidIssuer = config.Issuer;
+
+                    // Valida a assinatura de um token recebido
+                    paramsValidation.ValidateIssuerSigningKey = true;
+
+                    // Verifica se um token recebido ainda é válido
+                    paramsValidation.ValidateLifetime = true;
+
+                    // Tempo de tolerância para a expiração de um token (utilizado caso haja problemas de sincronismo
+                    //de horário entre diferentes computadores envolvidos no processo de comunicação)
+                    paramsValidation.ClockSkew = TimeSpan.Zero;
+                }
+            );
+
+            services.AddAuthorization
+            (
+                auth =>
+                {
+                    auth.AddPolicy
+                    (
+                        "Bearer",
+                        new AuthorizationPolicyBuilder()
+                            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                            .RequireAuthenticatedUser().Build()
+                    );
+                }
+            );
 
             return services;
         }
