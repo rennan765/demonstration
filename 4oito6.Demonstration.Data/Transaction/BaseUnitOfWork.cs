@@ -89,9 +89,10 @@ namespace _4oito6.Demonstration.Data.Transaction
             {
                 if (disposing)
                 {
+                    CloseConnections();
+
                     foreach (var transaction in _transactions.Values)
                     {
-                        transaction.Rollback();
                         transaction.Dispose();
                     }
 

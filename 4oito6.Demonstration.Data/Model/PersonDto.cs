@@ -7,14 +7,14 @@ namespace _4oito6.Demonstration.Data.Model
     public class PersonDto
     {
         [Key]
-        public int Id { get; set; }
+        public int id { get; set; }
 
-        public string Name { get; set; }
-        public string Document { get; set; }
-        public string Email { get; set; }
-        public int Gender { get; set; }
-        public int? AddressId { get; set; }
-        public int MainPhoneId { get; set; }
-        public DateTime BirthDate { get; set; }
+        public string name { get; set; }
+        public string document { get; set; }
+        public string email { get; set; }
+        public int gender { get; set; }
+        public int? addressid { get; set; }
+        public int mainphoneid { get; set; }
+        public DateTime birthdate { get; set; }
     }
 }

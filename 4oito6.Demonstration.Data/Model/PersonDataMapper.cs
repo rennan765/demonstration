@@ -30,17 +30,17 @@ namespace _4oito6.Demonstration.Data.Model
 
         public static Phone ToPhone(this PhoneDto dto)
         {
-            return new Phone(dto.Id, _phoneTypes[dto.Type], dto.Code, dto.Number);
+            return new Phone(dto.id, _phoneTypes[dto.type], dto.code, dto.number);
         }
 
         public static PhoneDto ToPhoneDto(this Phone phone)
         {
             return new PhoneDto
             {
-                Code = phone.Code,
-                Number = phone.Number,
-                Id = phone.Id,
-                Type = (int)phone.Type
+                code = phone.Code,
+                number = phone.Number,
+                id = phone.Id,
+                type = (int)phone.Type
             };
         }
 
@@ -48,17 +48,17 @@ namespace _4oito6.Demonstration.Data.Model
         {
             return new Address
             (
-                id: dto.Id,
-                street: dto.Street,
+                id: dto.id,
+                street: dto.street,
 
-                number: dto.Number,
-                complement: dto.Complement,
+                number: dto.number,
+                complement: dto.complement,
 
-                district: dto.District,
-                city: dto.City,
+                district: dto.district,
+                city: dto.city,
 
-                state: dto.State,
-                postalCode: dto.PostalCode
+                state: dto.state,
+                postalCode: dto.postalcode
             );
         }
 
@@ -66,14 +66,14 @@ namespace _4oito6.Demonstration.Data.Model
         {
             return new AddressDto
             {
-                Id = address.Id,
-                Street = address.Street,
-                Number = address.Number,
-                City = address.City,
-                State = address.State,
-                Complement = address.Complement,
-                District = address.District,
-                PostalCode = address.PostalCode
+                id = address.Id,
+                street = address.Street,
+                number = address.Number,
+                city = address.City,
+                state = address.State,
+                complement = address.Complement,
+                district = address.District,
+                postalcode = address.PostalCode
             };
         }
 
@@ -86,22 +86,22 @@ namespace _4oito6.Demonstration.Data.Model
 
         public static Person ToPerson(this IEnumerable<CompletePersonDto> dtos)
         {
-            return dtos.GroupBy(dto => dto.Id).Select(g => g.First())
+            return dtos.GroupBy(dto => dto.id).Select(g => g.First())
                 .Select
                 (
                     dto => new Person
                     (
-                        id: dto.Id,
-                        name: dto.Name,
+                        id: dto.id,
+                        name: dto.name,
 
-                        email: dto.Email,
-                        document: dto.Document,
+                        email: dto.email,
+                        document: dto.document,
 
-                        gender: _genders[dto.Gender],
-                        birthDate: dto.BirthDate,
+                        gender: _genders[dto.gender],
+                        birthDate: dto.birthdate,
 
                         phones: dtos.Select(d => d.Phone.ToPhone()).ToList(),
-                        mainPhone: dtos.Select(d => d.Phone).FirstOrDefault(d => d.Id == dto.MainPhoneId).ToPhone(),
+                        mainPhone: dtos.Select(d => d.Phone).FirstOrDefault(d => d.id == dto.mainphoneid).ToPhone(),
                         address: dto.Address?.ToAddress()
                     )
                 ).FirstOrDefault();
@@ -114,21 +114,21 @@ namespace _4oito6.Demonstration.Data.Model
                 throw new ArgumentNullException(nameof(dto));
             }
 
-            var phones = phoneDtos.ToDictionary(x => x.Id, x => x.ToPhone());
+            var phones = phoneDtos.ToDictionary(x => x.id, x => x.ToPhone());
             var address = addressDto?.ToAddress();
 
             return new Person
             (
-                id: dto.Id,
-                name: dto.Name,
-                email: dto.Email,
+                id: dto.id,
+                name: dto.name,
+                email: dto.email,
 
-                document: dto.Document,
-                gender: _genders[dto.Gender],
-                birthDate: dto.BirthDate,
+                document: dto.document,
+                gender: _genders[dto.gender],
+                birthDate: dto.birthdate,
 
                 phones: phones.Values,
-                mainPhone: phones[dto.MainPhoneId],
+                mainPhone: phones[dto.mainphoneid],
                 address: address
             );
         }
@@ -137,14 +137,14 @@ namespace _4oito6.Demonstration.Data.Model
         {
             return new PersonDto
             {
-                AddressId = person.Address?.Id,
-                BirthDate = person.BirthDate,
-                Document = person.Document,
-                Id = person.Id,
-                Name = person.Name,
-                Gender = (int)person.Gender,
-                MainPhoneId = person.MainPhone.Id,
-                Email = person.Email
+                addressid = person.Address?.Id,
+                birthdate = person.BirthDate,
+                document = person.Document,
+                id = person.Id,
+                name = person.Name,
+                gender = (int)person.Gender,
+                mainphoneid = person.MainPhone.Id,
+                email = person.Email
             };
         }
     }
