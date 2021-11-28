@@ -9,6 +9,8 @@ using _4oito6.Demonstration.Person.Domain.Services;
 using _4oito6.Demonstration.Person.Domain.Services.Interfaces;
 using _4oito6.Demonstration.Person.EntryPoint.Filters;
 using _4oito6.Demonstration.Person.EntryPoint.IoC.Config;
+using Amazon;
+using Amazon.SecretsManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -19,6 +21,21 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddAwsDependencies(this IServiceCollection services)
+        {
+            services.AddSingleton<IAmazonSecretsManager>
+            (
+                sp => new AmazonSecretsManagerClient
+                (
+                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
+                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
+                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
+                )
+            );
+
+            return services;
+        }
+
         public static IServiceCollection AddPersonApi(this IServiceCollection services)
         {
             // add dependencies:

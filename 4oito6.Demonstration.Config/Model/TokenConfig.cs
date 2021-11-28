@@ -5,6 +5,11 @@ namespace _4oito6.Demonstration.Config.Model
 {
     public class TokenConfig
     {
+        protected TokenConfig()
+        {
+
+        }
+
         public TokenConfig(string issuer, string audience, string secretKey, int tokenTime)
         {
             Issuer = issuer;
