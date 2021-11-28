@@ -2,7 +2,7 @@
 using _4oito6.Demonstration.Application.Model;
 using _4oito6.Demonstration.Commons;
 using _4oito6.Demonstration.Domain.Model.Entities.Base;
-using log4net;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +14,11 @@ namespace _4oito6.Demonstration.Application
     {
         private readonly List<Notification> _notifications;
 
-        protected AppServiceBase(ILog log, IEnumerable<IDisposable> composition)
+        protected AppServiceBase(ILogger logger, IEnumerable<IDisposable> composition)
             : base(composition)
         {
             _notifications = new List<Notification>();
-            Log = log ?? throw new ArgumentNullException(nameof(log));
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             IsValid = true;
             HttpStatusCode = HttpStatusCode.OK;
@@ -26,7 +26,7 @@ namespace _4oito6.Demonstration.Application
 
         public IEnumerable<Notification> Notifications => _notifications;
 
-        protected ILog Log { get; private set; }
+        protected ILogger Logger { get; private set; }
 
         public HttpStatusCode HttpStatusCode { get; private set; }
 
@@ -37,7 +37,7 @@ namespace _4oito6.Demonstration.Application
             HttpStatusCode = HttpStatusCode.InternalServerError;
             _notifications.Add(new Notification("HttpStatusCode", HttpStatusCode.InternalServerError.ToString()));
             IsValid = false;
-            Log.Error(ex.ToString());
+            Logger.LogError(ex.ToString());
         }
 
         protected void Notify(EntityBase entity)

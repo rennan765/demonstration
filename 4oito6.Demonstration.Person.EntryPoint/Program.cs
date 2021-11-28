@@ -21,6 +21,10 @@ builder.Services.Configure<IISServerOptions>(options =>
     options.AllowSynchronousIO = true;
 });
 
+builder.Services.AddLogging();
+builder.Services.AddSingleton<ILoggerFactory, LoggerFactory>();
+builder.Services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+
 builder.Services.AddControllers(config =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -31,6 +35,7 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
+builder.Services.AddSingleton<IConfiguration>(sp => builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddPersonApi();
 builder.Services.AddSwagger();

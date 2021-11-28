@@ -3,7 +3,7 @@ using _4oito6.Demonstration.Person.Application.Interfaces;
 using _4oito6.Demonstration.Person.Application.Model.Person;
 using _4oito6.Demonstration.Person.Domain.Data.Transaction;
 using _4oito6.Demonstration.Person.Domain.Services.Interfaces;
-using log4net;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -14,8 +14,8 @@ namespace _4oito6.Demonstration.Person.Application
         private readonly IPersonServices _services;
         private readonly IPersonUnitOfWork _uow;
 
-        public PersonAppServices(IPersonServices services, IPersonUnitOfWork uow, ILog log)
-            : base(log, new IDisposable[] { services, uow })
+        public PersonAppServices(IPersonServices services, IPersonUnitOfWork uow, ILogger<PersonAppServices> logger)
+            : base(logger, new IDisposable[] { services, uow })
         {
             _services = services ?? throw new ArgumentNullException(nameof(services));
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));

@@ -9,7 +9,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Middleware
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger logger)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -24,7 +24,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Middleware
 #if DEBUG
             message = ex.Message;
 #else
-            message = "Internal Server Error";
+            message = HttpStatusCode.InternalServerError.ToString();
 #endif
 
             using var writer = new StreamWriter(context.Response.Body, Encoding.UTF8, 2048, true);
