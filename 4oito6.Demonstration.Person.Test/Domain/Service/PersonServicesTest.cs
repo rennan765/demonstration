@@ -32,6 +32,27 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                 .ConfigureAwait(false);
         }
 
+        [Fact(DisplayName = "CreateAsync_Conflict")]
+        public async Task CreateAsync_Conflict()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var services = mocker.CreateInstance<PersonServices>();
+            var person = PersonTestCases.GetPersons(1).FirstOrDefault();
+
+            mocker.GetMock<IPersonRepositoryRoot>()
+                .Setup(r => r.Person.GetByEmailOrDocumentAsync(person.Email, person.Document))
+                .ReturnsAsync((Person)person.Clone())
+                .Verifiable();
+
+            //act:
+            var result = await services.CreateAsync(person).ConfigureAwait(false);
+
+            //assert:
+            result.IsValid.Should().BeFalse();
+            mocker.Verify();
+        }
+
         [Fact(DisplayName = "CreateAsync_Success")]
         public async Task CreateAsync_Success()
         {
