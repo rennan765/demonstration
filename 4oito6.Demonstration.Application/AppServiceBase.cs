@@ -50,6 +50,7 @@ namespace _4oito6.Demonstration.Application
             if (!entity.IsValid)
             {
                 IsValid = false;
+                HttpStatusCode = HttpStatusCode.BadRequest;
 
                 _notifications.AddRange(entity.ValidationResults.
                     SelectMany(r => r.Errors)

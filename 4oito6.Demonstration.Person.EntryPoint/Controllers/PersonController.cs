@@ -28,7 +28,6 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
         /// <returns></returns>
         [ProducesResponseType(typeof(PersonResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<Notification>), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [AllowAnonymous]
         [HttpPost]

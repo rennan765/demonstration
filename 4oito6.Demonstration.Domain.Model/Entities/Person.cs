@@ -158,7 +158,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 throw new ArgumentNullException(nameof(phone));
             }
 
-            if (_phones.ContainsKey(phone.ToString()))
+            if (!_phones.ContainsKey(phone.ToString()))
             {
                 _phones.Add(phone.ToString(), phone);
             }
