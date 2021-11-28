@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 namespace _4oito6.Demonstration.Person.Domain.Data.Repositories
 {
     using _4oito6.Demonstration.Domain.Model.Entities;
-    using System.Linq.Expressions;
 
     public interface IPersonRepository : IDisposable
     {
@@ -17,6 +16,5 @@ namespace _4oito6.Demonstration.Person.Domain.Data.Repositories
         Task<Person> InsertAsync(Person person);
 
         Task<Person> UpdateAsync(Person person);
-        void InsertAsync(Func<Expression<Func<Person, bool>>, Person> @is);
     }
 }
