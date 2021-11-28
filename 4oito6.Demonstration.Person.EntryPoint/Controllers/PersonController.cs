@@ -22,13 +22,11 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
     {
         private readonly TokenConfig _tokenConfig;
         private readonly IPersonAppServices _appServices;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PersonController(IPersonAppServices appServices, IHttpContextAccessor httpContextAccessor, IPersonConfig config)
-            : base(new IAppServiceBase[] { appServices })
+            : base(httpContextAccessor, new IAppServiceBase[] { appServices })
         {
             _appServices = appServices ?? throw new ArgumentNullException(nameof(appServices));
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _tokenConfig = config?.TokenConfig ?? throw new ArgumentNullException(nameof(config.TokenConfig));
         }
 
@@ -48,7 +46,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
                 }
             );
 
-            _httpContextAccessor.HttpContext.User.AddIdentity(identity);
+            HttpContextAccessor.HttpContext.User.AddIdentity(identity);
 
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.CreateToken
@@ -65,6 +63,28 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
             );
 
             return handler.WriteToken(securityToken);
+        }
+
+        /// <summary>
+        /// Get information by logged user
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(PersonResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            var person = GetToken();
+            var response = await _appServices.GetByIdAsync(person.Id).ConfigureAwait(false);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
         /// <summary>
@@ -117,10 +137,11 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
         [ProducesResponseType(typeof(IEnumerable<Notification>), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, [FromBody] PersonRequest request)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody] PersonRequest request)
         {
-            var response = await _appServices.UpdateAsync(id, request).ConfigureAwait(false);
+            var person = GetToken();
+            var response = await _appServices.UpdateAsync(person.Id, request).ConfigureAwait(false);
             return Result(response);
         }
     }

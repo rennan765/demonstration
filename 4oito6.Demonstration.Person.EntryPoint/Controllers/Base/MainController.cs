@@ -1,5 +1,7 @@
 ﻿using _4oito6.Demonstration.Application.Interfaces;
+using _4oito6.Demonstration.Person.Application.Model.Person;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.Controllers.Base
 {
@@ -7,10 +9,13 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers.Base
     {
         private readonly List<IAppServiceBase> _appServices;
 
-        public MainController(IEnumerable<IAppServiceBase> appServices)
+        public MainController(IHttpContextAccessor httpContextAccessor, IEnumerable<IAppServiceBase> appServices)
         {
+            HttpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _appServices = new List<IAppServiceBase>(appServices ?? throw new ArgumentNullException(nameof(appServices)));
         }
+
+        protected IHttpContextAccessor HttpContextAccessor { get; private set; }
 
         [NonAction]
         protected ObjectResult Result(object? value)
@@ -21,6 +26,26 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers.Base
             }
 
             return StatusCode(_appServices.Min(app => (int)app.HttpStatusCode), value);
+        }
+
+        [NonAction]
+        protected PersonResponse GetToken()
+        {
+            if (HttpContextAccessor.HttpContext.Items[typeof(PersonResponse).ToString()] is null)
+            {
+                var user = HttpContextAccessor.HttpContext.User.FindFirst(typeof(PersonResponse).ToString());
+
+                if (user != null)
+                {
+                    if (HttpContextAccessor.HttpContext.Items[typeof(PersonResponse).ToString()] is null)
+                    {
+                        HttpContextAccessor.HttpContext.Items[typeof(PersonResponse).ToString()] = JsonConvert.DeserializeObject<PersonResponse>(user.Value);
+                    }
+                }
+            }
+
+            return (PersonResponse)HttpContextAccessor
+                .HttpContext.Items[typeof(PersonResponse).ToString()];
         }
 
         protected override void Dispose(bool disposing)
