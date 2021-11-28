@@ -25,6 +25,8 @@ builder.Services.AddLogging();
 builder.Services.AddSingleton<ILoggerFactory, LoggerFactory>();
 builder.Services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
+builder.Services.AddAuthentication();
+
 builder.Services.AddControllers(config =>
 {
     var policy = new AuthorizationPolicyBuilder()
@@ -43,14 +45,23 @@ builder.Services.AddSwagger();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Local"))
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint($"{(string.IsNullOrEmpty(c.RoutePrefix) ? "." : "..")}/swagger/v1/swagger.json", "Demonstration Web API v1"));
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

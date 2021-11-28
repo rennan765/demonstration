@@ -117,6 +117,8 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
                 }
             });
 
+            services.AddSwaggerGenNewtonsoftSupport();
+
             return services;
         }
     }
