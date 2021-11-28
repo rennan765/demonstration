@@ -115,7 +115,7 @@ namespace _4oito6.Demonstration.Data.Transaction
             Dispose(disposing: false);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
