@@ -9,5 +9,9 @@ namespace _4oito6.Demonstration.Domain.Data.Transaction
         void Rollback();
 
         void CloseConnections();
+
+        void EnableTransactions();
+
+        void DisableTransactions();
     }
 }

@@ -12,6 +12,8 @@ namespace _4oito6.Demonstration.Domain.Model.Entities.Base
 
         public bool IsValid => !_validationResults.Any(x => !x.IsValid);
 
+        public IEnumerable<ValidationResult> ValidationResults => _validationResults;
+
         public bool Validate<TEntity>(TEntity entity, AbstractValidator<TEntity> validator)
         {
             if (entity is null)

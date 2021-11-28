@@ -20,6 +20,8 @@ namespace _4oito6.Demonstration.Data.Transaction
             _transactions = new Dictionary<DataSource, IDbTransaction>();
         }
 
+        public bool ActiveTransactions { get; private set; }
+
         public void CloseConnections()
         {
             foreach (var conn in _connections.Values)
@@ -43,7 +45,7 @@ namespace _4oito6.Demonstration.Data.Transaction
                 _connections[dataOperation.DataSource].Open();
             }
 
-            if (_connections.ContainsKey(dataOperation.DataSource) && dataOperation.OperationType == OperationType.Write && !_transactions.ContainsKey(dataOperation.DataSource))
+            if (ActiveTransactions && _connections.ContainsKey(dataOperation.DataSource) && dataOperation.OperationType == OperationType.Write && !_transactions.ContainsKey(dataOperation.DataSource))
             {
                 _transactions.Add(dataOperation.DataSource, _connections[dataOperation.DataSource].BeginTransaction());
             }
@@ -55,6 +57,17 @@ namespace _4oito6.Demonstration.Data.Transaction
             {
                 transaction.Rollback();
             }
+        }
+
+        public void EnableTransactions()
+        {
+            ActiveTransactions = true;
+        }
+
+        public void DisableTransactions()
+        {
+            Rollback();
+            ActiveTransactions = false;
         }
 
         protected void Attach(IAsyncDbConnection connection, DataSource dataSource)

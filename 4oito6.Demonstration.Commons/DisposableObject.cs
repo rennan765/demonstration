@@ -9,7 +9,7 @@ namespace _4oito6.Demonstration.Commons
         private bool _disposedValue;
         private readonly List<IDisposable> _composition;
 
-        public DisposableObject(IDisposable[] composition)
+        public DisposableObject(IEnumerable<IDisposable> composition)
         {
             _composition = (composition ?? throw new ArgumentNullException(nameof(composition))).ToList();
         }
