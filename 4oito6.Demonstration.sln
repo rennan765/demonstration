@@ -34,21 +34,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Person.Domain.Services", "4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj", "{FFEA7FDB-5C7D-4553-9754-3D5931D8C4DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person.Domain.Services", "4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj", "{FFEA7FDB-5C7D-4553-9754-3D5931D8C4DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{5D2F8A72-9229-4401-8D54-5F80F2127C6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Application", "4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj", "{8C87C2D2-713C-4D47-A055-341DD52C480E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Application", "4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj", "{8C87C2D2-713C-4D47-A055-341DD52C480E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_4oito6.Demonstration.Person.Application", "_4oito6.Demonstration.Person.Application\_4oito6.Demonstration.Person.Application.csproj", "{A2E8B6DE-BEA6-411F-89C1-EA44EC8D6CD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_4oito6.Demonstration.Person.Application", "_4oito6.Demonstration.Person.Application\_4oito6.Demonstration.Person.Application.csproj", "{A2E8B6DE-BEA6-411F-89C1-EA44EC8D6CD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{759A7F80-A18D-48C4-83AD-88AE07C8A917}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntryPoint", "EntryPoint", "{3D89DD61-1963-4B3A-B874-2849EF59189C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Person.EntryPoint", "4oito6.Demonstration.Person.EntryPoint\4oito6.Demonstration.Person.EntryPoint.csproj", "{478B2FF1-70C4-4375-8E1B-E35BACFA0499}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person.EntryPoint", "4oito6.Demonstration.Person.EntryPoint\4oito6.Demonstration.Person.EntryPoint.csproj", "{478B2FF1-70C4-4375-8E1B-E35BACFA0499}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Config", "4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj", "{6211C9D6-BB11-4FB5-9397-AF951F49D73E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Config", "4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj", "{6211C9D6-BB11-4FB5-9397-AF951F49D73E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F71C34CE-E780-422A-89C3-299E68C3F8DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Person.Test", "4oito6.Demonstration.Person.Test\4oito6.Demonstration.Person.Test.csproj", "{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +104,10 @@ Global
 		{6211C9D6-BB11-4FB5-9397-AF951F49D73E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6211C9D6-BB11-4FB5-9397-AF951F49D73E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6211C9D6-BB11-4FB5-9397-AF951F49D73E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +132,8 @@ Global
 		{3D89DD61-1963-4B3A-B874-2849EF59189C} = {F127B804-43DA-4065-99C7-18AA7CF72818}
 		{478B2FF1-70C4-4375-8E1B-E35BACFA0499} = {3D89DD61-1963-4B3A-B874-2849EF59189C}
 		{6211C9D6-BB11-4FB5-9397-AF951F49D73E} = {897E3069-D187-4823-B0CB-B0D91F2A8F2C}
+		{F71C34CE-E780-422A-89C3-299E68C3F8DA} = {F127B804-43DA-4065-99C7-18AA7CF72818}
+		{B1BB025C-86C0-4BD1-87BE-63C0A2FEC25D} = {F71C34CE-E780-422A-89C3-299E68C3F8DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28FE7937-CEEE-4156-A27B-54CCED363426}

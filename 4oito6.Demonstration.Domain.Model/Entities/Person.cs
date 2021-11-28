@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
 {
-    public class Person : EntityBase
+    public class Person : EntityBase, ICloneable
     {
         private readonly Dictionary<string, Phone> _phones;
 
@@ -190,5 +190,23 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public bool ValidateToCreate() => Validate(this, new CreatePersonValidator());
 
         public bool ValidateToUpdate() => Validate(this, new UpdatePersonValidator());
+
+        public object Clone()
+        {
+            return new Person
+            (
+                id: Id,
+                name: Name,
+                email: Email,
+
+                document: Document,
+                gender: Gender,
+                birthDate: BirthDate,
+
+                phones: Phones.Select(p => (Phone)p.Clone()),
+                mainPhone: (Phone)MainPhone.Clone(),
+                address: (Address?)Address?.Clone()
+            );
+        }
     }
 }
