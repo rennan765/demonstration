@@ -47,8 +47,8 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             WHERE p.{nameof(PersonDto.id)} = @{nameof(PersonDto.id)}";
 
             GetByEmailOrDocument = $@"{Get}
-            WHERE p.{nameof(PersonDto.email)} = COALESCE(@{nameof(PersonDto.email)}, p.{nameof(PersonDto.email)})
-            OR p.{nameof(PersonDto.document)} = COALESCE(@{nameof(PersonDto.document)}, p.{nameof(PersonDto.document)})
+            WHERE p.{nameof(PersonDto.email)} = @{nameof(PersonDto.email)}
+            OR p.{nameof(PersonDto.document)} = @{nameof(PersonDto.document)}
             ";
 
             GetPhonesByPersonId = $@"
