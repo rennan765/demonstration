@@ -11,9 +11,14 @@ namespace _4oito6.Demonstration.Config
         private readonly IConfiguration _configuration;
         private SwaggerConfig _swaggerConfig;
 
+        public CommonConfig(IConfiguration configuration)
+        {
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
+
         public string AwsRegion => Environment.GetEnvironmentVariable("AwsRegion");
 
-        public bool IsLocal => Environment.GetEnvironmentVariable("Environment").Equals("Local");
+        public bool IsLocal => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Local");
 
         public SwaggerConfig SwaggerConfig
         {
