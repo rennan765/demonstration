@@ -51,31 +51,28 @@ namespace _4oito6.Demonstration.Config
             {
                 if (_tokenConfig is null)
                 {
-                    _tokenConfig = new TokenConfig
-                    (
-                        issuer: Environment.GetEnvironmentVariable("Issuer"),
-                        audience: Environment.GetEnvironmentVariable("Audience"),
+                    if (IsLocal)
+                    {
+                        _tokenConfig = new TokenConfig
+                        (
+                            issuer: Environment.GetEnvironmentVariable("Issuer"),
+                            audience: Environment.GetEnvironmentVariable("Audience"),
 
-                        secretKey: Environment.GetEnvironmentVariable("SecretKey"),
-                        tokenTime: Convert.ToInt32(Environment.GetEnvironmentVariable("TokenTime"))
-                    );
+                            secretKey: Environment.GetEnvironmentVariable("SecretKey"),
+                            tokenTime: Convert.ToInt32(Environment.GetEnvironmentVariable("TokenTime"))
+                        );
+                    }
+                    else
+                    {
+                        _tokenConfig = JsonConvert.DeserializeObject<TokenConfig>(GetSecretString("TokenConfig").Result);
+                    }
                 }
 
                 return _tokenConfig;
             }
         }
 
-        public Task<string> GetRelationalDatabaseConnectionString()
-        {
-            if (!IsLocal)
-            {
-                return GetConnectionString("RelationalDatabaseConnectionString");
-            }
-
-            return Task.FromResult(Environment.GetEnvironmentVariable("RelationalDatabaseConnectionString"));
-        }
-
-        protected async Task<string> GetConnectionString(string secretName)
+        protected async Task<string> GetSecretString(string secretName)
         {
             var request = new GetSecretValueRequest
             {
@@ -85,6 +82,16 @@ namespace _4oito6.Demonstration.Config
 
             var response = await _secretsManager.GetSecretValueAsync(request).ConfigureAwait(false);
             return response.SecretString;
+        }
+
+        public Task<string> GetRelationalDatabaseConnectionString()
+        {
+            if (!IsLocal)
+            {
+                return GetSecretString("RelationalDatabaseConnectionString");
+            }
+
+            return Task.FromResult(Environment.GetEnvironmentVariable("RelationalDatabaseConnectionString"));
         }
     }
 }
