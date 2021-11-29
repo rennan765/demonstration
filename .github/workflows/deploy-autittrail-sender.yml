@@ -1,4 +1,4 @@
-name: Template Deploy on AWS Beanstalk
+name: AuditTrail Sender API Elasting Beanstalk deploy
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       
     - name: Publish
-      run: dotnet publish 4oito6.Demonstration.Person.EntryPoint/4oito6.Demonstration.Person.EntryPoint.csproj -c Release -o ${{ github.workspace }}/out
+      run: dotnet publish 4oito6.Demonstration.AuditTrail.Sender/4oito6.Demonstration.AuditTrail.Sender.csproj -c Release -o ${{ github.workspace }}/out
 
     - name: Generate deployment package
       run: |
@@ -36,8 +36,8 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: demonstration
-        environment_name: Demonstration-env
+        application_name: demonstration-audtitrail
+        environment_name: Demonstrationaudtitrail-env
         version_label: ${{ github.run_id }}
         version_description: ${{ github.sha }}
         region: sa-east-1
