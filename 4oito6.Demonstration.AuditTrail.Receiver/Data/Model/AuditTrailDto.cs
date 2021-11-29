@@ -1,7 +1,7 @@
 ﻿using _4oito6.Demonstration.Data.Model.Dynamo.Base;
 using System;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint.Data.Model
+namespace _4oito6.Demonstration.AuditTrail.Receiver.Data.Model
 {
     public class AuditTrailDto : DynamoEntityDto
     {

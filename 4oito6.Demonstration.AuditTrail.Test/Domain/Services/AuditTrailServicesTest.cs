@@ -1,5 +1,5 @@
-﻿using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Data;
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Services;
+﻿using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
 using FluentAssertions;
 using KellermanSoftware.CompareNetObjects;

@@ -1,7 +1,7 @@
-﻿using _4oito6.Demonstration.AuditTrail.EntryPoint.Application;
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Data;
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Data;
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Services;
+﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
+using _4oito6.Demonstration.AuditTrail.Receiver.Data;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.Config;
 using _4oito6.Demonstration.CrossCutting.AuditTrail;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint
+namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
     public static class IoC
     {

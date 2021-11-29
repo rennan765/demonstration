@@ -2,7 +2,7 @@
 using Amazon.Lambda.SQSEvents;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint.Application
+namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
 {
     public interface IAuditTrailAppServices : IAppServiceBase
     {

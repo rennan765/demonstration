@@ -1,5 +1,5 @@
 ﻿using _4oito6.Demonstration.Application;
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Services;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
 using Amazon.Lambda.SQSEvents;
@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint.Application
+namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
 {
     public class AuditTrailAppServices : AppServiceBase, IAuditTrailAppServices
     {

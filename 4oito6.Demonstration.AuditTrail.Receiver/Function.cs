@@ -1,4 +1,4 @@
-using _4oito6.Demonstration.AuditTrail.EntryPoint.Application;
+using _4oito6.Demonstration.AuditTrail.Receiver.Application;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint
+namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
     public class Function
     {

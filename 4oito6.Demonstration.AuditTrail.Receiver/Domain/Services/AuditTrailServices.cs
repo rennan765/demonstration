@@ -1,10 +1,10 @@
-﻿using _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Data;
+﻿using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
 using _4oito6.Demonstration.Commons;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
 using System;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Services
+namespace _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services
 {
     public class AuditTrailServices : DisposableObject, IAuditTrailServices
     {

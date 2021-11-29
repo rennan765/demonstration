@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.AuditTrail.EntryPoint.Domain.Data
+namespace _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data
 {
     public interface IAuditTrailRepository : IDisposable
     {

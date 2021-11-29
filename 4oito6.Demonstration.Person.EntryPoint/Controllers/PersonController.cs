@@ -130,7 +130,6 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
         /// <summary>
         /// Update an existing person.
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         [ProducesResponseType(typeof(PersonResponse), (int)HttpStatusCode.OK)]
