@@ -1,4 +1,5 @@
 ﻿using _4oito6.Demonstration.Application;
+using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.Person.Application.Interfaces;
 using _4oito6.Demonstration.Person.Application.Model.Person;
 using _4oito6.Demonstration.Person.Domain.Data.Transaction;
@@ -14,8 +15,15 @@ namespace _4oito6.Demonstration.Person.Application
         private readonly IPersonServices _services;
         private readonly IPersonUnitOfWork _uow;
 
-        public PersonAppServices(IPersonServices services, IPersonUnitOfWork uow, ILogger<PersonAppServices> logger)
-            : base(logger, new IDisposable[] { services, uow })
+        public PersonAppServices
+        (
+            IPersonServices services,
+            IPersonUnitOfWork uow,
+
+            IAuditTrailSender auditTrail,
+            ILogger<PersonAppServices> logger
+        )
+            : base(logger, auditTrail, new IDisposable[] { services, uow, auditTrail })
         {
             _services = services ?? throw new ArgumentNullException(nameof(services));
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));

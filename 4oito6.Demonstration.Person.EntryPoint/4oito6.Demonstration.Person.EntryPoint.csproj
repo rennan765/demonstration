@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
@@ -22,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Person.Data\4oito6.Demonstration.Person.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Data\4oito6.Demonstration.Person.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj" />

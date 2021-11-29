@@ -72,6 +72,8 @@ namespace _4oito6.Demonstration.Config
             }
         }
 
+        public string AuditTrailQueueUrl => _configuration.GetSection("AuditTrailQueueUrl").Value;
+
         protected async Task<string> GetSecretString(string secretName)
         {
             var request = new GetSecretValueRequest

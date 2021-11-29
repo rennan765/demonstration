@@ -18,6 +18,8 @@ namespace _4oito6.Demonstration.Config
 
         TokenConfig TokenConfig { get; }
 
+        string AuditTrailQueueUrl { get; }
+
         Task<string> GetRelationalDatabaseConnectionString();
     }
 }
