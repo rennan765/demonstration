@@ -36,7 +36,15 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
                 )
             );
 
-            services.AddScoped<IAmazonSQS, AmazonSQSClient>();
+            services.AddScoped<IAmazonSQS>
+            (
+                sp => new AmazonSQSClient
+                (
+                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
+                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
+                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
+                )
+            );
 
             return services;
         }
