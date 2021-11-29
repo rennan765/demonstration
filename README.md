@@ -81,7 +81,7 @@ A configuração do secret é desta forma:
   </tr>
   <tr>
     <td>TokenConfig</td>
-    <td>{ "Issuer": "c1f51f42", "Audience": "c6bbbb645024", "SecretKey": "65ec8b25-6dee-4686-a139-f14029dd7f34", "TokenTime": "900" }</td>
+    <td>{ "Issuer": "30bce1bb", "Audience": "2603aff38a29", "SecretKey": "c517a6fc-cefd-43b9-a1f5-40a551b7aecc", "TokenTime": "900" }</td>
   </tr>
   <tr>
   </tr>
