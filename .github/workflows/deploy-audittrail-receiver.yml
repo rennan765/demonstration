@@ -1,0 +1,36 @@
+name: AuditTrail Receiver API Lambda deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+    
+    - name: AWS CLI
+      run: dotnet tool install -g Amazon.Lambda.Tools
+
+    - name: Instal dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build 4oito6.Demonstration.AuditTrail.Receiver/4oito6.Demonstration.AuditTrail.Receiver.csproj --configuration Release --no-restore
+
+    - name: Deploy to Lambda
+      working-directory: 4oito6.Demonstration.AuditTrail.Receiver
+      run: dotnet lambda deploy-function audittrail-receiver
