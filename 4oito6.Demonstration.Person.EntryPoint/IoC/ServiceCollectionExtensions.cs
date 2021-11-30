@@ -1,4 +1,6 @@
 ﻿using _4oito6.Demonstration.Config;
+using _4oito6.Demonstration.CrossCutting.AuditTrail;
+using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.Data.Connection;
 using _4oito6.Demonstration.Person.Application;
 using _4oito6.Demonstration.Person.Application.Interfaces;
@@ -11,6 +13,7 @@ using _4oito6.Demonstration.Person.EntryPoint.Filters;
 using _4oito6.Demonstration.Person.EntryPoint.IoC.Config;
 using Amazon;
 using Amazon.SecretsManager;
+using Amazon.SQS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -33,6 +36,16 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
                 )
             );
 
+            services.AddScoped<IAmazonSQS>
+            (
+                sp => new AmazonSQSClient
+                (
+                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
+                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
+                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
+                )
+            );
+
             return services;
         }
 
@@ -41,6 +54,17 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
             // add dependencies:
             services.AddSingleton<IPersonConfig, PersonConfig>().
                 AddSingleton<ICommonConfig>(sp => sp.GetService<IPersonConfig>());
+
+            // add helpers:
+            services
+                .AddScoped<IAuditTrailSender>
+                (
+                    sp => new AuditTrailSender
+                    (
+                        sqs: sp.GetService<IAmazonSQS>(),
+                        queue: sp.GetService<IPersonConfig>().AuditTrailQueueUrl
+                    )
+                );
 
             // add data:
             services

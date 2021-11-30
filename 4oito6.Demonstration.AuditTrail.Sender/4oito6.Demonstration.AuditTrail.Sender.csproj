@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>_4oito6.Demonstration.AuditTrail.Sender</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.1.56" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.2" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
+  </ItemGroup>
+
+</Project>
