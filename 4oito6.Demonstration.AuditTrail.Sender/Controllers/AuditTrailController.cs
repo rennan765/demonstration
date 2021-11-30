@@ -7,7 +7,7 @@ using System.Net;
 namespace _4oito6.Demonstration.AuditTrail.Sender.Controllers
 {
     [ApiController]
-    [Route("person")]
+    [Route("audittrail")]
     public class AuditTrailController : Controller
     {
         private IAuditTrailSender _sender;
