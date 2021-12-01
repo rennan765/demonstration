@@ -60,8 +60,8 @@ Para que o mesmo execute normalmente, será necessário inserir as variáveis ab
   </tr>
   <tr>
     <td>AwsRegion</td>
+    <td>Região dos serviços AWS</td>
     <td>sa-east-1</td>
-    <td>fdjsa8e3/8HcsUVxaQB8QUFnRPfa5PhEVK2U+qIf</td>
   </tr>
 </table>
 
