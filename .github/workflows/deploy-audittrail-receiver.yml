@@ -33,4 +33,4 @@ jobs:
 
     - name: Deploy to Lambda
       working-directory: AuditTrail/4oito6.Demonstration.AuditTrail.Receiver
-      run: dotnet lambda deploy-function audittrail-receiver
+      run: dotnet lambda deploy-function audittrail-receiver --region sa-east-1
