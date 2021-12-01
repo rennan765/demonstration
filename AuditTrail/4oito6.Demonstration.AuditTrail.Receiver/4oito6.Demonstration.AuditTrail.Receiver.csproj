@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -10,13 +10,17 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.2.0" />
     <PackageReference Include="Amazon.Lambda.SQSEvents" Version="2.0.0" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.1.56" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Data\4oito6.Demonstration.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.Data\4oito6.Demonstration.Data.csproj" />
   </ItemGroup>
 </Project>

@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.Domain.Model\4oito6.Demonstration.Domain.Model.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Data\4oito6.Demonstration.Person.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj" />
   </ItemGroup>
 

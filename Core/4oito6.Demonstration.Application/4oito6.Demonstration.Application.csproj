@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Domain.Model\4oito6.Demonstration.Domain.Model.csproj" />
   </ItemGroup>
 

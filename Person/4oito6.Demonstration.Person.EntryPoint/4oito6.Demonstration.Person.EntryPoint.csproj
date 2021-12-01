@@ -22,11 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Person.Data\4oito6.Demonstration.Person.Data.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Data\4oito6.Demonstration.Person.Domain.Data.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj" />
     <ProjectReference Include="..\_4oito6.Demonstration.Person.Application\_4oito6.Demonstration.Person.Application.csproj" />
   </ItemGroup>
 

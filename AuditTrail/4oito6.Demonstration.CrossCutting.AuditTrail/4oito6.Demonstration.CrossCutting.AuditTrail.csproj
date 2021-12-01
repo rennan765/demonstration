@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
   </ItemGroup>
 
 </Project>
