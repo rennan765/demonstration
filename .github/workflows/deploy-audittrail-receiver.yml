@@ -1,4 +1,4 @@
-name: AuditTrail Receiver API Lambda deploy
+name: AuditTrail Receiver Lambda deploy
 
 on:
   workflow_dispatch:
@@ -29,8 +29,8 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build 4oito6.Demonstration.AuditTrail.Receiver/4oito6.Demonstration.AuditTrail.Receiver.csproj --configuration Release --no-restore
+      run: dotnet build AuditTrail/4oito6.Demonstration.AuditTrail.Receiver/4oito6.Demonstration.AuditTrail.Receiver.csproj --configuration Release --no-restore
 
     - name: Deploy to Lambda
-      working-directory: 4oito6.Demonstration.AuditTrail.Receiver
+      working-directory: AuditTrail/4oito6.Demonstration.AuditTrail.Receiver
       run: dotnet lambda deploy-function audittrail-receiver
