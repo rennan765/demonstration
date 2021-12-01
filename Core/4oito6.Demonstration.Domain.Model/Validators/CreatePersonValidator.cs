@@ -1,12 +1,14 @@
 ﻿using _4oito6.Demonstration.Commons.Extensions;
 using _4oito6.Demonstration.Domain.Model.Entities;
-using CpfLibrary;
+using Caelum.Stella.CSharp.Validation;
 using FluentValidation;
 
 namespace _4oito6.Demonstration.Domain.Model.Validators
 {
     public class CreatePersonValidator : AbstractValidator<Person>
     {
+        private readonly CPFValidator _cpfValidator = new CPFValidator();
+
         public CreatePersonValidator()
         {
             RuleFor(p => p.Name)
@@ -21,7 +23,7 @@ namespace _4oito6.Demonstration.Domain.Model.Validators
             RuleFor(p => p.Document)
                 .NotEmpty().WithMessage("CPF deve ser preenchido.")
                 .NotNull().WithMessage("CPF deve ser preenchido.")
-                .Must(d => Cpf.Check(d)).WithMessage("CPF inválido.");
+                .Must(d => _cpfValidator.IsValid(d)).WithMessage("CPF inválido.");
 
             RuleFor(p => p.BirthDate)
                 .Must(date => date.IsAgeRange(18, 150))
