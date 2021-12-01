@@ -5,3 +5,5 @@
 *launchSettings.json
 *.csproj.user
 *.csproj.user
+/.editorconfig
+*/aws-lambda-tools-defaults.json
