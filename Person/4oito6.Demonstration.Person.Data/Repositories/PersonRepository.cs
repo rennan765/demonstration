@@ -67,19 +67,19 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             ";
 
             MaintainPersonPhone = $@"
-            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) ({{0}})
+            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) AS ({{0}})
             INSERT INTO tb_phone ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)})
-            SELECT ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)})
-            FROM Phone TEMP
+            SELECT {nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}
+            FROM Phones TEMP
             WHERE NOT EXISTS (SELECT 1
                               FROM tb_phone p
                               WHERE p.{nameof(PhoneDto.type)} = TEMP.{nameof(PhoneDto.type)}
                               AND p.{nameof(PhoneDto.code)} = TEMP.{nameof(PhoneDto.code)}
                               AND p.{nameof(PhoneDto.number)} = TEMP.{nameof(PhoneDto.number)});
 
-            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) ({{0}})
+            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) AS ({{0}})
             INSERT INTO tb_person_phone ({nameof(PersonPhoneDto.personid)}, {nameof(PersonPhoneDto.phoneid)})
-            SELECT @({nameof(PersonPhoneDto.personid)}, p.({nameof(PhoneDto.phoneid)}
+            SELECT @{nameof(PersonPhoneDto.personid)}, p.{nameof(PhoneDto.phoneid)}
             FROM tb_phone p
             WHERE NOT EXISTS (SELECT 1
                               FROM Phones TEMP
@@ -87,7 +87,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
                               AND p.{nameof(PhoneDto.code)} = TEMP.{nameof(PhoneDto.code)}
                               AND p.{nameof(PhoneDto.number)} = TEMP.{nameof(PhoneDto.number)});
 
-            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) ({{0}})
+            WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) AS ({{0}})
             DELETE FROM tb_person_phone pp1
             WHERE NOT EXISTS (SELECT 1
                               FROM tb_person_phone pp2

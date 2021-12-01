@@ -128,7 +128,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
         }
 
         /// <summary>
-        /// Update an existing person.
+        /// Update current logged person.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
