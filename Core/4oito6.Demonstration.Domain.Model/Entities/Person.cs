@@ -191,6 +191,31 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public bool ValidateToUpdate() => Validate(this, new UpdatePersonValidator());
 
+        public void ClearPhones()
+        {
+            _phones.Clear();
+            MainPhone = null;
+        }
+
+        public void ClearAddress()
+        {
+            _phones.Clear();
+            MainPhone = null;
+        }
+
+        public static Person GetDefaultInstance()
+        {
+            return new Person
+            (
+                name: string.Empty,
+                email: string.Empty,
+                document: "00000000000",
+
+                gender: Gender.NotInformed,
+                birthDate: DateTime.UtcNow
+            );
+        }
+
         public object Clone()
         {
             return new Person
