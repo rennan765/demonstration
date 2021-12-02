@@ -51,9 +51,14 @@ namespace _4oito6.Demonstration.Contact.Domain.Services
                 person.Attach(phones.Select(p => p.Value));
             }
 
-            await _repoRoot.Person.UpdateContactInformationAsync(person).ConfigureAwait(false);
-            await _repoRoot.Address.DeleteWithoutPersonAsync().ConfigureAwait(false);
-            await _repoRoot.Phone.DeleteWithoutPersonAsync().ConfigureAwait(false);
+            person.ValidateToUpdate();
+            if (person.IsValid)
+            {
+                await _repoRoot.Person.UpdateContactInformationAsync(person).ConfigureAwait(false);
+                await _repoRoot.Address.DeleteWithoutPersonAsync().ConfigureAwait(false);
+                await _repoRoot.Phone.DeleteWithoutPersonAsync().ConfigureAwait(false);
+            }
+
             return person;
         }
     }
