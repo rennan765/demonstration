@@ -7,3 +7,4 @@
 *.csproj.user
 /.editorconfig
 */aws-lambda-tools-defaults.json
+*/aws-beanstalk-tools-defaults.json
