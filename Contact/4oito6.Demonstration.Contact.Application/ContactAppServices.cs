@@ -34,45 +34,50 @@ namespace _4oito6.Demonstration.Contact.Application
 
         public static string WarningMessage => "CONTACT_WA01";
 
-        public async Task MaintainInformationByPersonId(int personId)
+        public virtual async Task MaintainInformationAsync(int personId)
         {
             var message = new AuditTrailMessage();
+            _uow.EnableTransactions();
 
+            var person = await _services.MaintainContactInformationAsync(personId)
+                .ConfigureAwait(false);
+
+            Notify(person);
+            if (IsValid)
+            {
+                _uow.Commit();
+
+                message.Code = InformationMessage;
+                message.Message = "Informações de contato atualizadas com sucesso.";
+                Logger.LogWarning(message.Message);
+
+                message.AdditionalInformation = $"PhoneIds: {string.Join(",", person.Phones.Select(p => p.Id))}. ";
+                message.AdditionalInformation += $"MainPhoneId: {person.MainPhone.Id}";
+
+                if (person.Address != null)
+                {
+                    message.AdditionalInformation += $"AddressId: {person.Address.Id}";
+                }
+            }
+            else
+            {
+                _uow.Rollback();
+
+                message.Code = InformationMessage;
+                message.Message = "Falha ao realizar a manutenção das informações de contato.";
+
+                Logger.LogWarning(message.Message);
+                message.AdditionalInformation = JsonConvert.SerializeObject(Notifications);
+            }
+
+            await AuditTrail.SendAsync(message).ConfigureAwait(false);
+        }
+
+        public async Task MaintainInformationByPersonIdAsync(int personId)
+        {
             try
             {
-                _uow.EnableTransactions();
-                var person = await _services.MaintainContactInformationAsync(personId)
-                    .ConfigureAwait(false);
-
-                Notify(person);
-                if (IsValid)
-                {
-                    _uow.Commit();
-
-                    message.Code = InformationMessage;
-                    message.Message = "Informações de contato atualizadas com sucesso.";
-                    Logger.LogWarning(message.Message);
-
-                    message.AdditionalInformation = $"PhoneIds: {string.Join(",", person.Phones.Select(p => p.Id))}. ";
-                    message.AdditionalInformation += $"MainPhoneId: {person.MainPhone.Id}";
-
-                    if (person.Address != null)
-                    {
-                        message.AdditionalInformation += $"AddressId: {person.Address.Id}";
-                    }
-                }
-                else
-                {
-                    _uow.Rollback();
-
-                    message.Code = InformationMessage;
-                    message.Message = "Falha ao realizar a manutenção das informações de contato.";
-
-                    Logger.LogWarning(message.Message);
-                    message.AdditionalInformation = JsonConvert.SerializeObject(Notifications);
-                }
-
-                await AuditTrail.SendAsync(message).ConfigureAwait(false);
+                await MaintainInformationAsync(personId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

@@ -5,6 +5,6 @@ namespace _4oito6.Demonstration.Contact.Application.Interfaces
 {
     public interface IContactAppServices : IAppServiceBase
     {
-        Task MaintainInformationByPersonId(int personId);
+        Task MaintainInformationByPersonIdAsync(int personId);
     }
 }
