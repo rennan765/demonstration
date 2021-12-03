@@ -105,12 +105,12 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var parameters = person.Phones
                 .ToDictionary(_ => $"@{nameof(PersonPhoneDto.phoneid)}{++i}", p => (object)p.Id);
 
-            var whereClause = string.Join(",", parameters.Keys);
-            parameters.Add($"{nameof(PersonPhoneDto.personid)}", person.Id);
+            var cteClause = string.Join(" UNION ", $"SELECT {parameters.Keys}");
+            parameters.Add($"@{nameof(PersonPhoneDto.personid)}", person.Id);
 
             var command = new CommandDefinition
             (
-                commandText: string.Format(MaintainPersonPhone, whereClause),
+                commandText: string.Format(MaintainPersonPhone, cteClause),
                 parameters: parameters,
                 transaction: _conn.Transaction,
                 commandTimeout: (int)TimeSpan.FromMinutes(1).TotalSeconds
