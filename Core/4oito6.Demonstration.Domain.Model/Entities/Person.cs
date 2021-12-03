@@ -263,6 +263,11 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 }
             }
 
+            if (!MainPhone.Match(person.MainPhone))
+            {
+                return false;
+            }
+
             //validate person:
             return Id == person.Id &&
                 Name == person.Name &&
