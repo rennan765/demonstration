@@ -199,8 +199,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public void ClearAddress()
         {
-            _phones.Clear();
-            MainPhone = null;
+            Address = null;
         }
 
         public static Person GetDefaultInstance()
@@ -212,7 +211,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 document: "00000000000",
 
                 gender: Gender.NotInformed,
-                birthDate: DateTime.UtcNow
+                birthDate: DateTime.UtcNow.Date
             );
         }
 
@@ -232,6 +231,45 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 mainPhone: (Phone)MainPhone.Clone(),
                 address: (Address?)Address?.Clone()
             );
+        }
+
+        public bool Match(Person person)
+        {
+            if (person is null)
+            {
+                return false;
+            }
+
+            //validate address:
+            if (!(Address is null && person.Address is null) && !Address.Match(person.Address))
+            {
+                return false;
+            }
+
+            //validate phones
+            var thisPhones = Phones.ToDictionary(p => p.ToString());
+            var personPhones = person.Phones.ToDictionary(p => p.ToString());
+
+            foreach (var phone in thisPhones)
+            {
+                if (!personPhones.ContainsKey(phone.Key))
+                {
+                    return false;
+                }
+
+                if (!personPhones[phone.Key].Match(phone.Value))
+                {
+                    return false;
+                }
+            }
+
+            //validate person:
+            return Id == person.Id &&
+                Name == person.Name &&
+                Email == person.Email &&
+                Document == person.Document &&
+                Gender == person.Gender &&
+                BirthDate.Date == person.BirthDate.Date;
         }
     }
 }
