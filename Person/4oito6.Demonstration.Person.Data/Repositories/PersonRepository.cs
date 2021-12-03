@@ -13,11 +13,14 @@ using System.Threading.Tasks;
 namespace _4oito6.Demonstration.Person.Data.Repositories
 {
     using _4oito6.Demonstration.Domain.Model.Entities;
+    using _4oito6.Demonstration.Person.Data.Model;
+    using _4oito6.Demonstration.SQS.Interfaces;
 
     public class PersonRepository : DisposableObject, IPersonRepository
     {
         private readonly IAsyncDbConnection _conn;
         private readonly IDataOperationHandler _handler;
+        private readonly ISQSHelper _personQueue;
 
         public static string Get { get; private set; }
         public static string GetById { get; private set; }
@@ -101,11 +104,12 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             ";
         }
 
-        public PersonRepository(IAsyncDbConnection conn, IDataOperationHandler handler)
-            : base(new IDisposable[] { conn })
+        public PersonRepository(IAsyncDbConnection conn, IDataOperationHandler handler, ISQSHelper personQueue)
+            : base(new IDisposable[] { conn, personQueue })
         {
             _conn = conn ?? throw new ArgumentNullException(nameof(conn));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _personQueue = personQueue ?? throw new ArgumentNullException(nameof(personQueue));
         }
 
         public async Task<Person> GetByIdAsync(int id)
@@ -290,6 +294,15 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             await _conn.UpdateAsync(personDto, _conn.Transaction).ConfigureAwait(false);
 
             return personDto.ToPerson(addressDto, phoneDtos.Values);
+        }
+
+        public Task RequestMaintainContactInformationAsync(Person person)
+        {
+            return _personQueue
+                .SendAsync(new MaintainContactInformationRequestDto
+                {
+                    PersonId = person.Id
+                });
         }
     }
 }

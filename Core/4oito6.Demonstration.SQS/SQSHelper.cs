@@ -39,5 +39,21 @@ namespace _4oito6.Demonstration.SQS
 
             return JsonConvert.DeserializeObject<T>(body);
         }
+
+        public Task SendAsync<T>(T request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var sendRequest = new SendMessageRequest
+            {
+                MessageBody = JsonConvert.SerializeObject(request),
+                QueueUrl = _queue
+            };
+
+            return _sqs.SendMessageAsync(sendRequest);
+        }
     }
 }

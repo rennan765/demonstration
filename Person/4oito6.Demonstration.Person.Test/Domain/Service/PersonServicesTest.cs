@@ -102,6 +102,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                 .ReturnsAsync((Person)null)
                 .Verifiable();
 
+            var inserted = (Person)person.Clone();
             mocker.GetMock<IPersonRepositoryRoot>()
                 .Setup
                 (
@@ -110,11 +111,21 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                         It.Is<Person>(p => _comparison.Compare(p, person).AreEqual)
                     )
                 )
-                .ReturnsAsync((Person)person.Clone())
+                .ReturnsAsync(inserted)
+                .Verifiable();
+
+            mocker.GetMock<IPersonRepositoryRoot>()
+                .Setup
+                (
+                    r => r.Person.RequestMaintainContactInformationAsync
+                    (
+                        It.Is<Person>(p => _comparison.Compare(p, inserted).AreEqual)
+                    )
+                )
                 .Verifiable();
 
             //act:
-            var expectedResult = (Person)person.Clone();
+            var expectedResult = (Person)inserted.Clone();
             var result = await services.CreateAsync(person).ConfigureAwait(false);
 
             //assert:
@@ -215,6 +226,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
 
             var toUpdate = (Person)person.Clone();
             toUpdate.ValidateToUpdate();
+            var updated = (Person)toUpdate.Clone();
 
             mocker.GetMock<IPersonRepositoryRoot>()
                 .Setup
@@ -224,11 +236,21 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                         It.Is<Person>(p => _comparison.Compare(p, toUpdate).AreEqual)
                     )
                 )
-                .ReturnsAsync((Person)toUpdate.Clone())
+                .ReturnsAsync(updated)
+                .Verifiable();
+
+            mocker.GetMock<IPersonRepositoryRoot>()
+                .Setup
+                (
+                    r => r.Person.RequestMaintainContactInformationAsync
+                    (
+                        It.Is<Person>(p => _comparison.Compare(p, updated).AreEqual)
+                    )
+                )
                 .Verifiable();
 
             //act:
-            var expectedResult = (Person)toUpdate.Clone();
+            var expectedResult = (Person)updated.Clone();
             var result = await services.UpdateAsync(person).ConfigureAwait(false);
 
             //assert:

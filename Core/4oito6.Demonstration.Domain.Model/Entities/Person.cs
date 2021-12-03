@@ -133,7 +133,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
-        public IEnumerable<Phone> Phones => _phones.Select(p => p.Value);
+        public IEnumerable<Phone> Phones => _phones.Select(p => p.Value).ToList();
         public Phone MainPhone { get; private set; }
 
         public void Attach(Address address)
