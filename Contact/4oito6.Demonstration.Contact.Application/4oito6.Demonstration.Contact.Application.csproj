@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Services\4oito6.Demonstration.Contact.Domain.Services.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj" />
   </ItemGroup>
 
 </Project>
