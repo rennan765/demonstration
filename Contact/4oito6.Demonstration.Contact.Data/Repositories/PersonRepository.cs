@@ -51,13 +51,13 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             WITH Phones ({nameof(PersonPhoneDto.phoneid)}) AS ({{0}})
             DELETE FROM tb_person_phone pp1
-            WHERE EXISTS (SELECT 1
-                          FROM tb_person_phone pp2
-                          WHERE pp2.{nameof(PersonPhoneDto.personphoneid)} = pp1.{nameof(PersonPhoneDto.personphoneid)}
-                          AND NOT EXISTS (SELECT 1
-                                          FROM Phones TEMP
-                                          WHERE TEMP.{nameof(PersonPhoneDto.personid)} = @{nameof(PersonPhoneDto.personid)}
-                                          AND TEMP.{nameof(PersonPhoneDto.phoneid)} = pp2.{nameof(PersonPhoneDto.phoneid)}));
+            WHERE pp1.{nameof(PersonPhoneDto.personid)} = @{nameof(PersonPhoneDto.personid)}
+            AND EXISTS (SELECT 1
+                        FROM tb_person_phone pp2
+                        WHERE pp2.{nameof(PersonPhoneDto.personphoneid)} = pp1.{nameof(PersonPhoneDto.personphoneid)}
+                        AND NOT EXISTS (SELECT 1
+                                        FROM Phones TEMP
+                                        WHERE TEMP.{nameof(PersonPhoneDto.phoneid)} = pp2.{nameof(PersonPhoneDto.phoneid)}));
             ";
         }
 
@@ -105,7 +105,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var parameters = person.Phones
                 .ToDictionary(_ => $"@{nameof(PersonPhoneDto.phoneid)}{++i}", p => (object)p.Id);
 
-            var cteClause = string.Join(" UNION ", $"SELECT {parameters.Keys}");
+            var cteClause = string.Join(" UNION ", parameters.Keys.Select(p => $"SELECT {p}"));
             parameters.Add($"@{nameof(PersonPhoneDto.personid)}", person.Id);
 
             var command = new CommandDefinition

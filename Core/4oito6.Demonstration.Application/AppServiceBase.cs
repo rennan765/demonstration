@@ -85,11 +85,11 @@ namespace _4oito6.Demonstration.Application
         {
             var now = DateTime.UtcNow;
 
-            if (_healthCheckSyncRoot is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
+            if (_lastHealthCheck is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
             {
                 lock (_healthCheckSyncRoot)
                 {
-                    if (_healthCheckSyncRoot is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
+                    if (_lastHealthCheck is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
                     {
                         _lastHealthCheck = now;
                         Logger.LogInformation(message);

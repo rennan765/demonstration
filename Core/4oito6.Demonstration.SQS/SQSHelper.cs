@@ -26,7 +26,8 @@ namespace _4oito6.Demonstration.SQS
             var request = new ReceiveMessageRequest
             {
                 MaxNumberOfMessages = 1,
-                QueueUrl = _queue
+                QueueUrl = _queue,
+                VisibilityTimeout = (int)TimeSpan.FromMinutes(10).TotalSeconds
             };
 
             var response = await _sqs.ReceiveMessageAsync(request).ConfigureAwait(false);

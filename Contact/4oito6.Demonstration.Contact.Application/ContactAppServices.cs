@@ -54,14 +54,14 @@ namespace _4oito6.Demonstration.Contact.Application
 
                 message.Code = InformationMessage;
                 message.Message = "Informações de contato atualizadas com sucesso.";
-                Logger.LogWarning(message.Message);
+                Logger.LogInformation(message.Message);
 
                 message.AdditionalInformation = $"PhoneIds: {string.Join(",", person.Phones.Select(p => p.Id))}. ";
-                message.AdditionalInformation += $"MainPhoneId: {person.MainPhone.Id}";
+                message.AdditionalInformation += $"MainPhoneId: {person.MainPhone.Id}. ";
 
                 if (person.Address != null)
                 {
-                    message.AdditionalInformation += $"AddressId: {person.Address.Id}";
+                    message.AdditionalInformation += $"AddressId: {person.Address.Id}. ";
                 }
             }
             else
