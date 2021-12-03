@@ -1,9 +1,11 @@
 ﻿using _4oito6.Demonstration.Application;
+using _4oito6.Demonstration.Contact.Application.Arguments;
 using _4oito6.Demonstration.Contact.Application.Interfaces;
 using _4oito6.Demonstration.Contact.Domain.Data.Transaction;
 using _4oito6.Demonstration.Contact.Domain.Services.Interfaces;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
+using _4oito6.Demonstration.SQS.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -16,11 +18,13 @@ namespace _4oito6.Demonstration.Contact.Application
     {
         private readonly IContactServices _services;
         private readonly IContactUnitOfWork _uow;
+        private readonly ISQSHelper _sqs;
 
         public ContactAppServices
         (
             IContactServices service,
             IContactUnitOfWork uow,
+            ISQSHelper sqs,
 
             ILogger<ContactAppServices> logger,
             IAuditTrailSender auditTrail
@@ -28,6 +32,7 @@ namespace _4oito6.Demonstration.Contact.Application
         {
             _services = service ?? throw new ArgumentNullException(nameof(service));
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
+            _sqs = sqs ?? throw new ArgumentNullException(nameof(sqs));
         }
 
         public static string InformationMessage => "CONTACT_IN01";
@@ -77,6 +82,29 @@ namespace _4oito6.Demonstration.Contact.Application
         {
             try
             {
+                await MaintainInformationAsync(personId).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
+            }
+            finally
+            {
+                _uow.CloseConnections();
+            }
+        }
+
+        public async Task MaintainInformationByQueueAsync(int personId)
+        {
+            try
+            {
+                var request = await _sqs.GetAsync<MaintainInformationRequest>().ConfigureAwait(false);
+                if (request is null)
+                {
+                    HandleEmptyQueue();
+                    return;
+                }
+
                 await MaintainInformationAsync(personId).ConfigureAwait(false);
             }
             catch (Exception ex)
