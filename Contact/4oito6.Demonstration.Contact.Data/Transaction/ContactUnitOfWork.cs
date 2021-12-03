@@ -10,23 +10,23 @@ namespace _4oito6.Demonstration.Contact.Data.Transaction
 {
     public class ContactUnitOfWork : BaseUnitOfWork, IContactUnitOfWork
     {
-        private readonly IAsyncDbConnection _conn;
+        private readonly IAsyncDbConnection _relationalDatabase;
 
         private IPersonRepository _person;
         private IPhoneRepository _phone;
         private IAddressRepository _address;
 
-        public ContactUnitOfWork(IAsyncDbConnection conn) : base()
+        public ContactUnitOfWork(IAsyncDbConnection relationalDatabase) : base()
         {
-            _conn = conn ?? throw new ArgumentNullException(nameof(conn));
-            Attach(conn, DataSource.RelationalDatabase);
+            _relationalDatabase = relationalDatabase ?? throw new ArgumentNullException(nameof(relationalDatabase));
+            Attach(relationalDatabase, DataSource.RelationalDatabase);
         }
 
-        public IPersonRepository Person => _person ??= new PersonRepository(_conn, this);
+        public IPersonRepository Person => _person ??= new PersonRepository(_relationalDatabase, this);
 
-        public IPhoneRepository Phone => _phone ??= new PhoneRepository(_conn, this);
+        public IPhoneRepository Phone => _phone ??= new PhoneRepository(_relationalDatabase, this);
 
-        public IAddressRepository Address => _address ??= new AddressRepository(_conn, this);
+        public IAddressRepository Address => _address ??= new AddressRepository(_relationalDatabase, this);
 
         public override void Dispose()
         {

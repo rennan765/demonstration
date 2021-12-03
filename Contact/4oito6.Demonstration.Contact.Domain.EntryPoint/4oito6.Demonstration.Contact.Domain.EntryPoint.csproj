@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-_4oito6.Demonstration.Contact.Domain.EntryPoint-4474C152-84BC-440C-845F-A80C45C7F6FE</UserSecretsId>
+    <RootNamespace>_4oito6.Demonstration.Contact.Domain.EntryPoint</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Npgsql" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Contact.Application\4oito6.Demonstration.Contact.Application.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Contact.Data\4oito6.Demonstration.Contact.Data.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Services\4oito6.Demonstration.Contact.Domain.Services.csproj" />
+  </ItemGroup>
+</Project>

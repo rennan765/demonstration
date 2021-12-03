@@ -22,15 +22,15 @@ namespace _4oito6.Demonstration.Contact.Application
 
         public ContactAppServices
         (
-            IContactServices service,
+            IContactServices services,
             IContactUnitOfWork uow,
             ISQSHelper sqs,
 
             ILogger<ContactAppServices> logger,
             IAuditTrailSender auditTrail
-        ) : base(logger, auditTrail, new IDisposable[] { service, uow })
+        ) : base(logger, auditTrail, new IDisposable[] { services, uow })
         {
-            _services = service ?? throw new ArgumentNullException(nameof(service));
+            _services = services ?? throw new ArgumentNullException(nameof(services));
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
             _sqs = sqs ?? throw new ArgumentNullException(nameof(sqs));
         }
@@ -94,7 +94,7 @@ namespace _4oito6.Demonstration.Contact.Application
             }
         }
 
-        public async Task MaintainInformationByQueueAsync(int personId)
+        public async Task MaintainInformationByQueueAsync()
         {
             try
             {
@@ -105,7 +105,7 @@ namespace _4oito6.Demonstration.Contact.Application
                     return;
                 }
 
-                await MaintainInformationAsync(personId).ConfigureAwait(false);
+                await MaintainInformationAsync(request.PersonId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

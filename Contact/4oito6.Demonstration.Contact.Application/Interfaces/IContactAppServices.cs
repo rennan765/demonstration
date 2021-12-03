@@ -7,6 +7,6 @@ namespace _4oito6.Demonstration.Contact.Application.Interfaces
     {
         Task MaintainInformationByPersonIdAsync(int personId);
 
-        Task MaintainInformationByQueueAsync(int personId);
+        Task MaintainInformationByQueueAsync();
     }
 }

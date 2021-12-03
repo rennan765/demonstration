@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Contac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.SQS", "4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj", "{CE645543-DA70-48DB-8BFA-5E2DFB810556}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Contact.Domain.EntryPoint", "4oito6.Demonstration.Contact.Domain.EntryPoint\4oito6.Demonstration.Contact.Domain.EntryPoint.csproj", "{865F62C7-D0FF-42CD-9FB5-861499248CA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{CE645543-DA70-48DB-8BFA-5E2DFB810556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE645543-DA70-48DB-8BFA-5E2DFB810556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE645543-DA70-48DB-8BFA-5E2DFB810556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
