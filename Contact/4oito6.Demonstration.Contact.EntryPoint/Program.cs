@@ -1,5 +1,5 @@
-using _4oito6.Demonstration.Contact.Domain.EntryPoint;
-using _4oito6.Demonstration.Contact.Domain.EntryPoint.IoC;
+using _4oito6.Demonstration.Contact.EntryPoint;
+using _4oito6.Demonstration.Contact.EntryPoint.IoC;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

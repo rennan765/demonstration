@@ -4,9 +4,9 @@ using _4oito6.Demonstration.Contact.Application.Interfaces;
 using _4oito6.Demonstration.Contact.Data.Transaction;
 using _4oito6.Demonstration.Contact.Domain.Data.Repositories;
 using _4oito6.Demonstration.Contact.Domain.Data.Transaction;
-using _4oito6.Demonstration.Contact.Domain.EntryPoint.IoC.Config;
 using _4oito6.Demonstration.Contact.Domain.Services;
 using _4oito6.Demonstration.Contact.Domain.Services.Interfaces;
+using _4oito6.Demonstration.Contact.EntryPoint.IoC.Config;
 using _4oito6.Demonstration.CrossCutting.AuditTrail;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.Data.Connection;
@@ -16,7 +16,7 @@ using Amazon.SecretsManager;
 using Amazon.SQS;
 using Npgsql;
 
-namespace _4oito6.Demonstration.Contact.Domain.EntryPoint.IoC
+namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
 {
     public static class ServiceCollectionExtensions
     {

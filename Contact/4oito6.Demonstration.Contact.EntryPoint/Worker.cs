@@ -1,6 +1,6 @@
 using _4oito6.Demonstration.Contact.Application.Interfaces;
 
-namespace _4oito6.Demonstration.Contact.Domain.EntryPoint
+namespace _4oito6.Demonstration.Contact.EntryPoint
 {
     public class Worker : BackgroundService
     {

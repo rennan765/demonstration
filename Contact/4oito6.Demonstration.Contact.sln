@@ -27,11 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Contac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Contact.Application", "4oito6.Demonstration.Contact.Application\4oito6.Demonstration.Contact.Application.csproj", "{7D27CED0-806C-48EF-9305-91D4E5D45A65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Contact.Domain.EntryPoint", "4oito6.Demonstration.Contact.Domain.EntryPoint\4oito6.Demonstration.Contact.Domain.EntryPoint.csproj", "{865F62C7-D0FF-42CD-9FB5-861499248CA9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.SQS", "..\Core\4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj", "{CC69DF1A-1259-4872-B343-3FE475B963BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Contact.Test", "4oito6.Demonstration.Contact.Test\4oito6.Demonstration.Contact.Test.csproj", "{2018D54F-F2DC-4FE0-87E3-6620DE4F9C94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.Contact.EntryPoint", "4oito6.Demonstration.Contact.EntryPoint\4oito6.Demonstration.Contact.EntryPoint.csproj", "{0C0A4819-E0B7-4C4F-99FC-49510B965808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,10 +83,6 @@ Global
 		{7D27CED0-806C-48EF-9305-91D4E5D45A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D27CED0-806C-48EF-9305-91D4E5D45A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D27CED0-806C-48EF-9305-91D4E5D45A65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{865F62C7-D0FF-42CD-9FB5-861499248CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC69DF1A-1259-4872-B343-3FE475B963BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC69DF1A-1259-4872-B343-3FE475B963BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC69DF1A-1259-4872-B343-3FE475B963BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,6 +91,10 @@ Global
 		{2018D54F-F2DC-4FE0-87E3-6620DE4F9C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2018D54F-F2DC-4FE0-87E3-6620DE4F9C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2018D54F-F2DC-4FE0-87E3-6620DE4F9C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0A4819-E0B7-4C4F-99FC-49510B965808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0A4819-E0B7-4C4F-99FC-49510B965808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0A4819-E0B7-4C4F-99FC-49510B965808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0A4819-E0B7-4C4F-99FC-49510B965808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

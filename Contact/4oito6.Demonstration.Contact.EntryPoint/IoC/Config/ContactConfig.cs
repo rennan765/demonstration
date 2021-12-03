@@ -1,7 +1,7 @@
 ﻿using _4oito6.Demonstration.Config;
 using Amazon.SecretsManager;
 
-namespace _4oito6.Demonstration.Contact.Domain.EntryPoint.IoC.Config
+namespace _4oito6.Demonstration.Contact.EntryPoint.IoC.Config
 {
     public class ContactConfig : CommonConfig, IContactConfig
     {

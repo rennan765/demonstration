@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-_4oito6.Demonstration.Contact.Domain.EntryPoint-4474C152-84BC-440C-845F-A80C45C7F6FE</UserSecretsId>
-    <RootNamespace>_4oito6.Demonstration.Contact.Domain.EntryPoint</RootNamespace>
+    <UserSecretsId>dotnet-_4oito6.Demonstration.Contact.EntryPoint-8E79BF6C-3504-41C8-8717-9D60CD6BDF24</UserSecretsId>
+    <RootNamespace>_4oito6.Demonstration.Contact.EntryPoint</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Application\4oito6.Demonstration.Contact.Application.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Data\4oito6.Demonstration.Contact.Data.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Data\4oito6.Demonstration.Contact.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Services\4oito6.Demonstration.Contact.Domain.Services.csproj" />
   </ItemGroup>
 </Project>
