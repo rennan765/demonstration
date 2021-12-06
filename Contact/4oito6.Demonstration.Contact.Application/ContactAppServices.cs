@@ -16,9 +16,19 @@ namespace _4oito6.Demonstration.Contact.Application
 {
     public class ContactAppServices : AppServiceBase, IContactAppServices
     {
+        private static readonly int _runInterval;
+        private static readonly object _runCheckSyncRoot;
+        private static DateTime? _lastRunCheck;
+
         private readonly IContactServices _services;
         private readonly IContactUnitOfWork _uow;
         private readonly ISQSHelper _sqs;
+
+        static ContactAppServices()
+        {
+            _runInterval = (int)TimeSpan.FromMinutes(1).TotalSeconds;
+            _runCheckSyncRoot = new object();
+        }
 
         public ContactAppServices
         (
@@ -38,6 +48,25 @@ namespace _4oito6.Demonstration.Contact.Application
         public static string InformationMessage => "CONTACT_IN01";
 
         public static string WarningMessage => "CONTACT_WA01";
+
+        private bool IsAbleToRun()
+        {
+            var now = DateTime.UtcNow;
+
+            if (_lastRunCheck is null || now.Subtract(_lastRunCheck.Value).TotalSeconds >= _runInterval)
+            {
+                lock (_runCheckSyncRoot)
+                {
+                    if (_lastRunCheck is null || now.Subtract(_lastRunCheck.Value).TotalSeconds >= _runInterval)
+                    {
+                        _lastRunCheck = now;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         public virtual async Task MaintainInformationAsync(int personId)
         {
@@ -98,6 +127,11 @@ namespace _4oito6.Demonstration.Contact.Application
         {
             try
             {
+                if (!IsAbleToRun())
+                {
+                    return;
+                }
+
                 var request = await _sqs.GetAsync<MaintainInformationRequest>().ConfigureAwait(false);
                 if (request is null)
                 {
