@@ -9,5 +9,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC.Config
             : base(configuration, secretsManager)
         {
         }
+
+        public string PersonQueueUrl => Environment.GetEnvironmentVariable("PersonQueueUrl");
     }
 }
