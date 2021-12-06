@@ -24,9 +24,13 @@ namespace _4oito6.Demonstration.Data.Transaction
 
         public void CloseConnections()
         {
+            Rollback();
+
             foreach (var conn in _connections.Values)
             {
                 conn.Close();
+
+                _connections.Clear();
             }
         }
 
@@ -36,6 +40,8 @@ namespace _4oito6.Demonstration.Data.Transaction
             {
                 transaction.Commit();
             }
+
+            _transactions.Clear();
         }
 
         public void NotifyDataOperation(DataOperation dataOperation)
@@ -57,6 +63,8 @@ namespace _4oito6.Demonstration.Data.Transaction
             {
                 transaction.Rollback();
             }
+
+            _transactions.Clear();
         }
 
         public void EnableTransactions()

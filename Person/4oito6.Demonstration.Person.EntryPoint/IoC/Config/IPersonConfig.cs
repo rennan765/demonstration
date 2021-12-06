@@ -4,5 +4,6 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC.Config
 {
     public interface IPersonConfig : ICommonConfig
     {
+        string PersonQueueUrl { get; }
     }
 }

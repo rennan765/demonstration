@@ -40,10 +40,12 @@ namespace _4oito6.Demonstration.Person.Domain.Services
                 return person;
             }
 
-            return await _repoRoot.Person.InsertAsync(person).ConfigureAwait(false);
+            var newPerson = await _repoRoot.Person.InsertAsync(person).ConfigureAwait(false);
+            await _repoRoot.Person.RequestMaintainContactInformationAsync(newPerson).ConfigureAwait(false);
+            return newPerson;
         }
 
-        public Task<Person> GetByEmailAsync(string email) 
+        public Task<Person> GetByEmailAsync(string email)
             => _repoRoot.Person.GetByEmailAsync(email);
 
         public Task<Person> GetByIdAsync(int id)
@@ -69,7 +71,9 @@ namespace _4oito6.Demonstration.Person.Domain.Services
                 return person;
             }
 
-            return await _repoRoot.Person.UpdateAsync(person).ConfigureAwait(false);
+            var updatedPerson = await _repoRoot.Person.UpdateAsync(person).ConfigureAwait(false);
+            await _repoRoot.Person.RequestMaintainContactInformationAsync(updatedPerson).ConfigureAwait(false);
+            return updatedPerson;
         }
     }
 }

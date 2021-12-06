@@ -51,5 +51,10 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         {
             return new Phone(Id, Type, Code, Number);
         }
+
+        public bool Match(Phone phone)
+        {
+            return ToString().Equals(phone.ToString());
+        }
     }
 }

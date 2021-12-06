@@ -16,5 +16,7 @@ namespace _4oito6.Demonstration.Person.Domain.Data.Repositories
         Task<Person> InsertAsync(Person person);
 
         Task<Person> UpdateAsync(Person person);
+
+        Task RequestMaintainContactInformationAsync(Person person);
     }
 }

@@ -57,5 +57,22 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         {
             return new Address(Id, Street, Number, Complement, District, City, State, PostalCode);
         }
+
+        public bool Match(Address address)
+        {
+            if (address is null)
+            {
+                return false;
+            }
+
+            return Id == address.Id &&
+                Street == address.Street &&
+                Complement == address.Complement &&
+                District == address.District &&
+                Number == address.Number &&
+                City == address.City &&
+                State == address.State &&
+                PostalCode == address.PostalCode;
+        }
     }
 }

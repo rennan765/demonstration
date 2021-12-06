@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Domain.Data\4oito6.Demonstration.Domain.Data.csproj" />
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Domain.Model\4oito6.Demonstration.Domain.Model.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj" />
   </ItemGroup>
 
 </Project>

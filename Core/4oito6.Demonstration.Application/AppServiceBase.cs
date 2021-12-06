@@ -15,7 +15,15 @@ namespace _4oito6.Demonstration.Application
 {
     public abstract class AppServiceBase : DisposableObject, IAppServiceBase
     {
+        private static DateTime? _lastHealthCheck;
+        private static object _healthCheckSyncRoot;
+
         private readonly List<Notification> _notifications;
+
+        static AppServiceBase()
+        {
+            _healthCheckSyncRoot = new object();
+        }
 
         protected AppServiceBase
         (
@@ -70,6 +78,23 @@ namespace _4oito6.Demonstration.Application
                 _notifications.AddRange(entity.ValidationResults.
                     SelectMany(r => r.Errors)
                     .Select(vf => new Notification(vf.PropertyName, vf.ErrorMessage)));
+            }
+        }
+
+        protected void HandleEmptyQueue(string message = "Empty queue.")
+        {
+            var now = DateTime.UtcNow;
+
+            if (_lastHealthCheck is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
+            {
+                lock (_healthCheckSyncRoot)
+                {
+                    if (_lastHealthCheck is null || now.Subtract(_lastHealthCheck.Value).TotalHours > 1)
+                    {
+                        _lastHealthCheck = now;
+                        Logger.LogInformation(message);
+                    }
+                }
             }
         }
     }

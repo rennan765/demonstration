@@ -8,7 +8,9 @@ Acesse a página http://localhost:{porta}/swagger para abrir a interface do swag
 Caso queira abrir a interface do swagger minimizada, acessar http://localhost:{porta}/swagger/index.html?docExpansion=none.
 <hr />
 
+Ao efetuar o cadastro de uma nova pessoa ou alterar o cadastro de uma pessao existente, o sistema enviará uma mensagem para uma fila informando qual pessoa foi alterada.
 <hr />
+
 Este projeto utiliza variáveis de ambiente para o funcionamento. 
 Para que o mesmo execute normalmente, será necessário inserir as variáveis abaixo: 
 
@@ -62,6 +64,11 @@ Para que o mesmo execute normalmente, será necessário inserir as variáveis ab
     <td>AwsRegion</td>
     <td>Região dos serviços AWS</td>
     <td>sa-east-1</td>
+  </tr>
+  <tr>
+    <td>PersonQueueUrl</td>
+    <td>Fila para publicação da pessoa adicionada/alterada</td>
+    <td>https://sqs.sa-east-1.amazonaws.com/257893541578/PERSON</td>
   </tr>
 </table>
 

@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.Person.Test", "4oito6.Demonstration.Person.Test\4oito6.Demonstration.Person.Test.csproj", "{D301F1B4-D857-4E0E-A194-ADEAE193AC76}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.SQS", "..\Core\4oito6.Demonstration.SQS\4oito6.Demonstration.SQS.csproj", "{930089BE-D757-4176-9423-46F7B58942C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{D301F1B4-D857-4E0E-A194-ADEAE193AC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D301F1B4-D857-4E0E-A194-ADEAE193AC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D301F1B4-D857-4E0E-A194-ADEAE193AC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{930089BE-D757-4176-9423-46F7B58942C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{930089BE-D757-4176-9423-46F7B58942C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{930089BE-D757-4176-9423-46F7B58942C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{930089BE-D757-4176-9423-46F7B58942C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{6DD59EDF-B3B0-499E-A7E2-BDB84CDCB67B} = {DC3B99C6-3E1F-487F-B474-D4648D288E7B}
 		{71147E02-43E3-44B3-A188-EF926682A2D1} = {DC3B99C6-3E1F-487F-B474-D4648D288E7B}
 		{E76F6A72-091B-4B3D-BE00-F3B6B8369AD9} = {DC3B99C6-3E1F-487F-B474-D4648D288E7B}
+		{930089BE-D757-4176-9423-46F7B58942C4} = {DC3B99C6-3E1F-487F-B474-D4648D288E7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4C70074C-5749-411B-B94C-72C187A2947F}

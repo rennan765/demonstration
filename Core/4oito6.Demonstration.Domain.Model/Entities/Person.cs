@@ -133,7 +133,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
-        public IEnumerable<Phone> Phones => _phones.Select(p => p.Value);
+        public IEnumerable<Phone> Phones => _phones.Select(p => p.Value).ToList();
         public Phone MainPhone { get; private set; }
 
         public void Attach(Address address)
@@ -191,6 +191,30 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public bool ValidateToUpdate() => Validate(this, new UpdatePersonValidator());
 
+        public void ClearPhones()
+        {
+            _phones.Clear();
+            MainPhone = null;
+        }
+
+        public void ClearAddress()
+        {
+            Address = null;
+        }
+
+        public static Person GetDefaultInstance()
+        {
+            return new Person
+            (
+                name: string.Empty,
+                email: string.Empty,
+                document: "00000000000",
+
+                gender: Gender.NotInformed,
+                birthDate: DateTime.UtcNow.Date
+            );
+        }
+
         public object Clone()
         {
             return new Person
@@ -207,6 +231,50 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 mainPhone: (Phone)MainPhone.Clone(),
                 address: (Address?)Address?.Clone()
             );
+        }
+
+        public bool Match(Person person)
+        {
+            if (person is null)
+            {
+                return false;
+            }
+
+            //validate address:
+            if (!(Address is null && person.Address is null) && !Address.Match(person.Address))
+            {
+                return false;
+            }
+
+            //validate phones
+            var thisPhones = Phones.ToDictionary(p => p.ToString());
+            var personPhones = person.Phones.ToDictionary(p => p.ToString());
+
+            foreach (var phone in thisPhones)
+            {
+                if (!personPhones.ContainsKey(phone.Key))
+                {
+                    return false;
+                }
+
+                if (!personPhones[phone.Key].Match(phone.Value))
+                {
+                    return false;
+                }
+            }
+
+            if (!MainPhone.Match(person.MainPhone))
+            {
+                return false;
+            }
+
+            //validate person:
+            return Id == person.Id &&
+                Name == person.Name &&
+                Email == person.Email &&
+                Document == person.Document &&
+                Gender == person.Gender &&
+                BirthDate.Date == person.BirthDate.Date;
         }
     }
 }

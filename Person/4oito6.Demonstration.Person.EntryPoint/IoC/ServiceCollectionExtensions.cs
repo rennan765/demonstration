@@ -4,13 +4,16 @@ using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.Data.Connection;
 using _4oito6.Demonstration.Person.Application;
 using _4oito6.Demonstration.Person.Application.Interfaces;
+using _4oito6.Demonstration.Person.Data.Repositories.NonTransactional;
 using _4oito6.Demonstration.Person.Data.Transaction;
 using _4oito6.Demonstration.Person.Domain.Data.Repositories;
+using _4oito6.Demonstration.Person.Domain.Data.Repositories.NonTransactional;
 using _4oito6.Demonstration.Person.Domain.Data.Transaction;
 using _4oito6.Demonstration.Person.Domain.Services;
 using _4oito6.Demonstration.Person.Domain.Services.Interfaces;
 using _4oito6.Demonstration.Person.EntryPoint.Filters;
 using _4oito6.Demonstration.Person.EntryPoint.IoC.Config;
+using _4oito6.Demonstration.SQS;
 using Amazon;
 using Amazon.SecretsManager;
 using Amazon.SQS;
@@ -67,6 +70,19 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
                 );
 
             // add data:
+            services.AddScoped<IPersonNonTransactionRepositoryRoot>(sp =>
+            {
+                var config = sp.GetService<IPersonConfig>();
+                return new PersonNonTransactionRepositoryRoot
+                (
+                    personQueue: new SQSHelper
+                    (
+                        sqs: sp.GetService<IAmazonSQS>(),
+                        queue: config.PersonQueueUrl
+                    )
+                );
+            });
+
             services
                 .AddScoped<IPersonUnitOfWork>
                 (
@@ -78,7 +94,8 @@ namespace _4oito6.Demonstration.Person.EntryPoint.IoC
                             relationalDatabase: new AsyncDbConnection
                             (
                                 conn: new NpgsqlConnection(config.GetRelationalDatabaseConnectionString().Result)
-                            )
+                            ),
+                            nonTransactional: sp.GetService<IPersonNonTransactionRepositoryRoot>()
                         );
                     }
                 )
