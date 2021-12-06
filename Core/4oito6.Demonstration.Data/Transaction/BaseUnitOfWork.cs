@@ -32,64 +32,64 @@ namespace _4oito6.Demonstration.Data.Transaction
 
                 _connections.Clear();
             }
+        }
 
-            public void Commit()
+        public void Commit()
+        {
+            foreach (var transaction in _transactions.Values)
             {
-                foreach (var transaction in _transactions.Values)
-                {
-                    transaction.Commit();
-                }
-
-                _transactions.Clear();
+                transaction.Commit();
             }
 
-            public void NotifyDataOperation(DataOperation dataOperation)
-            {
-                if (_connections.ContainsKey(dataOperation.DataSource) && _connections[dataOperation.DataSource].State == ConnectionState.Closed)
-                {
-                    _connections[dataOperation.DataSource].Open();
-                }
+            _transactions.Clear();
+        }
 
-                if (ActiveTransactions && _connections.ContainsKey(dataOperation.DataSource) && dataOperation.OperationType == OperationType.Write && !_transactions.ContainsKey(dataOperation.DataSource))
-                {
-                    _transactions.Add(dataOperation.DataSource, _connections[dataOperation.DataSource].BeginTransaction());
-                }
+        public void NotifyDataOperation(DataOperation dataOperation)
+        {
+            if (_connections.ContainsKey(dataOperation.DataSource) && _connections[dataOperation.DataSource].State == ConnectionState.Closed)
+            {
+                _connections[dataOperation.DataSource].Open();
             }
 
-            public void Rollback()
+            if (ActiveTransactions && _connections.ContainsKey(dataOperation.DataSource) && dataOperation.OperationType == OperationType.Write && !_transactions.ContainsKey(dataOperation.DataSource))
             {
-                foreach (var transaction in _transactions.Values)
-                {
-                    transaction.Rollback();
-                }
+                _transactions.Add(dataOperation.DataSource, _connections[dataOperation.DataSource].BeginTransaction());
+            }
+        }
 
-                _transactions.Clear();
+        public void Rollback()
+        {
+            foreach (var transaction in _transactions.Values)
+            {
+                transaction.Rollback();
             }
 
-            public void EnableTransactions()
+            _transactions.Clear();
+        }
+
+        public void EnableTransactions()
+        {
+            ActiveTransactions = true;
+        }
+
+        public void DisableTransactions()
+        {
+            Rollback();
+            ActiveTransactions = false;
+        }
+
+        protected void Attach(IAsyncDbConnection connection, DataSource dataSource)
+        {
+            if (connection is null)
             {
-                ActiveTransactions = true;
+                throw new ArgumentNullException(nameof(connection));
             }
 
-            public void DisableTransactions()
+            if (!_connections.ContainsKey(dataSource))
             {
-                Rollback();
-                ActiveTransactions = false;
+                _connections.Add(dataSource, connection);
             }
-
-            protected void Attach(IAsyncDbConnection connection, DataSource dataSource)
-            {
-                if (connection is null)
-                {
-                    throw new ArgumentNullException(nameof(connection));
-                }
-
-                if (!_connections.ContainsKey(dataSource))
-                {
-                    _connections.Add(dataSource, connection);
-                }
-            }
-
+        }
 
         protected virtual void Dispose(bool disposing)
         {
