@@ -11,6 +11,8 @@ namespace _4oito6.Demonstration.Data.Connection
     /// </summary>
     public interface IAsyncDbConnection : IDisposable
     {
+        IDbConnection Connection { get; }
+
         IDbTransaction Transaction { get; }
 
         string ConnectionString { get; }

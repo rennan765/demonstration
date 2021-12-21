@@ -73,7 +73,7 @@ namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
                         (
                             relationalDatabase: new AsyncDbConnection
                             (
-                                conn: new NpgsqlConnection(config.GetRelationalDatabaseConnectionString().Result)
+                                connection: new NpgsqlConnection(config.GetRelationalDatabaseConnectionString().Result)
                             )
                         );
                     }

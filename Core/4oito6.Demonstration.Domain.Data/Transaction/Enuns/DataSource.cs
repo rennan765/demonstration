@@ -2,6 +2,7 @@
 {
     public enum DataSource
     {
-        RelationalDatabase
+        RelationalDatabase,
+        CloneDatabase
     }
 }
