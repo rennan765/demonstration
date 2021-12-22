@@ -1,4 +1,5 @@
 ﻿using _4oito6.Demonstration.Commons;
+using _4oito6.Demonstration.Contact.Data.Model;
 using _4oito6.Demonstration.Contact.Domain.Data.Repositories;
 using _4oito6.Demonstration.Data.Connection;
 using _4oito6.Demonstration.Data.Model;
@@ -15,15 +16,26 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 {
     public class PhoneRepository : DisposableObject, IPhoneRepository
     {
-        private readonly IAsyncDbConnection _conn;
+        private readonly IAsyncDbConnection _relationalConn;
+        private readonly IMySqlAsyncDbConnection _cloneConn;
         private readonly IDataOperationHandler _handler;
 
         public static string GetByNumber { get; private set; }
 
         public static string DeleteWithoutPerson { get; private set; }
 
+        public static string TemporaryTableName { get; private set; }
+
+        public static string DropTemporaryTable { get; private set; }
+
+        public static string CreateTemporaryTable { get; private set; }
+
+        public static string MaintainFromTemporaryTable { get; private set; }
+
         static PhoneRepository()
         {
+            var properties = typeof(PhoneDto).GetProperties();
+
             GetByNumber = $@"
             WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) AS ({{0}})
             SELECT P.{nameof(PhoneDto.phoneid)}, P.{nameof(PhoneDto.type)}, P.{nameof(PhoneDto.code)}, P.{nameof(PhoneDto.number)}
@@ -52,12 +64,50 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                               FROM tb_person_phone PP
                               WHERE PP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
             ";
+
+            TemporaryTableName = "temp_phone";
+
+            DropTemporaryTable = $@"DROP TABLE IF EXISTS {TemporaryTableName};";
+
+            CreateTemporaryTable = $@"{DropTemporaryTable}
+
+            CREATE TEMPORARY TABLE {TemporaryTableName}
+            (
+                {nameof(PhoneDto.phoneid)} INT NOT NULL,
+                {nameof(PhoneDto.code)} CHAR(2) NOT NULL,
+                {nameof(PhoneDto.number)} varchar(9) NOT NULL
+            );
+            ";
+
+            MaintainFromTemporaryTable = $@"
+            DELETE P FROM tb_phone P
+            WHERE NOT EXISTS (SELECT 1 FROM temp_phone TEMP WHERE TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
+
+            UPDATE tb_phone P
+            INNER JOIN temp_phone TEMP ON TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)}
+            SET P.{nameof(PhoneDto.code)} = TEMP.{nameof(PhoneDto.code)},
+	            P.{nameof(PhoneDto.number)} = TEMP.{nameof(PhoneDto.number)}
+            WHERE TEMP.{nameof(PhoneDto.code)} IS NOT NULL AND TEMP.{nameof(PhoneDto.number)} IS NOT NULL;
+
+            INSERT INTO tb_phone ({string.Join(",", properties.Select(p => p.Name))})
+            SELECT {string.Join(",", properties.Select(p => p.Name))}
+            FROM {TemporaryTableName} TEMP
+            WHER NOT EXISTS (SELECT 1
+                             FROM tb_phone P
+                             WHERE p.{nameof(PhoneDto.phoneid)} = TEMP.{nameof(PhoneDto.phoneid)});
+            ";
         }
 
-        public PhoneRepository(IAsyncDbConnection conn, IDataOperationHandler handler)
-            : base(new IDisposable[] { conn })
+        public PhoneRepository
+        (
+            IAsyncDbConnection relationalConn,
+            IMySqlAsyncDbConnection cloneConn,
+            IDataOperationHandler handler
+        )
+            : base(new IDisposable[] { relationalConn, cloneConn })
         {
-            _conn = conn ?? throw new ArgumentNullException(nameof(conn));
+            _relationalConn = relationalConn ?? throw new ArgumentNullException(nameof(relationalConn));
+            _cloneConn = cloneConn ?? throw new ArgumentNullException(nameof(cloneConn));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
@@ -68,11 +118,11 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var command = new CommandDefinition
             (
                 commandText: DeleteWithoutPerson,
-                transaction: _conn.Transaction,
+                transaction: _relationalConn.Transaction,
                 commandTimeout: (int)TimeSpan.FromMinutes(2).TotalSeconds
             );
 
-            return _conn.ExecuteAsync(command);
+            return _relationalConn.ExecuteAsync(command);
         }
 
         public async Task<IEnumerable<Phone>> GetByNumberAsync(IEnumerable<Phone> phones)
@@ -102,12 +152,12 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             (
                 commandText: string.Format(GetByNumber, string.Join(" UNION ", whereClauses)),
                 parameters: parameters,
-                transaction: _conn.Transaction
+                transaction: _relationalConn.Transaction
             );
 
             whereClauses.Clear();
 
-            return (await _conn.QueryAsync<PhoneDto>(command).ConfigureAwait(false))
+            return (await _relationalConn.QueryAsync<PhoneDto>(command).ConfigureAwait(false))
                 .Select(dto => dto.ToPhone())
                 .ToList();
         }
@@ -116,19 +166,59 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
         {
             _handler.NotifyDataOperation(DataOperation.RelationalDatabaseRead);
 
-            return (await _conn
+            return (await _relationalConn
                 .GetAllAsync<PhoneDto>
                 (
-                    transaction: _conn.Transaction,
+                    transaction: _relationalConn.Transaction,
                     commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
                 ).ConfigureAwait(false))
                 .Select(dto => dto.ToPhone())
                 .ToList();
         }
 
-        public Task CloneAsync(IEnumerable<Phone> phones)
+        public async Task CloneAsync(IEnumerable<Phone> phones)
         {
-            throw new NotImplementedException();
+            if (phones is null)
+            {
+                throw new ArgumentNullException(nameof(phones));
+            }
+
+            if (!phones.Any())
+            {
+                return;
+            }
+
+            _handler.NotifyDataOperation(DataOperation.CloneDatabaseWrite);
+
+            //creating temp table:
+            var command = new CommandDefinition
+            (
+                commandText: CreateTemporaryTable,
+                transaction: _relationalConn.Transaction
+            );
+
+            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
+
+            //var inserting
+            using var bulkOperation = _cloneConn
+                .GetBulkOperation
+                (
+                    tableName: TemporaryTableName,
+                    commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+                );
+
+            phones.Select(p => p.ToPhoneDto().ToBulkDictionary());
+            await bulkOperation.BulkInsertAsync().ConfigureAwait(false);
+
+            //maintain:
+            command = new CommandDefinition
+            (
+                commandText: MaintainFromTemporaryTable,
+                transaction: _cloneConn.Transaction,
+                commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+            );
+
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
         }
     }
 }

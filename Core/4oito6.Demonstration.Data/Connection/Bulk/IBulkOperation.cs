@@ -6,7 +6,7 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
 {
     public interface IBulkOperation : IDisposable
     {
-        void SetRow(Dictionary<string, object> row);
+        void AddRow(Dictionary<string, object> row);
 
         Task<int> BulkInsertAsync();
     }

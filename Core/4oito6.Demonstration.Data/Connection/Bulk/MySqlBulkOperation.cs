@@ -42,7 +42,7 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
             return result.RowsInserted;
         }
 
-        public void SetRow(Dictionary<string, object> row)
+        public void AddRow(Dictionary<string, object> row)
         {
             if (row is null)
             {
