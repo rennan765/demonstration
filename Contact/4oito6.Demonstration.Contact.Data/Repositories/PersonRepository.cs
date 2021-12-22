@@ -1,4 +1,5 @@
 ﻿using _4oito6.Demonstration.Commons;
+using _4oito6.Demonstration.Contact.Data.Model;
 using _4oito6.Demonstration.Contact.Domain.Data.Repositories;
 using _4oito6.Demonstration.Data.Connection;
 using _4oito6.Demonstration.Data.Model;
@@ -15,16 +16,29 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 {
     public class PersonRepository : DisposableObject, IPersonRepository
     {
-        private readonly IAsyncDbConnection _conn;
+        private readonly IAsyncDbConnection _relationalConn;
+        private readonly IMySqlAsyncDbConnection _cloneConn;
         private readonly IDataOperationHandler _handler;
 
         public static string Get { get; private set; }
+
         public static string GetById { get; private set; }
+
         public static string MaintainPersonPhone { get; private set; }
+
+        public static string TemporaryTableName { get; private set; }
+
+        public static string DropTemporaryTable { get; private set; }
+
+        public static string CreateTemporaryTable { get; private set; }
+
+        public static string MaintainFromTemporaryTable { get; private set; }
 
         static PersonRepository()
         {
             var personProperties = typeof(PersonDto).GetProperties().Select(p => p.Name);
+            var personPropertiesWithoutId = personProperties.Where(n => !n.Equals(nameof(PersonDto.personid)));
+
             var addressProperties = typeof(AddressDto).GetProperties().Select(p => p.Name);
             var phoneProperties = typeof(PhoneDto).GetProperties().Select(p => p.Name);
 
@@ -63,12 +77,57 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                                         FROM Phones TEMP
                                         WHERE TEMP.{nameof(PersonPhoneDto.phoneid)} = pp2.{nameof(PersonPhoneDto.phoneid)}));
             ";
+
+            TemporaryTableName = @"temp_person";
+
+            DropTemporaryTable = $@"DROP TABLE IF EXISTS {TemporaryTableName};";
+
+            CreateTemporaryTable = $@"{DropTemporaryTable}
+
+            CREATE TEMPORARY TABLE {TemporaryTableName}
+            (
+                {nameof(PersonDto.personid)} int not null,
+	            {nameof(PersonDto.name)} varchar(80) not null,
+	            {nameof(PersonDto.birthdate)} date not null,
+	            {nameof(PersonDto.document)} char(11) not null,
+	            {nameof(PersonDto.email)} varchar(150) not null,
+	            {nameof(PersonDto.gender)} int not null,
+	            {nameof(PersonDto.addressid)} int null,
+	            {nameof(PersonDto.mainphoneid)} int not null
+            );
+            ";
+
+            MaintainFromTemporaryTable = $@"
+            DELETE PP FROM tb_person_phone PP
+            WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(PersonDto.personid)} = PP.{nameof(PersonDto.personid)});
+
+            DELETE P FROM tb_person P
+            WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(PersonDto.personid)} = P.{nameof(PersonDto.personid)});
+
+            UPDATE tb_person P
+            INNER JOIN {TemporaryTableName} TEMP ON TEMP.{nameof(PersonDto.personid)} = P.{nameof(PersonDto.personid)}
+            SET {string.Join(",", personPropertiesWithoutId.Select(p => $"P.{p} = TEMP.{p}"))}
+            WHERE {string.Join(" AND ", personPropertiesWithoutId.Select(p => $"TEMP.{p} IS NOT NULL"))};
+
+            INSERT INTO tb_person ({string.Join(",", personProperties.Select(p => p))})
+            SELECT {string.Join(",", personProperties.Select(p => p))}
+            FROM {TemporaryTableName} TEMP
+            WHER NOT EXISTS (SELECT 1
+                             FROM tb_person P
+                             WHERE P.{nameof(PersonDto.personid)} = TEMP.{nameof(PersonDto.personid)});
+            ";
         }
 
-        public PersonRepository(IAsyncDbConnection conn, IDataOperationHandler handler)
-            : base(new IDisposable[] { conn })
+        public PersonRepository
+        (
+            IAsyncDbConnection relationalConn,
+            IMySqlAsyncDbConnection cloneConn,
+            IDataOperationHandler handler
+        )
+            : base(new IDisposable[] { relationalConn, cloneConn })
         {
-            _conn = conn ?? throw new ArgumentNullException(nameof(conn));
+            _relationalConn = relationalConn ?? throw new ArgumentNullException(nameof(relationalConn));
+            _cloneConn = cloneConn ?? throw new ArgumentNullException(nameof(cloneConn));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
@@ -79,11 +138,11 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var command = new CommandDefinition
             (
                 commandText: GetById,
-                transaction: _conn.Transaction,
+                transaction: _relationalConn.Transaction,
                 commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
             );
 
-            return (await _conn
+            return (await _relationalConn
                 .QueryAsync<CompletePersonDto, AddressDto, PhoneDto, CompletePersonDto>
                 (
                     command: command,
@@ -108,10 +167,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                 {
                     { $"{nameof(PersonDto.personid)}", id }
                 },
-                transaction: _conn.Transaction
+                transaction: _relationalConn.Transaction
             );
 
-            return (await _conn
+            return (await _relationalConn
                 .QueryAsync<CompletePersonDto, AddressDto, PhoneDto, CompletePersonDto>
                 (
                     command: command,
@@ -126,7 +185,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             _handler.NotifyDataOperation(DataOperation.RelationalDatabaseWrite);
 
             //updating person data:
-            await _conn.UpdateAsync(person.ToPersonDto(), _conn.Transaction)
+            await _relationalConn.UpdateAsync(person.ToPersonDto(), _relationalConn.Transaction)
                 .ConfigureAwait(false);
 
             //updating personphone data:
@@ -141,16 +200,77 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             (
                 commandText: string.Format(MaintainPersonPhone, cteClause),
                 parameters: parameters,
-                transaction: _conn.Transaction,
+                transaction: _relationalConn.Transaction,
                 commandTimeout: (int)TimeSpan.FromMinutes(1).TotalSeconds
             );
 
-            await _conn.ExecuteAsync(command).ConfigureAwait(false);
+            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
         }
 
-        public Task CloneAsync(IEnumerable<Person> persons)
+        public async Task CloneAsync(IEnumerable<Person> persons)
         {
-            throw new NotImplementedException();
+            if (persons is null)
+            {
+                throw new ArgumentNullException(nameof(persons));
+            }
+
+            if (!persons.Any())
+            {
+                return;
+            }
+
+            _handler.NotifyDataOperation(DataOperation.CloneDatabaseWrite);
+
+            //creating temp table:
+            var command = new CommandDefinition
+            (
+                commandText: CreateTemporaryTable,
+                transaction: _relationalConn.Transaction
+            );
+
+            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
+
+            //var inserting
+            using var bulkOperation = _cloneConn
+                .GetBulkOperation
+                (
+                    tableName: TemporaryTableName,
+                    commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+                );
+
+            persons.Select(p => p.ToPersonDto().ToBulkDictionary());
+            await bulkOperation.BulkInsertAsync().ConfigureAwait(false);
+
+            //maintain:
+            command = new CommandDefinition
+            (
+                commandText: MaintainFromTemporaryTable,
+                transaction: _cloneConn.Transaction,
+                commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+            );
+
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
+
+            //updating personphone data:
+            foreach (var person in persons) // TODO: this process must run by a bulk insert.
+            {
+                var i = 0;
+                var parameters = person.Phones
+                    .ToDictionary(_ => $"@{nameof(PersonPhoneDto.phoneid)}{++i}", p => (object)p.Id);
+
+                var cteClause = string.Join(" UNION ", parameters.Keys.Select(p => $"SELECT {p}"));
+                parameters.Add($"@{nameof(PersonPhoneDto.personid)}", person.Id);
+
+                command = new CommandDefinition
+                (
+                    commandText: string.Format(MaintainPersonPhone, cteClause),
+                    parameters: parameters,
+                    transaction: _relationalConn.Transaction,
+                    commandTimeout: (int)TimeSpan.FromMinutes(1).TotalSeconds
+                );
+
+                await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
+            }
         }
     }
 }

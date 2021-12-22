@@ -66,13 +66,13 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 	            {nameof(AddressDto.district)} VARCHAR(30) NOT NULL,
 	            {nameof(AddressDto.city)} VARCHAR(30) NOT NULL,
 	            {nameof(AddressDto.state)} CHAR(2) NOT NULL,
-	            {nameof(AddressDto.postalcode)} CHAR(8) NOT NULL,
+	            {nameof(AddressDto.postalcode)} CHAR(8) NOT NULL
             );
             ";
 
             MaintainFromTemporaryTable = $@"
-            DELETE P FROM tb_address A
-            WHERE NOT EXISTS (SELECT 1 FROM temp_phone TEMP WHERE TEMP.{nameof(AddressDto.addressid)} = A.{nameof(AddressDto.addressid)});
+            DELETE A FROM tb_address A
+            WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(AddressDto.addressid)} = A.{nameof(AddressDto.addressid)});
 
             UPDATE tb_address A
             INNER JOIN {TemporaryTableName} TEMP ON TEMP.{nameof(AddressDto.addressid)} = A.{nameof(AddressDto.addressid)}
