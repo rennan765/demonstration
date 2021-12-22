@@ -49,6 +49,9 @@ namespace _4oito6.Demonstration.Data.Connection
         public Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters)
             => Connection.QueryAsync<T>(sql: sql, param: parameters);
 
+        public Task<IEnumerable<T>> GetAllAsync<T>(IDbTransaction transaction, int? commandTimeout = null) where T : class
+            => Connection.GetAllAsync<T>(transaction, commandTimeout);
+
         public Task<int> ExecuteAsync(CommandDefinition command)
             => Connection.ExecuteAsync(command);
 

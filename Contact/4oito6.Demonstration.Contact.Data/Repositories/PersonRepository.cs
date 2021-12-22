@@ -18,6 +18,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
         private readonly IAsyncDbConnection _conn;
         private readonly IDataOperationHandler _handler;
 
+        public static string Get { get; private set; }
         public static string GetById { get; private set; }
         public static string MaintainPersonPhone { get; private set; }
 
@@ -27,7 +28,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var addressProperties = typeof(AddressDto).GetProperties().Select(p => p.Name);
             var phoneProperties = typeof(PhoneDto).GetProperties().Select(p => p.Name);
 
-            GetById = $@"
+            Get = $@"
             SELECT
                 {string.Join(",", personProperties.Select(p => $"p.{p}"))},
                 {string.Join(",", addressProperties.Select(a => $"a.{a}"))},
@@ -36,6 +37,9 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             LEFT JOIN tb_address a ON a.{nameof(AddressDto.addressid)} = p.{nameof(PersonDto.addressid)}
             INNER JOIN tb_person_phone pp ON pp.{nameof(PersonPhoneDto.personid)} = p.{nameof(PersonDto.personid)}
             INNER JOIN tb_phone ph ON ph.{nameof(PhoneDto.phoneid)} = pp.{nameof(PersonPhoneDto.phoneid)}
+            ";
+
+            GetById = $@"{Get}
             WHERE p.{nameof(PersonDto.personid)} = @{nameof(PersonDto.personid)};
             ";
 
@@ -66,6 +70,31 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
         {
             _conn = conn ?? throw new ArgumentNullException(nameof(conn));
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+        }
+
+        public async Task<IEnumerable<Person>> GetAllAsync()
+        {
+            _handler.NotifyDataOperation(DataOperation.RelationalDatabaseRead);
+
+            var command = new CommandDefinition
+            (
+                commandText: GetById,
+                transaction: _conn.Transaction,
+                commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+            );
+
+            return (await _conn
+                .QueryAsync<CompletePersonDto, AddressDto, PhoneDto, CompletePersonDto>
+                (
+                    command: command,
+                    map: PersonDataMapper.MapPersonDtoProperties,
+                    splitOn: $"{nameof(PersonDto.personid)}, {nameof(AddressDto.addressid)}, {nameof(PhoneDto.phoneid)}"
+                )
+                .ConfigureAwait(false))
+                .GroupBy(p => p.personid)
+                .ToDictionary(p => p.Key, p => p.ToList())
+                .Select(p => p.Value.ToPerson())
+                .ToList();
         }
 
         public async Task<Person> GetByIdAsync(int id)

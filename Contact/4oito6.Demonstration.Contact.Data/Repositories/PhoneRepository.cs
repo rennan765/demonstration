@@ -111,5 +111,19 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                 .Select(dto => dto.ToPhone())
                 .ToList();
         }
+
+        public async Task<IEnumerable<Phone>> GetAllAsync()
+        {
+            _handler.NotifyDataOperation(DataOperation.RelationalDatabaseRead);
+
+            return (await _conn
+                .GetAllAsync<PhoneDto>
+                (
+                    transaction: _conn.Transaction,
+                    commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+                ).ConfigureAwait(false))
+                .Select(dto => dto.ToPhone())
+                .ToList();
+        }
     }
 }

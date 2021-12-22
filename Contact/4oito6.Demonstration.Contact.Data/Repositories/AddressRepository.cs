@@ -7,6 +7,7 @@ using _4oito6.Demonstration.Domain.Data.Transaction.Model;
 using _4oito6.Demonstration.Domain.Model.Entities;
 using Dapper;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,6 +76,20 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             return (await _conn.QueryAsync<AddressDto>(command).ConfigureAwait(false))
                 .FirstOrDefault()?.ToAddress();
+        }
+
+        public async Task<IEnumerable<Address>> GetAllAsync()
+        {
+            _handler.NotifyDataOperation(DataOperation.RelationalDatabaseRead);
+
+            return (await _conn
+                .GetAllAsync<AddressDto>
+                (
+                    transaction: _conn.Transaction,
+                    commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+                ).ConfigureAwait(false))
+                .Select(dto => dto.ToAddress())
+                .ToList();
         }
     }
 }

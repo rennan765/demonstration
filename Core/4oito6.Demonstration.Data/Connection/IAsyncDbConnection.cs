@@ -43,6 +43,8 @@ namespace _4oito6.Demonstration.Data.Connection
 
         Task<bool> DeleteAsync<T>(T entity, IDbTransaction transaction) where T : class;
 
+        Task<IEnumerable<T>> GetAllAsync<T>(IDbTransaction transaction, int? commandTimeout = null) where T : class;
+
         Task<int> ExecuteAsync(CommandDefinition command);
 
         IDbTransaction BeginTransaction();
