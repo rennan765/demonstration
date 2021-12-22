@@ -12,5 +12,7 @@ namespace _4oito6.Demonstration.Contact.Domain.Data.Repositories
         Task<Address> GetByAddressAsync(Address address);
 
         Task DeleteWithoutPersonAsync();
+
+        Task CloneAsync(IEnumerable<Address> addresses);
     }
 }

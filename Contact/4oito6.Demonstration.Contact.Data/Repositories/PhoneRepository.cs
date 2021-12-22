@@ -125,5 +125,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                 .Select(dto => dto.ToPhone())
                 .ToList();
         }
+
+        public Task CloneAsync(IEnumerable<Phone> phones)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -147,5 +147,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             await _conn.ExecuteAsync(command).ConfigureAwait(false);
         }
+
+        public Task CloneAsync(IEnumerable<Person> persons)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

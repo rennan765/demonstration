@@ -91,5 +91,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                 .Select(dto => dto.ToAddress())
                 .ToList();
         }
+
+        public Task CloneAsync(IEnumerable<Address> addresses)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace _4oito6.Demonstration.Contact.Domain.Data.Repositories
         Task<Person> GetByIdAsync(int id);
 
         Task UpdateContactInformationAsync(Person person);
+
+        Task CloneAsync(IEnumerable<Person> persons);
     }
 }

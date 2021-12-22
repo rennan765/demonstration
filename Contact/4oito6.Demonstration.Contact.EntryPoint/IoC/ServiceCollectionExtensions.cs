@@ -87,7 +87,9 @@ namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
                 .AddScoped<IContactRepositoryRoot>(sp => sp.GetService<IContactUnitOfWork>());
 
             //add service layer:
-            services.AddScoped<IContactServices, ContactServices>();
+            services
+                .AddScoped<IContactServices, ContactServices>()
+                .AddScoped<ICloningServices, CloningServices>();
 
             // add application layer:
             services.AddScoped<IContactAppServices>
@@ -97,7 +99,9 @@ namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
                     var config = sp.GetService<IContactConfig>();
                     return new ContactAppServices
                     (
-                        services: sp.GetService<IContactServices>(),
+                        contact: sp.GetService<IContactServices>(),
+                        cloning: sp.GetService<ICloningServices>(),
+
                         uow: sp.GetService<IContactUnitOfWork>(),
                         sqs: new SQSHelper
                         (
