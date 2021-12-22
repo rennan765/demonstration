@@ -269,7 +269,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                 (
                     commandText: string.Format(MaintainPersonPhone, cteClause),
                     parameters: parameters,
-                    transaction: _relationalConn.Transaction,
+                    transaction: _cloneConn.Transaction,
                     commandTimeout: (int)TimeSpan.FromMinutes(1).TotalSeconds
                 );
 
