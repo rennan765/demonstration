@@ -34,6 +34,14 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
         public static string MaintainFromTemporaryTable { get; private set; }
 
+        public static string PersonPhoneTemporaryTableName { get; private set; }
+
+        public static string DropPersonPhoneTemporaryTable { get; private set; }
+
+        public static string CreatePersonPhoneTemporaryTable { get; private set; }
+
+        public static string MaintainPersonPhoneFromTemporaryTable { get; private set; }
+
         static PersonRepository()
         {
             var personProperties = typeof(PersonDto).GetProperties().Select(p => p.Name);
@@ -41,6 +49,8 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             var addressProperties = typeof(AddressDto).GetProperties().Select(p => p.Name);
             var phoneProperties = typeof(PhoneDto).GetProperties().Select(p => p.Name);
+
+            var personPhoneProperties = typeof(PersonPhoneDto).GetProperties().Select(p => p.Name).Where(n => !n.Equals(nameof(PersonPhoneDto.personphoneid)));
 
             Get = $@"
             SELECT
@@ -115,6 +125,33 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             WHERE NOT EXISTS (SELECT 1
                               FROM tb_person P
                               WHERE P.{nameof(PersonDto.personid)} = TEMP.{nameof(PersonDto.personid)});
+            ";
+
+            PersonPhoneTemporaryTableName = @"temp_person_phone";
+
+            DropPersonPhoneTemporaryTable = $@"DROP TABLE IF EXISTS {PersonPhoneTemporaryTableName};";
+
+            CreatePersonPhoneTemporaryTable = $@"{DropPersonPhoneTemporaryTable}
+
+            CREATE TEMPORARY TABLE {PersonPhoneTemporaryTableName}
+            (
+                {nameof(PersonPhoneDto.personid)} INT NOT NULL,
+	            {nameof(PersonPhoneDto.phoneid)} INT NOT NULL
+            );
+            ";
+
+            MaintainPersonPhoneFromTemporaryTable = $@"
+            DELETE PP FROM tb_person_phone PP
+            WHERE NOT EXISTS (SELECT 1
+                              FROM {PersonPhoneTemporaryTableName} TEMP
+                              WHERE {string.Join(" AND ", personPhoneProperties.Select(p => $"TEMP.{p} = PP.{p}"))});
+
+            INSERT INTO tb_person_phone ({string.Join(",", personPhoneProperties.Select(p => p))})
+            SELECT {string.Join(",", personPhoneProperties.Select(p => p))}
+            FROM {PersonPhoneTemporaryTableName} TEMP
+            WHERE NOT EXISTS (SELECT 1
+                              FROM tb_person_phone P
+                              WHERE {string.Join(" AND ", personPhoneProperties.Select(p => $"P.{p} = TEMP.{p}"))});
             ";
         }
 
@@ -230,7 +267,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
 
-            //var inserting
+            //inserting:
             using var bulkOperation = _cloneConn
                 .GetBulkOperation
                 (
@@ -256,25 +293,49 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
 
             //updating personphone data:
-            foreach (var person in persons) // TODO: this process must run by a bulk insert.
+            //creating temp table:
+            var dtos = new List<PersonPhoneDto>();
+            foreach (var person in persons)
             {
-                var i = 0;
-                var parameters = person.Phones
-                    .ToDictionary(_ => $"@{nameof(PersonPhoneDto.phoneid)}{++i}", p => (object)p.Id);
+                dtos.AddRange(person.Phones.Select(p => new PersonPhoneDto
+                {
+                    personid = person.Id,
+                    phoneid = p.Id
+                }));
+            }
 
-                var cteClause = string.Join(" UNION ", parameters.Keys.Select(p => $"SELECT {p}"));
-                parameters.Add($"@{nameof(PersonPhoneDto.personid)}", person.Id);
+            command = new CommandDefinition
+            (
+                commandText: CreatePersonPhoneTemporaryTable,
+                transaction: _cloneConn.Transaction
+            );
 
-                command = new CommandDefinition
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
+
+            //var inserting
+            using var personPhoneBulkOperation = _cloneConn
+                .GetBulkOperation
                 (
-                    commandText: string.Format(MaintainPersonPhone, cteClause),
-                    parameters: parameters,
-                    transaction: _cloneConn.Transaction,
-                    commandTimeout: (int)TimeSpan.FromMinutes(1).TotalSeconds
+                    tableName: PersonPhoneTemporaryTableName,
+                    commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
                 );
 
-                await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
+            foreach (var dto in dtos)
+            {
+                personPhoneBulkOperation.AddRow(dto.ToBulkDictionary());
             }
+
+            await personPhoneBulkOperation.BulkInsertAsync().ConfigureAwait(false);
+
+            //maintain:
+            command = new CommandDefinition
+            (
+                commandText: MaintainPersonPhoneFromTemporaryTable,
+                transaction: _cloneConn.Transaction,
+                commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
+            );
+
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
         }
     }
 }

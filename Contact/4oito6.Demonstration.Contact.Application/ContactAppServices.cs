@@ -71,7 +71,6 @@ namespace _4oito6.Demonstration.Contact.Application
                 {
                     if (lastRunCheck is null || now.Subtract(lastRunCheck.Value).TotalSeconds >= runInterval)
                     {
-                        lastRunCheck = now;
                         return true;
                     }
                 }
@@ -80,9 +79,27 @@ namespace _4oito6.Demonstration.Contact.Application
             return false;
         }
 
-        private bool IsAbleToMaintain() => IsAbleToRun(_lastMaintainCheck, _maintainInterval);
+        private bool IsAbleToMaintain()
+        {
+            if (IsAbleToRun(_lastMaintainCheck, _maintainInterval))
+            {
+                _lastMaintainCheck = DateTime.UtcNow;
+                return true;
+            }
 
-        private bool IsAbleToClone() => IsAbleToRun(_lastMaintainCheck, _cloneInterval);
+            return false;
+        }
+
+        private bool IsAbleToClone()
+        {
+            if (IsAbleToRun(_lastCloneCheck, _cloneInterval))
+            {
+                _lastCloneCheck = DateTime.UtcNow;
+                return true;
+            }
+
+            return false;
+        }
 
         public virtual async Task MaintainInformationAsync(int personId)
         {
@@ -177,13 +194,13 @@ namespace _4oito6.Demonstration.Contact.Application
                     return;
                 }
 
-                Logger.LogInformation($"Processamento de clone iniciado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH-mm-ss}.");
+                Logger.LogInformation($"Processamento de clone iniciado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH:mm:ss}.");
 
                 _uow.EnableTransactions();
                 await _cloning.CloneAsync().ConfigureAwait(false);
                 _uow.Commit();
 
-                var message = $"Processamento de clone finalizado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH-mm-ss}.";
+                var message = $"Processamento de clone finalizado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH:mm:ss}.";
                 await AuditTrail.SendAsync(CloneInformationMessage, message).ConfigureAwait(false);
 
                 Logger.LogInformation(message);

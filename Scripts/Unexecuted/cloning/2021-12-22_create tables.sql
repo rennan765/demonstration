@@ -32,7 +32,7 @@ create table if not exists tb_person
 
 create table if not exists tb_person_phone
 (
-	personphoneid int not null,
+	personphoneid int not null primary key auto_increment,
 	personid int not null,
 	phoneid int not null
 );
