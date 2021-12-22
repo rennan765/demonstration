@@ -14,7 +14,7 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
         private readonly string _tableName;
         private readonly MySqlBulkCopy _bulkCopy;
 
-        public MySqlBulkOperation(IAsyncDbConnection conn, string tableName)
+        public MySqlBulkOperation(IAsyncDbConnection conn, string tableName, int commandTimeout = 0)
             : base(new IDisposable[] { conn })
         {
             _conn = conn ?? throw new ArgumentNullException(nameof(conn));
@@ -24,6 +24,11 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
             {
                 DestinationTableName = _tableName
             };
+
+            if (commandTimeout > 0)
+            {
+                _bulkCopy.BulkCopyTimeout = commandTimeout;
+            }
 
             Table = new DataTable
             {

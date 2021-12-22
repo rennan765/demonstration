@@ -14,6 +14,7 @@ using _4oito6.Demonstration.SQS;
 using Amazon;
 using Amazon.SecretsManager;
 using Amazon.SQS;
+using MySqlConnector;
 using Npgsql;
 
 namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
@@ -74,6 +75,11 @@ namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
                             relationalDatabase: new AsyncDbConnection
                             (
                                 connection: new NpgsqlConnection(config.GetRelationalDatabaseConnectionString().Result)
+                            ),
+
+                            cloneDatabase: new MySqlAsyncDbConnection
+                            (
+                                connection: new MySqlConnection(config.GetCloneDatabaseConnectionString().Result)
                             )
                         );
                     }

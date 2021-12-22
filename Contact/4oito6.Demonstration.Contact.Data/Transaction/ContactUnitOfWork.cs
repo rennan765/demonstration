@@ -11,15 +11,23 @@ namespace _4oito6.Demonstration.Contact.Data.Transaction
     public class ContactUnitOfWork : BaseUnitOfWork, IContactUnitOfWork
     {
         private readonly IAsyncDbConnection _relationalDatabase;
+        private readonly IMySqlAsyncDbConnection _cloneDatabase;
 
         private IPersonRepository _person;
         private IPhoneRepository _phone;
         private IAddressRepository _address;
 
-        public ContactUnitOfWork(IAsyncDbConnection relationalDatabase) : base()
+        public ContactUnitOfWork
+        (
+            IAsyncDbConnection relationalDatabase,
+            IMySqlAsyncDbConnection cloneDatabase
+        ) : base()
         {
             _relationalDatabase = relationalDatabase ?? throw new ArgumentNullException(nameof(relationalDatabase));
             Attach(relationalDatabase, DataSource.RelationalDatabase);
+
+            _cloneDatabase = cloneDatabase ?? throw new ArgumentNullException(nameof(cloneDatabase));
+            Attach(cloneDatabase, DataSource.CloneDatabase);
         }
 
         public IPersonRepository Person => _person ??= new PersonRepository(_relationalDatabase, this);
