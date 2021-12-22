@@ -65,7 +65,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                               WHERE PP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
             ";
 
-            TemporaryTableName = "temp_phone";
+            TemporaryTableName = @"temp_phone";
 
             DropTemporaryTable = $@"DROP TABLE IF EXISTS {TemporaryTableName};";
 
@@ -81,10 +81,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             MaintainFromTemporaryTable = $@"
             DELETE P FROM tb_phone P
-            WHERE NOT EXISTS (SELECT 1 FROM temp_phone TEMP WHERE TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
+            WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
 
             UPDATE tb_phone P
-            INNER JOIN temp_phone TEMP ON TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)}
+            INNER JOIN {TemporaryTableName} TEMP ON TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)}
             SET P.{nameof(PhoneDto.code)} = TEMP.{nameof(PhoneDto.code)},
 	            P.{nameof(PhoneDto.number)} = TEMP.{nameof(PhoneDto.number)}
             WHERE TEMP.{nameof(PhoneDto.code)} IS NOT NULL AND TEMP.{nameof(PhoneDto.number)} IS NOT NULL;
