@@ -61,13 +61,13 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
                 {nameof(AddressDto.addressid)} INT NOT NULL,
-                {nameof(AddressDto.street)} VARCHAR(250) NOT NULL,
-	            {nameof(AddressDto.number)} VARCHAR(8) NULL,
-	            {nameof(AddressDto.complement)} VARCHAR(20) NULL,
-	            {nameof(AddressDto.district)} VARCHAR(30) NOT NULL,
-	            {nameof(AddressDto.city)} VARCHAR(30) NOT NULL,
-	            {nameof(AddressDto.state)} CHAR(2) NOT NULL,
-	            {nameof(AddressDto.postalcode)} CHAR(8) NOT NULL
+                {nameof(AddressDto.city)} VARCHAR(30) NOT NULL,
+                {nameof(AddressDto.complement)} VARCHAR(20) NULL,
+                {nameof(AddressDto.district)} VARCHAR(30) NOT NULL,
+                {nameof(AddressDto.number)} VARCHAR(8) NULL,
+                {nameof(AddressDto.postalcode)} CHAR(8) NOT NULL,
+                {nameof(AddressDto.state)} CHAR(2) NOT NULL,
+                {nameof(AddressDto.street)} VARCHAR(250) NOT NULL
             );
             ";
 

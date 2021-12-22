@@ -74,10 +74,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
-                {nameof(PhoneDto.phoneid)} INT NOT NULL,
-                {nameof(PhoneDto.type)} INT NOT NULL,
                 {nameof(PhoneDto.code)} CHAR(2) NOT NULL,
-                {nameof(PhoneDto.number)} varchar(9) NOT NULL
+                {nameof(PhoneDto.number)} varchar(9) NOT NULL,
+                {nameof(PhoneDto.phoneid)} INT NOT NULL,
+                {nameof(PhoneDto.type)} INT NOT NULL
             );
             ";
 

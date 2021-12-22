@@ -44,13 +44,14 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
         static PersonRepository()
         {
-            var personProperties = typeof(PersonDto).GetProperties().Select(p => p.Name);
+            var personProperties = typeof(PersonDto).GetProperties().Select(p => p.Name).OrderBy(p => p);
             var personPropertiesWithoutId = personProperties.Where(n => !n.Equals(nameof(PersonDto.personid)));
 
             var addressProperties = typeof(AddressDto).GetProperties().Select(p => p.Name);
             var phoneProperties = typeof(PhoneDto).GetProperties().Select(p => p.Name);
 
-            var personPhoneProperties = typeof(PersonPhoneDto).GetProperties().Select(p => p.Name).Where(n => !n.Equals(nameof(PersonPhoneDto.personphoneid)));
+            var personPhoneProperties = typeof(PersonPhoneDto).GetProperties().Select(p => p.Name)
+                .Where(n => !n.Equals(nameof(PersonPhoneDto.personphoneid))).OrderBy(p => p);
 
             Get = $@"
             SELECT
@@ -96,14 +97,14 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
-                {nameof(PersonDto.personid)} INT NOT NULL,
-	            {nameof(PersonDto.name)} VARCHAR(80) NOT NULL,
-	            {nameof(PersonDto.birthdate)} DATE NOT NULL,
-	            {nameof(PersonDto.document)} CHAR(11) NOT NULL,
+                {nameof(PersonDto.addressid)} INT NULL,
+                {nameof(PersonDto.birthdate)} DATE NOT NULL,
+                {nameof(PersonDto.document)} CHAR(11) NOT NULL,
 	            {nameof(PersonDto.email)} VARCHAR(150) NOT NULL,
 	            {nameof(PersonDto.gender)} INT NOT NULL,
-	            {nameof(PersonDto.addressid)} INT NULL,
-	            {nameof(PersonDto.mainphoneid)} INT NOT NULL
+                {nameof(PersonDto.mainphoneid)} INT NOT NULL,
+                {nameof(PersonDto.name)} VARCHAR(80) NOT NULL,
+                {nameof(PersonDto.personid)} INT NOT NULL
             );
             ";
 
@@ -136,6 +137,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             CREATE TEMPORARY TABLE {PersonPhoneTemporaryTableName}
             (
                 {nameof(PersonPhoneDto.personid)} INT NOT NULL,
+                {nameof(PersonPhoneDto.personphoneid)} INT NULL,
 	            {nameof(PersonPhoneDto.phoneid)} INT NOT NULL
             );
             ";

@@ -61,7 +61,7 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
             {
                 if (!Table.Columns.Contains(pair.Key))
                 {
-                    Table.Columns.Add(pair.Key);
+                    Table.Columns.Add(pair.Key, pair.Value.GetType());
                 }
 
                 dataRow[pair.Key] = pair.Value;
