@@ -86,14 +86,14 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
-                {nameof(PersonDto.personid)} int not null,
-	            {nameof(PersonDto.name)} varchar(80) not null,
-	            {nameof(PersonDto.birthdate)} date not null,
-	            {nameof(PersonDto.document)} char(11) not null,
-	            {nameof(PersonDto.email)} varchar(150) not null,
-	            {nameof(PersonDto.gender)} int not null,
-	            {nameof(PersonDto.addressid)} int null,
-	            {nameof(PersonDto.mainphoneid)} int not null
+                {nameof(PersonDto.personid)} INT NOT NULL,
+	            {nameof(PersonDto.name)} VARCHAR(80) NOT NULL,
+	            {nameof(PersonDto.birthdate)} DATE NOT NULL,
+	            {nameof(PersonDto.document)} CHAR(11) NOT NULL,
+	            {nameof(PersonDto.email)} VARCHAR(150) NOT NULL,
+	            {nameof(PersonDto.gender)} INT NOT NULL,
+	            {nameof(PersonDto.addressid)} INT NULL,
+	            {nameof(PersonDto.mainphoneid)} INT NOT NULL
             );
             ";
 
@@ -112,9 +112,9 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             INSERT INTO tb_person ({string.Join(",", personProperties.Select(p => p))})
             SELECT {string.Join(",", personProperties.Select(p => p))}
             FROM {TemporaryTableName} TEMP
-            WHER NOT EXISTS (SELECT 1
-                             FROM tb_person P
-                             WHERE P.{nameof(PersonDto.personid)} = TEMP.{nameof(PersonDto.personid)});
+            WHERE NOT EXISTS (SELECT 1
+                              FROM tb_person P
+                              WHERE P.{nameof(PersonDto.personid)} = TEMP.{nameof(PersonDto.personid)});
             ";
         }
 
@@ -137,7 +137,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             var command = new CommandDefinition
             (
-                commandText: GetById,
+                commandText: Get,
                 transaction: _relationalConn.Transaction,
                 commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
             );
@@ -225,10 +225,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var command = new CommandDefinition
             (
                 commandText: CreateTemporaryTable,
-                transaction: _relationalConn.Transaction
+                transaction: _cloneConn.Transaction
             );
 
-            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
 
             //var inserting
             using var bulkOperation = _cloneConn
@@ -238,7 +238,11 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                     commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
                 );
 
-            persons.Select(p => p.ToPersonDto().ToBulkDictionary());
+            foreach (var dto in persons.Select(dto => dto.ToPersonDto()))
+            {
+                bulkOperation.AddRow(dto.ToBulkDictionary());
+            }
+
             await bulkOperation.BulkInsertAsync().ConfigureAwait(false);
 
             //maintain:

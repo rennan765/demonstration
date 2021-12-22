@@ -30,11 +30,11 @@ namespace _4oito6.Demonstration.Contact.Data.Transaction
             Attach(cloneDatabase, DataSource.CloneDatabase);
         }
 
-        public IPersonRepository Person => _person ??= new PersonRepository(_relationalDatabase, this);
+        public IPersonRepository Person => _person ??= new PersonRepository(_relationalDatabase, _cloneDatabase, this);
 
-        public IPhoneRepository Phone => _phone ??= new PhoneRepository(_relationalDatabase, this);
+        public IPhoneRepository Phone => _phone ??= new PhoneRepository(_relationalDatabase, _cloneDatabase, this);
 
-        public IAddressRepository Address => _address ??= new AddressRepository(_relationalDatabase, this);
+        public IAddressRepository Address => _address ??= new AddressRepository(_relationalDatabase, _cloneDatabase, this);
 
         public override void Dispose()
         {

@@ -3,7 +3,6 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.Bulk
@@ -58,7 +57,16 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
             }
 
             var dataRow = Table.NewRow();
-            row.Select(p => dataRow[p.Key] = p.Value);
+            foreach (var pair in row)
+            {
+                if (!Table.Columns.Contains(pair.Key))
+                {
+                    Table.Columns.Add(pair.Key);
+                }
+
+                dataRow[pair.Key] = pair.Value;
+            }
+
             Table.Rows.Add(dataRow);
         }
 

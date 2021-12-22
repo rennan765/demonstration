@@ -16,6 +16,7 @@ namespace _4oito6.Demonstration.Contact.EntryPoint
             while (!stoppingToken.IsCancellationRequested)
             {
                 await _appServices.MaintainInformationByQueueAsync().ConfigureAwait(false);
+                await _appServices.CloneAsync().ConfigureAwait(false);
             }
         }
 

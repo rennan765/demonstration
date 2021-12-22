@@ -35,6 +35,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
         static PhoneRepository()
         {
             var properties = typeof(PhoneDto).GetProperties();
+            var propertiesWithoutId = properties.Where(p => !p.Name.Equals(nameof(PhoneDto.phoneid)));
 
             GetByNumber = $@"
             WITH Phones ({nameof(PhoneDto.type)}, {nameof(PhoneDto.code)}, {nameof(PhoneDto.number)}) AS ({{0}})
@@ -74,27 +75,30 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
                 {nameof(PhoneDto.phoneid)} INT NOT NULL,
+                {nameof(PhoneDto.type)} INT NOT NULL,
                 {nameof(PhoneDto.code)} CHAR(2) NOT NULL,
                 {nameof(PhoneDto.number)} varchar(9) NOT NULL
             );
             ";
 
             MaintainFromTemporaryTable = $@"
+            DELETE PP FROM tb_person_phone PP
+            WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(PhoneDto.phoneid)} = PP.{nameof(PhoneDto.phoneid)});
+
             DELETE P FROM tb_phone P
             WHERE NOT EXISTS (SELECT 1 FROM {TemporaryTableName} TEMP WHERE TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)});
 
             UPDATE tb_phone P
             INNER JOIN {TemporaryTableName} TEMP ON TEMP.{nameof(PhoneDto.phoneid)} = P.{nameof(PhoneDto.phoneid)}
-            SET P.{nameof(PhoneDto.code)} = TEMP.{nameof(PhoneDto.code)},
-	            P.{nameof(PhoneDto.number)} = TEMP.{nameof(PhoneDto.number)}
-            WHERE TEMP.{nameof(PhoneDto.code)} IS NOT NULL AND TEMP.{nameof(PhoneDto.number)} IS NOT NULL;
+            SET {string.Join(",", propertiesWithoutId.Select(p => $"P.{p.Name} = TEMP.{p.Name}"))}
+            WHERE {string.Join(" AND ", propertiesWithoutId.Select(p => $"TEMP.{p.Name} IS NOT NULL"))};
 
             INSERT INTO tb_phone ({string.Join(",", properties.Select(p => p.Name))})
             SELECT {string.Join(",", properties.Select(p => p.Name))}
             FROM {TemporaryTableName} TEMP
-            WHER NOT EXISTS (SELECT 1
-                             FROM tb_phone P
-                             WHERE p.{nameof(PhoneDto.phoneid)} = TEMP.{nameof(PhoneDto.phoneid)});
+            WHERE NOT EXISTS (SELECT 1
+                              FROM tb_phone P
+                              WHERE P.{nameof(PhoneDto.phoneid)} = TEMP.{nameof(PhoneDto.phoneid)});
             ";
         }
 
@@ -194,10 +198,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var command = new CommandDefinition
             (
                 commandText: CreateTemporaryTable,
-                transaction: _relationalConn.Transaction
+                transaction: _cloneConn.Transaction
             );
 
-            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
 
             //var inserting
             using var bulkOperation = _cloneConn
@@ -207,7 +211,11 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                     commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
                 );
 
-            phones.Select(p => p.ToPhoneDto().ToBulkDictionary());
+            foreach (var dto in phones.Select(dto => dto.ToPhoneDto()))
+            {
+                bulkOperation.AddRow(dto.ToBulkDictionary());
+            }
+
             await bulkOperation.BulkInsertAsync().ConfigureAwait(false);
 
             //maintain:

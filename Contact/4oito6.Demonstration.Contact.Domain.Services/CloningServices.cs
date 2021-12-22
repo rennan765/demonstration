@@ -26,7 +26,7 @@ namespace _4oito6.Demonstration.Contact.Domain.Services
             }
 
             var phones = await _repoRoot.Phone.GetAllAsync().ConfigureAwait(false);
-            if (addresses.Any())
+            if (phones.Any())
             {
                 await _repoRoot.Phone.CloneAsync(phones).ConfigureAwait(false);
             }

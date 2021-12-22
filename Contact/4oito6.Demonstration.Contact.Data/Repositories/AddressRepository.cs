@@ -60,6 +60,7 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
 
             CREATE TEMPORARY TABLE {TemporaryTableName}
             (
+                {nameof(AddressDto.addressid)} INT NOT NULL,
                 {nameof(AddressDto.street)} VARCHAR(250) NOT NULL,
 	            {nameof(AddressDto.number)} VARCHAR(8) NULL,
 	            {nameof(AddressDto.complement)} VARCHAR(20) NULL,
@@ -82,9 +83,9 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             INSERT INTO tb_address ({string.Join(",", properties.Select(p => p.Name))})
             SELECT {string.Join(",", properties.Select(p => p.Name))}
             FROM {TemporaryTableName} TEMP
-            WHER NOT EXISTS (SELECT 1
-                             FROM tb_address A
-                             WHERE A.{nameof(AddressDto.addressid)} = TEMP.{nameof(AddressDto.addressid)});
+            WHERE NOT EXISTS (SELECT 1
+                              FROM tb_address A
+                              WHERE A.{nameof(AddressDto.addressid)} = TEMP.{nameof(AddressDto.addressid)});
             ";
         }
 
@@ -162,10 +163,10 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
             var command = new CommandDefinition
             (
                 commandText: CreateTemporaryTable,
-                transaction: _relationalConn.Transaction
+                transaction: _cloneConn.Transaction
             );
 
-            await _relationalConn.ExecuteAsync(command).ConfigureAwait(false);
+            await _cloneConn.ExecuteAsync(command).ConfigureAwait(false);
 
             //var inserting
             using var bulkOperation = _cloneConn
@@ -175,7 +176,11 @@ namespace _4oito6.Demonstration.Contact.Data.Repositories
                     commandTimeout: (int)TimeSpan.FromMinutes(15).TotalSeconds
                 );
 
-            addresses.Select(p => p.ToAddressDto().ToBulkDictionary());
+            foreach (var dto in addresses.Select(dto => dto.ToAddressDto()))
+            {
+                bulkOperation.AddRow(dto.ToBulkDictionary());
+            }
+
             await bulkOperation.BulkInsertAsync().ConfigureAwait(false);
 
             //maintain:
