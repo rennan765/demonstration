@@ -10,17 +10,15 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
 {
     public class MySqlBulkOperation : DisposableObject, IBulkOperation
     {
-        private readonly IAsyncDbConnection _conn;
         private readonly string _tableName;
         private readonly MySqlBulkCopy _bulkCopy;
 
-        public MySqlBulkOperation(IAsyncDbConnection conn, string tableName, int commandTimeout = 0)
-            : base(new IDisposable[] { conn })
+        public MySqlBulkOperation(IMySqlAsyncDbConnection conn, string tableName, int commandTimeout = 0)
+            : base(new IDisposable[0])
         {
-            _conn = conn ?? throw new ArgumentNullException(nameof(conn));
             _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
 
-            _bulkCopy = new MySqlBulkCopy((MySqlConnection)_conn.Connection, (MySqlTransaction)_conn.Transaction)
+            _bulkCopy = new MySqlBulkCopy((MySqlConnection)conn.Connection, (MySqlTransaction)conn.Transaction)
             {
                 DestinationTableName = _tableName
             };
