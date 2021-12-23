@@ -8,6 +8,8 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
     {
         void AddRow(Dictionary<string, object> row);
 
+        Task AddRowAsync(Dictionary<string, object> row);
+
         Task<int> BulkInsertAsync();
     }
 }

@@ -51,6 +51,12 @@ namespace _4oito6.Demonstration.Data.Connection.Bulk
             Table.Rows.Add(dataRow);
         }
 
+        public virtual Task AddRowAsync(Dictionary<string, object> row)
+        {
+            AddRow(row);
+            return Task.CompletedTask;
+        }
+
         public abstract Task<int> BulkInsertAsync();
 
         public override void Dispose()
