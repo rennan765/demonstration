@@ -10,6 +10,7 @@ using _4oito6.Demonstration.Contact.EntryPoint.IoC.Config;
 using _4oito6.Demonstration.CrossCutting.AuditTrail;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.Data.Connection;
+using _4oito6.Demonstration.Data.Connection.MySql;
 using _4oito6.Demonstration.SQS;
 using Amazon;
 using Amazon.SecretsManager;

@@ -1,13 +1,14 @@
-﻿using System.Data.SqlClient;
+﻿using _4oito6.Demonstration.Data.Connection.Bulk;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.Data.Connection.Bulk
+namespace _4oito6.Demonstration.Data.Connection.MsSql.Bulk
 {
     public class MsSqlBulkOperation : BulkOperation, IBulkOperation
     {
         private readonly SqlBulkCopy _bulkCopy;
 
-        public MsSqlBulkOperation(IMySqlAsyncDbConnection conn, string tableName, int commandTimeout = 0)
+        public MsSqlBulkOperation(IMsSqlAsyncDbConnection conn, string tableName, int commandTimeout = 0)
             : base(tableName)
         {
             _bulkCopy = new SqlBulkCopy

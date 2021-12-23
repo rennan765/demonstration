@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
+    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Data.Connection.MySql\4oito6.Demonstration.Data.Connection.MySql.csproj" />
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Data\4oito6.Demonstration.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Data\4oito6.Demonstration.Contact.Domain.Data.csproj" />
   </ItemGroup>

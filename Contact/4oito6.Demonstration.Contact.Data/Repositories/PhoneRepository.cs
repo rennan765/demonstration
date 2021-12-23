@@ -2,6 +2,7 @@
 using _4oito6.Demonstration.Contact.Data.Model;
 using _4oito6.Demonstration.Contact.Domain.Data.Repositories;
 using _4oito6.Demonstration.Data.Connection;
+using _4oito6.Demonstration.Data.Connection.MySql;
 using _4oito6.Demonstration.Data.Model;
 using _4oito6.Demonstration.Domain.Data.Transaction;
 using _4oito6.Demonstration.Domain.Data.Transaction.Model;

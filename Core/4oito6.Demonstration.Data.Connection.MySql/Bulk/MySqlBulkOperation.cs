@@ -1,7 +1,8 @@
-﻿using MySqlConnector;
+﻿using _4oito6.Demonstration.Data.Connection.Bulk;
+using MySqlConnector;
 using System.Threading.Tasks;
 
-namespace _4oito6.Demonstration.Data.Connection.Bulk
+namespace _4oito6.Demonstration.Data.Connection.MySql.Bulk
 {
     public class MySqlBulkOperation : BulkOperation, IBulkOperation
     {

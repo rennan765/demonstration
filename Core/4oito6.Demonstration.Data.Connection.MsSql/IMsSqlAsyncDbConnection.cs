@@ -1,8 +1,8 @@
 ﻿using _4oito6.Demonstration.Data.Connection.Bulk;
 
-namespace _4oito6.Demonstration.Data.Connection
+namespace _4oito6.Demonstration.Data.Connection.MsSql
 {
-    public interface IMySqlAsyncDbConnection : IAsyncDbConnection
+    public interface IMsSqlAsyncDbConnection : IAsyncDbConnection
     {
         /// <summary>
         /// Start MySql Bulk Operation
