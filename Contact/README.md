@@ -9,6 +9,10 @@ Para debugar esta solução, restaure os pacotes nuget e execute-o.
 O Worker Service roda em um intervalo pequeno, efetuando a leitura de uma fila SQS. Caso esta esteja vazia, la loga no console uma mensagem de fila vazia de hora em hora, o qual pode ser utilizada como um keep alive.
 <hr />
 
+Também existe uma rotina neste Worker Service que clona os dados do banco de dados PostgreSQL para um banco MySQL utilizando operações de bulk insert. Esta rotina roda a cada 72 horas.
+<hr />
+
+
 Este projeto utiliza variáveis de ambiente para o funcionamento. 
 Para que o mesmo execute normalmente, será necessário inserir as variáveis abaixo: 
 
@@ -32,6 +36,11 @@ Para que o mesmo execute normalmente, será necessário inserir as variáveis ab
     <td>RelationalDatabaseConnectionString</td>
     <td>Connection String do banco de dados relacional (PostgreSQL)</td>
     <td>User ID=user;Password=password;Host=host;Port=5432;Database=database;</td>
+  </tr>
+  <tr>
+    <td>CloneDatabaseConnectionString</td>
+    <td>Connection String do banco de dados clone (MySQL). Para o funcionamento do Bulk Insert, será necessário inserir na clonnection string a propriedade AllowLoadLocalInfile=true.</td>
+    <td>Server=myserver;Port=myport;Database=mydatabase;Uid=myuser;mypass;AllowLoadLocalInfile=true;</td>
   </tr>
   <tr>
     <td>AwsAccessKeyId</td>
@@ -68,5 +77,9 @@ A configuração do secret é desta forma:
   <tr>
     <td>RelationalDatabaseConnectionString</td>
     <td>User ID=user;Password=password;Host=host;Port=5432;Database=database;</td>
+  </tr>
+  <tr>
+    <td>CloneDatabaseConnectionString</td>
+    <td>Server=myserver;Port=myport;Database=mydatabase;Uid=myuser;mypass;AllowLoadLocalInfile=true;</td>
   </tr>
 </table>
