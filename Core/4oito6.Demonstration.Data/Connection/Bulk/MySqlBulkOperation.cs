@@ -1,80 +1,30 @@
-﻿using _4oito6.Demonstration.Commons;
-using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using MySqlConnector;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.Bulk
 {
-    public class MySqlBulkOperation : DisposableObject, IBulkOperation
+    public class MySqlBulkOperation : BulkOperation, IBulkOperation
     {
-        private readonly string _tableName;
         private readonly MySqlBulkCopy _bulkCopy;
 
         public MySqlBulkOperation(IMySqlAsyncDbConnection conn, string tableName, int commandTimeout = 0)
-            : base(new IDisposable[0])
+            : base(tableName)
         {
-            _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
-
             _bulkCopy = new MySqlBulkCopy((MySqlConnection)conn.Connection, (MySqlTransaction)conn.Transaction)
             {
-                DestinationTableName = _tableName
+                DestinationTableName = TableName
             };
 
             if (commandTimeout > 0)
             {
                 _bulkCopy.BulkCopyTimeout = commandTimeout;
             }
-
-            Table = new DataTable
-            {
-                TableName = _tableName
-            };
         }
 
-        public DataTable Table { get; private set; }
-
-        public async Task<int> BulkInsertAsync()
+        public override async Task<int> BulkInsertAsync()
         {
             var result = await _bulkCopy.WriteToServerAsync(Table).ConfigureAwait(false);
             return result.RowsInserted;
-        }
-
-        public void AddRow(Dictionary<string, object> row)
-        {
-            if (row is null)
-            {
-                throw new ArgumentNullException(nameof(row));
-            }
-
-            if (Table is null)
-            {
-                Table = new DataTable
-                {
-                    TableName = _tableName
-                };
-            }
-
-            var dataRow = Table.NewRow();
-            foreach (var pair in row)
-            {
-                if (!Table.Columns.Contains(pair.Key))
-                {
-                    Table.Columns.Add(pair.Key, pair.Value.GetType());
-                }
-
-                dataRow[pair.Key] = pair.Value;
-            }
-
-            Table.Rows.Add(dataRow);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            Table?.Dispose();
-            Table = null;
         }
     }
 }
