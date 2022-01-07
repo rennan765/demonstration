@@ -21,6 +21,7 @@
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Data\4oito6.Demonstration.AuditTrail.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Domain.Data\4oito6.Demonstration.AuditTrail.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Domain.Services\4oito6.Demonstration.AuditTrail.Domain.Services.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.IoC\4oito6.Demonstration.AuditTrail.IoC.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.CrossCutting.AuditTrail\4oito6.Demonstration.CrossCutting.AuditTrail.csproj" />
   </ItemGroup>
 
