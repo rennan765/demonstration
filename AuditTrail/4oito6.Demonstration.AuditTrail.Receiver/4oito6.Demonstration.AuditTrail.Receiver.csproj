@@ -13,10 +13,14 @@
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.2.7" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.1.56" />
     <PackageReference Include="AWSSDK.SQS" Version="3.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />

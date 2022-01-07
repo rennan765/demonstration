@@ -1,6 +1,5 @@
 ﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
 using _4oito6.Demonstration.AuditTrail.Receiver.Data;
-using _4oito6.Demonstration.AuditTrail.Receiver.Data.Model;
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.Config;
@@ -67,7 +66,7 @@ namespace _4oito6.Demonstration.AuditTrail.IoC
                 );
 
             // adding data:
-            services.AddScoped<IDynamoConnection<AuditTrailDto>, DynamoConnection<AuditTrailDto>>();
+            services.AddScoped(typeof(IDynamoConnection<>), typeof(DynamoConnection<>));
 
             // adding context services
             services

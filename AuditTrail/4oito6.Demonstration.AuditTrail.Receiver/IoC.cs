@@ -1,6 +1,9 @@
 ﻿using _4oito6.Demonstration.AuditTrail.IoC;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
@@ -11,6 +14,20 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver
         static IoC()
         {
             IServiceCollection services = new ServiceCollection();
+
+            // adding configuration
+            services.AddScoped<IConfiguration>
+            (
+                sp => new ConfigurationBuilder()
+                    .SetBasePath
+                    (
+                        basePath: Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Local") ?
+                            Directory.GetCurrentDirectory().Replace("bin\\Debug\\netcoreapp3.1", string.Empty) :
+                            Directory.GetCurrentDirectory()
+                    )
+                    .AddJsonFile("appsettings.json")
+                    .Build()
+            );
 
             // adding aws dependencies
             services.AddAwsDependencies();
