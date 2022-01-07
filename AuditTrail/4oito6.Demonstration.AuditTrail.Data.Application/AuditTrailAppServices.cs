@@ -2,9 +2,7 @@
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
-using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -24,7 +22,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public Task ProcessMessageAsync(SQSEvent.SQSMessage message)
+        public Task ProcessMessageAsync(AuditTrailMessage message)
         {
             try
             {
@@ -33,13 +31,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
                     throw new ArgumentNullException(nameof(message));
                 }
 
-                var auditTrailMessage = JsonConvert.DeserializeObject<AuditTrailMessage>(message.Body);
-                if (auditTrailMessage is null)
-                {
-                    throw new InvalidOperationException(nameof(message));
-                }
-
-                return _services.ProcessAsync(auditTrailMessage);
+                return _services.ProcessAsync(message);
             }
             catch (Exception ex)
             {
