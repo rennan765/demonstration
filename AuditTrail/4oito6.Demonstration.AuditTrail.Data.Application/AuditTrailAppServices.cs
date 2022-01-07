@@ -38,5 +38,17 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
                 return HandleExceptionAsync(ex);
             }
         }
+
+        public Task SendAsync(string code, string message, string additionalInformation = null)
+        {
+            try
+            {
+                return AuditTrail.SendAsync(code, message, additionalInformation);
+            }
+            catch (Exception ex)
+            {
+                return HandleExceptionAsync(ex);
+            }
+        }
     }
 }

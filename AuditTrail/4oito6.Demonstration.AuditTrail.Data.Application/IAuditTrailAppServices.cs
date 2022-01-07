@@ -7,5 +7,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
     public interface IAuditTrailAppServices : IAppServiceBase
     {
         Task ProcessMessageAsync(AuditTrailMessage message);
+
+        Task SendAsync(string code, string message, string additionalInformation = null);
     }
 }

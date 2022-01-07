@@ -1,4 +1,8 @@
-﻿using _4oito6.Demonstration.Config;
+﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
+using _4oito6.Demonstration.AuditTrail.Receiver.Data;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
+using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
+using _4oito6.Demonstration.Config;
 using _4oito6.Demonstration.CrossCutting.AuditTrail;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using Amazon;
@@ -37,8 +41,7 @@ namespace _4oito6.Demonstration.AuditTrail.Sender.IoC
             // add config:
             services.AddSingleton<ICommonConfig, CommonConfig>();
 
-            //
-            //add audit trail
+            //add audit trail:
             services
                 .AddScoped<IAuditTrailSender>
                 (
@@ -51,6 +54,11 @@ namespace _4oito6.Demonstration.AuditTrail.Sender.IoC
                             queue: config.AuditTrailQueueUrl
                         );
                     });
+
+            services
+                .AddScoped<IAuditTrailRepository, AuditTrailRepository>()
+                .AddScoped<IAuditTrailServices, AuditTrailServices>()
+                .AddScoped<IAuditTrailAppServices, AuditTrailAppServices>();
 
             // add swagger:
             var config = services.BuildServiceProvider().GetService<ICommonConfig>()?.SwaggerConfig;
