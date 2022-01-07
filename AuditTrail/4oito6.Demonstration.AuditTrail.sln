@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Receiver", "4oito6.Demonstration.AuditTrail.Receiver\4oito6.Demonstration.AuditTrail.Receiver.csproj", "{53A3D841-B175-42F1-9F72-CD7954DDEE2F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Sender", "4oito6.Demonstration.AuditTrail.Sender\4oito6.Demonstration.AuditTrail.Sender.csproj", "{43B81FFD-6117-445D-983D-F2CEE60FAB9A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Test", "4oito6.Demonstration.AuditTrail.Test\4oito6.Demonstration.AuditTrail.Test.csproj", "{3E76660E-1BB2-4090-A68E-B2FC8811303F}"
@@ -23,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Domain.Services", "4oito6.Demonstration.AuditTrail.Domain.Services\4oito6.Demonstration.AuditTrail.Domain.Services.csproj", "{A3B58AB8-5F66-4632-A5F9-2E01B62F90EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4oito6.Demonstration.AuditTrail.Application", "4oito6.Demonstration.AuditTrail.Application\4oito6.Demonstration.AuditTrail.Application.csproj", "{0C6943D5-E123-49F4-9B69-94814841A742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Application", "4oito6.Demonstration.AuditTrail.Application\4oito6.Demonstration.AuditTrail.Application.csproj", "{0C6943D5-E123-49F4-9B69-94814841A742}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Receiver", "4oito6.Demonstration.AuditTrail.Receiver\4oito6.Demonstration.AuditTrail.Receiver.csproj", "{48910421-D644-4F36-A166-04A18BBC6675}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{53A3D841-B175-42F1-9F72-CD7954DDEE2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53A3D841-B175-42F1-9F72-CD7954DDEE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53A3D841-B175-42F1-9F72-CD7954DDEE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53A3D841-B175-42F1-9F72-CD7954DDEE2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43B81FFD-6117-445D-983D-F2CEE60FAB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43B81FFD-6117-445D-983D-F2CEE60FAB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43B81FFD-6117-445D-983D-F2CEE60FAB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,6 +67,10 @@ Global
 		{0C6943D5-E123-49F4-9B69-94814841A742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C6943D5-E123-49F4-9B69-94814841A742}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C6943D5-E123-49F4-9B69-94814841A742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48910421-D644-4F36-A166-04A18BBC6675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48910421-D644-4F36-A166-04A18BBC6675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48910421-D644-4F36-A166-04A18BBC6675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48910421-D644-4F36-A166-04A18BBC6675}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

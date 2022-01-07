@@ -92,8 +92,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntryPoint", "EntryPoint", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Data", "AuditTrail\4oito6.Demonstration.AuditTrail.Data\4oito6.Demonstration.AuditTrail.Data.csproj", "{98F3E0FB-A876-4976-B8E2-E76F9F044742}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Data.Application", "AuditTrail\4oito6.Demonstration.AuditTrail.Data.Application\4oito6.Demonstration.AuditTrail.Data.Application.csproj", "{54008DAC-66EA-4B45-8116-81F789D588A9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Domain.Data", "AuditTrail\4oito6.Demonstration.AuditTrail.Domain.Data\4oito6.Demonstration.AuditTrail.Domain.Data.csproj", "{FD29B9A1-22B9-4AC8-A2D3-3E5E675C23DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4oito6.Demonstration.AuditTrail.Domain.Services", "AuditTrail\4oito6.Demonstration.AuditTrail.Domain.Services\4oito6.Demonstration.AuditTrail.Domain.Services.csproj", "{5FC9BF43-AA26-4B85-97F1-6E55B04E59D6}"
@@ -202,10 +200,6 @@ Global
 		{98F3E0FB-A876-4976-B8E2-E76F9F044742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98F3E0FB-A876-4976-B8E2-E76F9F044742}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98F3E0FB-A876-4976-B8E2-E76F9F044742}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54008DAC-66EA-4B45-8116-81F789D588A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54008DAC-66EA-4B45-8116-81F789D588A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54008DAC-66EA-4B45-8116-81F789D588A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54008DAC-66EA-4B45-8116-81F789D588A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD29B9A1-22B9-4AC8-A2D3-3E5E675C23DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD29B9A1-22B9-4AC8-A2D3-3E5E675C23DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD29B9A1-22B9-4AC8-A2D3-3E5E675C23DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -261,7 +255,6 @@ Global
 		{7D383548-AACF-4214-92D3-34C077DF989F} = {070AEAF0-997B-468E-9D4F-37706FC88BBD}
 		{DAEE6B7E-DEDD-4F81-A934-17D05B36115B} = {070AEAF0-997B-468E-9D4F-37706FC88BBD}
 		{98F3E0FB-A876-4976-B8E2-E76F9F044742} = {57AF1E70-0171-4E34-85D3-3C87F657D684}
-		{54008DAC-66EA-4B45-8116-81F789D588A9} = {57AF1E70-0171-4E34-85D3-3C87F657D684}
 		{FD29B9A1-22B9-4AC8-A2D3-3E5E675C23DC} = {57AF1E70-0171-4E34-85D3-3C87F657D684}
 		{5FC9BF43-AA26-4B85-97F1-6E55B04E59D6} = {57AF1E70-0171-4E34-85D3-3C87F657D684}
 		{23414C59-A792-4A45-B8B5-F8DB861E6D97} = {57AF1E70-0171-4E34-85D3-3C87F657D684}

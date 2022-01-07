@@ -1,13 +1,14 @@
 using _4oito6.Demonstration.AuditTrail.Receiver.Application;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+[assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
@@ -33,22 +34,23 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver
         {
             foreach (var message in evnt.Records)
             {
-                await ProcessMessageAsync(message, context).ConfigureAwait(false);
+                await ProcessMessageAsync(message, context);
             }
         }
 
         private Task ProcessMessageAsync(SQSEvent.SQSMessage message, ILambdaContext context)
         {
             context.Logger.LogLine($"Processed message {message.Body}");
-            var auditTrailMessage = JsonConvert.DeserializeObject<AuditTrailMessage>(message.Body);
 
-            if (auditTrailMessage != null)
+            var auditMessage = JsonConvert.DeserializeObject<AuditTrailMessage>(message.Body);
+
+            if (auditMessage is null)
             {
-                using var appService = IoC.Provider.GetService<IAuditTrailAppServices>();
-                return appService.ProcessMessageAsync(auditTrailMessage);
+                return Task.CompletedTask;
             }
 
-            return Task.CompletedTask;
+            using var appService = IoC.Provider.GetService<IAuditTrailAppServices>();
+            return appService.ProcessMessageAsync(auditMessage);
         }
     }
 }
