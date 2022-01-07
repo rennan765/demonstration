@@ -17,11 +17,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\4oito6.Demonstration.Application\4oito6.Demonstration.Application.csproj" />
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Commons\4oito6.Demonstration.Commons.csproj" />
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Config\4oito6.Demonstration.Config.csproj" />
     <ProjectReference Include="..\..\Core\4oito6.Demonstration.Data\4oito6.Demonstration.Data.csproj" />
-    <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Data.Application\4oito6.Demonstration.AuditTrail.Data.Application.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Application\4oito6.Demonstration.AuditTrail.Application.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Data\4oito6.Demonstration.AuditTrail.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Domain.Data\4oito6.Demonstration.AuditTrail.Domain.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.AuditTrail.Domain.Services\4oito6.Demonstration.AuditTrail.Domain.Services.csproj" />
