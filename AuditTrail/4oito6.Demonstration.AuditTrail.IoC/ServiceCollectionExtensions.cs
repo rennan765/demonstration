@@ -13,9 +13,11 @@ using Amazon.SecretsManager;
 using Amazon.SQS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.AuditTrail.IoC
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAwsDependencies(this IServiceCollection services)

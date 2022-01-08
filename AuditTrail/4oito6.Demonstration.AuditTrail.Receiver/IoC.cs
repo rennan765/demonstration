@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
+    [ExcludeFromCodeCoverage]
     public static class IoC
     {
         public static ServiceProvider Provider { get; private set; }

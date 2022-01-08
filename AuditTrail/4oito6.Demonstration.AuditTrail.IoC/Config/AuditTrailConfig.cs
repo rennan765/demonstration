@@ -2,9 +2,11 @@
 using Amazon.SecretsManager;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.AuditTrail.IoC.Config
 {
+    [ExcludeFromCodeCoverage]
     public class AuditTrailConfig : CommonConfig, IAuditTrailConfig
     {
         public AuditTrailConfig(IConfiguration configuration, IAmazonSecretsManager secretsManager)

@@ -2,9 +2,11 @@
 using _4oito6.Demonstration.Config;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.AuditTrail.Sender.IoC
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAuditTrailSender(this IServiceCollection services)

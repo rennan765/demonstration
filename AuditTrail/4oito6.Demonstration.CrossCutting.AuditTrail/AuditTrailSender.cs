@@ -14,13 +14,17 @@ namespace _4oito6.Demonstration.CrossCutting.AuditTrail
         private readonly IAmazonSQS _sqs;
         private readonly string _queue;
 
+        protected AuditTrailSender() : base(new IDisposable[0])
+        {
+        }
+
         public AuditTrailSender(IAmazonSQS sqs, string queue) : base(new IDisposable[] { sqs })
         {
             _sqs = sqs ?? throw new ArgumentNullException(nameof(sqs));
             _queue = queue ?? throw new ArgumentNullException(nameof(queue));
         }
 
-        public Task SendAsync(AuditTrailMessage message)
+        public virtual Task SendAsync(AuditTrailMessage message)
         {
             var request = new SendMessageRequest
             {

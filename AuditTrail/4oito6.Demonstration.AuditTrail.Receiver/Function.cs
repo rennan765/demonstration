@@ -6,6 +6,7 @@ using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace QuatroOito6.Demonstration.AuditTrail.Receiver
 {
+    [ExcludeFromCodeCoverage]
     public class Function
     {
         /// <summary>

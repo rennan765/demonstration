@@ -1,12 +1,14 @@
 ﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
 using _4oito6.Demonstration.AuditTrail.Sender.Arguments;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace _4oito6.Demonstration.AuditTrail.Sender.Controllers
 {
     [ApiController]
     [Route("audittrail")]
+    [ExcludeFromCodeCoverage]
     public class AuditTrailController : Controller
     {
         private IAuditTrailAppServices _appService;
