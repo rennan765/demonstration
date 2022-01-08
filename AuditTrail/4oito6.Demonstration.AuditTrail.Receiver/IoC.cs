@@ -25,7 +25,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver
                             Directory.GetCurrentDirectory().Replace("bin\\Debug\\netcoreapp3.1", string.Empty) :
                             Directory.GetCurrentDirectory()
                     )
-                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile(path: "appsettings.json", optional: true)
                     .Build()
             );
 

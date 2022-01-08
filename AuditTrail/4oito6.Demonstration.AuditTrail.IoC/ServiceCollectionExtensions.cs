@@ -1,4 +1,5 @@
-﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
+﻿using _4oito6.Demonstration.AuditTrail.IoC.Config;
+using _4oito6.Demonstration.AuditTrail.Receiver.Application;
 using _4oito6.Demonstration.AuditTrail.Receiver.Data;
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
@@ -54,9 +55,12 @@ namespace _4oito6.Demonstration.AuditTrail.IoC
 
         public static IServiceCollection AddReceiverDependencies(this IServiceCollection services)
         {
+            // adding config:
+            services.AddScoped<IAuditTrailConfig, AuditTrailConfig>();
+            services.AddScoped<ICommonConfig>(sp => sp.GetService<IAuditTrailConfig>());
+
             // adding other dependencies:
-            services.AddScoped<ICommonConfig, CommonConfig>()
-                .AddScoped<IAuditTrailSender>
+            services.AddScoped<IAuditTrailSender>
                 (
                     sp => new AuditTrailSender
                     (

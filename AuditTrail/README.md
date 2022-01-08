@@ -52,4 +52,9 @@ Para que o mesmo execute normalmente, será necessário inserir as variáveis ab
     <td>Região dos serviços AWS</td>
     <td>sa-east-1</td>
   </tr>
+  <tr>
+    <td>AuditTrailQueueUrl</td>
+    <td>Url da fila SQS que será responsável por disparar o Lambda.</td>
+    <td>https://sqs.sa-east-1.amazonaws.com/257893541578/AUDIT-TRAIL</td>
+  </tr>
 </table>
