@@ -4,10 +4,12 @@ using Dapper.Contrib.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection
 {
+    [ExcludeFromCodeCoverage]
     public class AsyncDbConnection : DisposableObject, IAsyncDbConnection
     {
         public AsyncDbConnection(IDbConnection connection)

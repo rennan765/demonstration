@@ -7,12 +7,14 @@ using _4oito6.Demonstration.Domain.Model.Entities.Base;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Application
 {
+    [ExcludeFromCodeCoverage]
     public abstract class AppServiceBase : DisposableObject, IAppServiceBase
     {
         private static DateTime? _lastHealthCheck;

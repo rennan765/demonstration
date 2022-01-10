@@ -5,11 +5,13 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection
 {
+    [ExcludeFromCodeCoverage]
     public class DynamoConnection<T> : DisposableObject, IDynamoConnection<T> where T : DynamoEntityDto, new()
     {
         private readonly IAmazonDynamoDB _conn;

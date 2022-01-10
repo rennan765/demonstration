@@ -4,11 +4,13 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.SQS
 {
+    [ExcludeFromCodeCoverage]
     public class SQSHelper : DisposableObject, ISQSHelper
     {
         private readonly IAmazonSQS _sqs;

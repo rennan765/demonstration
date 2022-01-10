@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Application.Model
 {
+    [ExcludeFromCodeCoverage]
     public class Notification : ICloneable
     {
         public Notification(string name, string message)
