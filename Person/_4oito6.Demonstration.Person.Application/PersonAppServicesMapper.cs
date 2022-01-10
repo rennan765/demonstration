@@ -1,10 +1,11 @@
-﻿namespace _4oito6.Demonstration.Person.Application
+﻿using _4oito6.Demonstration.Person.Application.Model.Address;
+using _4oito6.Demonstration.Person.Application.Model.Person;
+using _4oito6.Demonstration.Person.Application.Model.Phone;
+using System.Linq;
+
+namespace _4oito6.Demonstration.Person.Application
 {
     using _4oito6.Demonstration.Domain.Model.Entities;
-    using _4oito6.Demonstration.Person.Application.Model.Address;
-    using _4oito6.Demonstration.Person.Application.Model.Person;
-    using _4oito6.Demonstration.Person.Application.Model.Phone;
-    using System.Linq;
 
     public static class PersonAppServicesMapper
     {
