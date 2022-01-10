@@ -21,5 +21,7 @@ namespace _4oito6.Demonstration.Config
         string AuditTrailQueueUrl { get; }
 
         Task<string> GetRelationalDatabaseConnectionString();
+
+        Task<string> GetCloneDatabaseConnectionString();
     }
 }

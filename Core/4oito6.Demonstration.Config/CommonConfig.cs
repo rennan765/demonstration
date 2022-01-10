@@ -97,5 +97,15 @@ namespace _4oito6.Demonstration.Config
 
             return Task.FromResult(Environment.GetEnvironmentVariable("RelationalDatabaseConnectionString"));
         }
+
+        public Task<string> GetCloneDatabaseConnectionString()
+        {
+            if (!IsLocal)
+            {
+                return GetSecretString("CloneDatabaseConnectionString");
+            }
+
+            return Task.FromResult(Environment.GetEnvironmentVariable("CloneDatabaseConnectionString"));
+        }
     }
 }

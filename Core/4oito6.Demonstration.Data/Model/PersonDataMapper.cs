@@ -62,7 +62,7 @@ namespace _4oito6.Demonstration.Data.Model
             );
         }
 
-        public static AddressDto ToAddress(this Address address)
+        public static AddressDto ToAddressDto(this Address address)
         {
             return new AddressDto
             {

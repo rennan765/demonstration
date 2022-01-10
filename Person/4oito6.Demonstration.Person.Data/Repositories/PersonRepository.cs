@@ -194,7 +194,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             AddressDto? addressDto = null;
             if (person.Address != null)
             {
-                addressDto = person.Address.ToAddress();
+                addressDto = person.Address.ToAddressDto();
                 addressDto.addressid = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
                 personDto.addressid = addressDto.addressid;
             }
@@ -235,7 +235,7 @@ namespace _4oito6.Demonstration.Person.Data.Repositories
             AddressDto? addressDto = null;
             if (person.Address != null)
             {
-                addressDto = person.Address.ToAddress();
+                addressDto = person.Address.ToAddressDto();
                 addressDto.addressid = await _conn.InsertAsync(addressDto, _conn.Transaction).ConfigureAwait(false);
                 personDto.addressid = addressDto.addressid;
             }

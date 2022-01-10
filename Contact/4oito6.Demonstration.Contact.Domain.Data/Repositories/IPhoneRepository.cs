@@ -7,8 +7,12 @@ namespace _4oito6.Demonstration.Contact.Domain.Data.Repositories
 {
     public interface IPhoneRepository : IDisposable
     {
+        Task<IEnumerable<Phone>> GetAllAsync();
+
         Task<IEnumerable<Phone>> GetByNumberAsync(IEnumerable<Phone> phones);
 
         Task DeleteWithoutPersonAsync();
+
+        Task CloneAsync(IEnumerable<Phone> phones);
     }
 }

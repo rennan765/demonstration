@@ -11,6 +11,8 @@ namespace _4oito6.Demonstration.Data.Connection
     /// </summary>
     public interface IAsyncDbConnection : IDisposable
     {
+        IDbConnection Connection { get; }
+
         IDbTransaction Transaction { get; }
 
         string ConnectionString { get; }
@@ -40,6 +42,8 @@ namespace _4oito6.Demonstration.Data.Connection
         Task<bool> UpdateAsync<T>(T entity, IDbTransaction transaction) where T : class;
 
         Task<bool> DeleteAsync<T>(T entity, IDbTransaction transaction) where T : class;
+
+        Task<IEnumerable<T>> GetAllAsync<T>(IDbTransaction transaction, int? commandTimeout = null) where T : class;
 
         Task<int> ExecuteAsync(CommandDefinition command);
 

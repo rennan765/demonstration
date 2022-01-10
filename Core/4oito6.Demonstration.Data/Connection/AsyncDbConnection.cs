@@ -10,93 +10,96 @@ namespace _4oito6.Demonstration.Data.Connection
 {
     public class AsyncDbConnection : DisposableObject, IAsyncDbConnection
     {
-        private readonly IDbConnection _conn;
-
-        public AsyncDbConnection(IDbConnection conn)
-            : base(new IDisposable[] { conn })
+        public AsyncDbConnection(IDbConnection connection)
+            : base(new IDisposable[] { connection })
         {
-            _conn = conn ?? throw new ArgumentNullException(nameof(conn));
+            Connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
+
+        public IDbConnection Connection { get; private set; }
 
         public IDbTransaction Transaction { get; private set; }
 
-        public string ConnectionString => _conn.ConnectionString;
+        public string ConnectionString => Connection.ConnectionString;
 
-        public int ConnectionTimeOut => _conn.ConnectionTimeout;
+        public int ConnectionTimeOut => Connection.ConnectionTimeout;
 
-        public ConnectionState State => _conn.State;
+        public ConnectionState State => Connection.State;
 
-        public string Database => _conn.Database;
+        public string Database => Connection.Database;
 
         public Task<IEnumerable<dynamic>> QueryAsync(CommandDefinition command)
-            => _conn.QueryAsync(command);
+            => Connection.QueryAsync(command);
 
         public Task<IEnumerable<T>> QueryAsync<T>(CommandDefinition command)
-            => _conn.QueryAsync<T>(command);
+            => Connection.QueryAsync<T>(command);
 
         public Task<IEnumerable<TReturn>> QueryAsync<TFirst, TSecond, TThird, TReturn>(CommandDefinition command, Func<TFirst, TSecond, TThird, TReturn> map, string splitOn = "Id")
-            => _conn.QueryAsync(command, map, splitOn);
+            => Connection.QueryAsync(command, map, splitOn);
 
         public Task<IEnumerable<dynamic>> QueryAsync(string sql, object parameters)
-            => _conn.QueryAsync(sql, parameters);
+            => Connection.QueryAsync(sql, parameters);
 
         public Task<IEnumerable<dynamic>> QueryAsync(string sql, object parameters, IDbTransaction transaction)
-            => _conn.QueryAsync(sql: sql, param: parameters, transaction: transaction);
+            => Connection.QueryAsync(sql: sql, param: parameters, transaction: transaction);
 
         public Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters, IDbTransaction transaction)
-            => _conn.QueryAsync<T>(sql: sql, param: parameters, transaction: transaction);
+            => Connection.QueryAsync<T>(sql: sql, param: parameters, transaction: transaction);
 
         public Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameters)
-            => _conn.QueryAsync<T>(sql: sql, param: parameters);
+            => Connection.QueryAsync<T>(sql: sql, param: parameters);
+
+        public Task<IEnumerable<T>> GetAllAsync<T>(IDbTransaction transaction, int? commandTimeout = null) where T : class
+            => Connection.GetAllAsync<T>(transaction, commandTimeout);
 
         public Task<int> ExecuteAsync(CommandDefinition command)
-            => _conn.ExecuteAsync(command);
+            => Connection.ExecuteAsync(command);
 
         public Task<int> InsertAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.InsertAsync(entity, transaction);
+            return Connection.InsertAsync(entity, transaction);
         }
 
         public Task<bool> UpdateAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.UpdateAsync(entity, transaction);
+            return Connection.UpdateAsync(entity, transaction);
         }
 
         public Task<bool> DeleteAsync<T>(T entity, IDbTransaction transaction) where T : class
         {
-            return _conn.DeleteAsync(entity, transaction);
+            return Connection.DeleteAsync(entity, transaction);
         }
 
         public IDbTransaction BeginTransaction()
         {
-            Transaction = _conn.BeginTransaction();
+            Transaction = Connection.BeginTransaction();
             return Transaction;
         }
 
         public IDbTransaction BeginTransaction(IsolationLevel level)
         {
-            Transaction = _conn.BeginTransaction(level);
+            Transaction = Connection.BeginTransaction(level);
             return Transaction;
         }
 
         public void ChangeDatabase(string databaseName)
         {
-            _conn.ChangeDatabase(databaseName);
+            Connection.ChangeDatabase(databaseName);
         }
 
         public void Open()
         {
-            _conn.Open();
+            Connection.Open();
         }
 
         public void Close()
         {
-            _conn.Close();
+            Connection.Close();
         }
 
         public void CreateCommand()
         {
-            _conn.CreateCommand();
+            Connection.CreateCommand();
         }
     }
 }

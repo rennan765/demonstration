@@ -29,8 +29,6 @@ namespace _4oito6.Demonstration.Data.Transaction
             foreach (var conn in _connections.Values)
             {
                 conn.Close();
-
-                _connections.Clear();
             }
         }
 

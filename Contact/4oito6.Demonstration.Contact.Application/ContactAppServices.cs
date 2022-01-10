@@ -16,53 +16,86 @@ namespace _4oito6.Demonstration.Contact.Application
 {
     public class ContactAppServices : AppServiceBase, IContactAppServices
     {
-        private static readonly int _runInterval;
         private static readonly object _runCheckSyncRoot;
-        private static DateTime? _lastRunCheck;
+        private static readonly int _maintainInterval;
+        private static DateTime? _lastMaintainCheck;
 
-        private readonly IContactServices _services;
+        private static readonly int _cloneInterval;
+        private static DateTime? _lastCloneCheck;
+
+        private readonly IContactServices _contact;
+        private readonly ICloningServices _cloning;
+
         private readonly IContactUnitOfWork _uow;
         private readonly ISQSHelper _sqs;
 
         static ContactAppServices()
         {
-            _runInterval = (int)TimeSpan.FromMinutes(1).TotalSeconds;
+            _maintainInterval = (int)TimeSpan.FromMinutes(1).TotalSeconds;
+            _cloneInterval = (int)TimeSpan.FromDays(3).TotalSeconds;
             _runCheckSyncRoot = new object();
         }
 
         public ContactAppServices
         (
-            IContactServices services,
+            IContactServices contact,
+            ICloningServices cloning,
+
             IContactUnitOfWork uow,
             ISQSHelper sqs,
 
             ILogger<ContactAppServices> logger,
             IAuditTrailSender auditTrail
-        ) : base(logger, auditTrail, new IDisposable[] { services, uow })
+        ) : base(logger, auditTrail, new IDisposable[] { contact, cloning, uow })
         {
-            _services = services ?? throw new ArgumentNullException(nameof(services));
+            _contact = contact ?? throw new ArgumentNullException(nameof(contact));
+            _cloning = cloning ?? throw new ArgumentNullException(nameof(cloning));
+
             _uow = uow ?? throw new ArgumentNullException(nameof(uow));
             _sqs = sqs ?? throw new ArgumentNullException(nameof(sqs));
         }
 
-        public static string InformationMessage => "CONTACT_IN01";
+        public static string MaintainInformationMessage => "CONTACT_IN01";
+
+        public static string CloneInformationMessage => "CONTACT_IN02";
 
         public static string WarningMessage => "CONTACT_WA01";
 
-        private bool IsAbleToRun()
+        private bool IsAbleToRun(DateTime? lastRunCheck, int runInterval)
         {
             var now = DateTime.UtcNow;
 
-            if (_lastRunCheck is null || now.Subtract(_lastRunCheck.Value).TotalSeconds >= _runInterval)
+            if (lastRunCheck is null || now.Subtract(lastRunCheck.Value).TotalSeconds >= runInterval)
             {
                 lock (_runCheckSyncRoot)
                 {
-                    if (_lastRunCheck is null || now.Subtract(_lastRunCheck.Value).TotalSeconds >= _runInterval)
+                    if (lastRunCheck is null || now.Subtract(lastRunCheck.Value).TotalSeconds >= runInterval)
                     {
-                        _lastRunCheck = now;
                         return true;
                     }
                 }
+            }
+
+            return false;
+        }
+
+        private bool IsAbleToMaintain()
+        {
+            if (IsAbleToRun(_lastMaintainCheck, _maintainInterval))
+            {
+                _lastMaintainCheck = DateTime.UtcNow;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsAbleToClone()
+        {
+            if (IsAbleToRun(_lastCloneCheck, _cloneInterval))
+            {
+                _lastCloneCheck = DateTime.UtcNow;
+                return true;
             }
 
             return false;
@@ -73,7 +106,7 @@ namespace _4oito6.Demonstration.Contact.Application
             var message = new AuditTrailMessage();
             _uow.EnableTransactions();
 
-            var person = await _services.MaintainContactInformationAsync(personId)
+            var person = await _contact.MaintainContactInformationAsync(personId)
                 .ConfigureAwait(false);
 
             Notify(person);
@@ -81,7 +114,7 @@ namespace _4oito6.Demonstration.Contact.Application
             {
                 _uow.Commit();
 
-                message.Code = InformationMessage;
+                message.Code = MaintainInformationMessage;
                 message.Message = "Informações de contato atualizadas com sucesso.";
                 Logger.LogInformation(message.Message);
 
@@ -97,7 +130,7 @@ namespace _4oito6.Demonstration.Contact.Application
             {
                 _uow.Rollback();
 
-                message.Code = InformationMessage;
+                message.Code = MaintainInformationMessage;
                 message.Message = "Falha ao realizar a manutenção das informações de contato.";
 
                 Logger.LogWarning(message.Message);
@@ -127,7 +160,7 @@ namespace _4oito6.Demonstration.Contact.Application
         {
             try
             {
-                if (!IsAbleToRun())
+                if (!IsAbleToMaintain())
                 {
                     return;
                 }
@@ -147,6 +180,38 @@ namespace _4oito6.Demonstration.Contact.Application
             }
             finally
             {
+                _uow.CloseConnections();
+            }
+        }
+
+        public async Task CloneAsync()
+        {
+            try
+            {
+                if (!IsAbleToClone())
+                {
+                    HandleEmptyQueue("Aguardando agendamento para rodar o clone.");
+                    return;
+                }
+
+                Logger.LogInformation($"Processamento de clone iniciado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH:mm:ss}.");
+
+                _uow.EnableTransactions();
+                await _cloning.CloneAsync().ConfigureAwait(false);
+                _uow.Commit();
+
+                var message = $"Processamento de clone finalizado na data UTC {DateTime.UtcNow:dd/MM/yyyy HH:mm:ss}.";
+                await AuditTrail.SendAsync(CloneInformationMessage, message).ConfigureAwait(false);
+
+                Logger.LogInformation(message);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
+            }
+            finally
+            {
+                _uow.Rollback();
                 _uow.CloseConnections();
             }
         }

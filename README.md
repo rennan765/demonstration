@@ -20,7 +20,8 @@ Após a criação/alteração, uma mensagem é enviada para uma fila SQS para a 
 Todos os contextos da solução mandam mensagens para uma fila SQS, podendo ser esta uma informação, aviso ou o log de um erro, visando auditoria posterior.
 
 3. O contexto para manutenção de contatos é um Worker Services que fica fazendo a leitura da fila SQS informada no contexto de cadastro de pessoas.
-Ao receber esta mensagem, o Qorker Services obtém o cadastro da pessoa informada na mensagem e remove os dados duplicados de telefone e endereço desta.
+Ao receber esta mensagem, o Worker Services obtém o cadastro da pessoa informada na mensagem e remove os dados duplicados de telefone e endereço desta.
+Além da rotina de manutenção, o Worker Services também executa uma rotina a cada 72 horas que clona os dados para um banco MySQL.
 
 <hr />
 
