@@ -13,7 +13,7 @@ namespace _4oito6.Demonstration.Test.Data.Model
     {
         private readonly CompareLogic _comparison = new();
 
-        [Fact(DisplayName = "ToPhone_Success")]
+        [Fact(DisplayName = "Testing Phone's Domain Model's mapper")]
         public void ToPhone_Success()
         {
             //arrange:
@@ -30,7 +30,7 @@ namespace _4oito6.Demonstration.Test.Data.Model
             _comparison.Compare(expectedResult, result).AreEqual.Should().BeTrue();
         }
 
-        [Fact(DisplayName = "ToAddress_Success")]
+        [Fact(DisplayName = "Testing Address' Domain Model's mapper")]
         public void ToAddress_Success()
         {
             //arrange:
@@ -60,7 +60,7 @@ namespace _4oito6.Demonstration.Test.Data.Model
             _comparison.Compare(expectedResult, result).AreEqual.Should().BeTrue();
         }
 
-        [Fact(DisplayName = "MapPersonDtoProperties_Success")]
+        [Fact(DisplayName = "Testing Person's split on's mapper")]
         public void MapPersonDtoProperties_Success()
         {
             //arrange:
@@ -79,7 +79,7 @@ namespace _4oito6.Demonstration.Test.Data.Model
             _comparison.Compare(expectedResult, result).AreEqual.Should().BeTrue();
         }
 
-        [Fact(DisplayName = "ToPerson_Success")]
+        [Fact(DisplayName = "Testing Person's Domain Model's mapper")]
         public void ToPerson_Success()
         {
             //arrange:
@@ -114,7 +114,7 @@ namespace _4oito6.Demonstration.Test.Data.Model
             expectedResult.Match(result).Should().BeTrue();
         }
 
-        [Fact(DisplayName = "ToPerson_Success")]
+        [Fact(DisplayName = "Testing Person's complete Domain Model's mapper")]
         public void ToPerson_Complete_Success()
         {
             //arrange:

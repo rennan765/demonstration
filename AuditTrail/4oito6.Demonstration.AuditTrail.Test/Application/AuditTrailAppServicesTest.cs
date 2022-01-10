@@ -14,7 +14,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Application
     [Trait("AuditTrailAppServices", "Application tests")]
     public class AuditTrailAppServicesTest
     {
-        [Fact(DisplayName = "ProcessMessageAsync_ArgumentNullException")]
+        [Fact(DisplayName = "Testing if message is null.")]
         public async Task ProcessMessageAsync_ArgumentNullException()
         {
             //arrange
@@ -41,7 +41,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Application
             Mock.Verify(appServiceMock);
         }
 
-        [Fact(DisplayName = "ProcessMessageAsync_Success")]
+        [Fact(DisplayName = "Message should process successfully.")]
         public async Task ProcessMessageAsync_Success()
         {
             //arrange
@@ -67,7 +67,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Application
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "ProcessMessageAsync_Exception")]
+        [Fact(DisplayName = "Error while trying to process successfully.")]
         public async Task ProcessMessageAsync_Exception()
         {
             //arrange
@@ -105,7 +105,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Application
             Mock.Verify(appServiceMock);
         }
 
-        [Fact(DisplayName = "SendAsync_Success")]
+        [Fact(DisplayName = "Message should be sent successfully.")]
         public async Task SendAsync_Success()
         {
             //arrange
@@ -127,7 +127,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Application
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "SendAsync_Exception")]
+        [Fact(DisplayName = "Error while trying to send message.")]
         public async Task SendAsync_Exception()
         {
             //arrange
