@@ -22,7 +22,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public Task ProcessMessageAsync(AuditTrailMessage message)
+        public async Task ProcessMessageAsync(AuditTrailMessage message)
         {
             try
             {
@@ -31,23 +31,23 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
                     throw new ArgumentNullException(nameof(message));
                 }
 
-                return _services.ProcessAsync(message);
+                await _services.ProcessAsync(message).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                return HandleExceptionAsync(ex);
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
             }
         }
 
-        public Task SendAsync(string code, string message, string additionalInformation = null)
+        public async Task SendAsync(string code, string message, string additionalInformation = null)
         {
             try
             {
-                return AuditTrail.SendAsync(code, message, additionalInformation);
+                await AuditTrail.SendAsync(code, message, additionalInformation).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                return HandleExceptionAsync(ex);
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
             }
         }
     }
