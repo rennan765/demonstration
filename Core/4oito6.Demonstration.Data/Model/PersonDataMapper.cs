@@ -2,25 +2,26 @@
 using _4oito6.Demonstration.Domain.Model.Enum;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Data.Model
 {
     public static class PersonDataMapper
     {
-        private static Dictionary<int, Gender> _genders;
-        private static Dictionary<int, PhoneType> _phoneTypes;
+        public static Dictionary<int, Gender> Genders;
+        public static Dictionary<int, PhoneType> PhoneTypes;
 
         static PersonDataMapper()
         {
-            _genders = new Dictionary<int, Gender>
+            Genders = new Dictionary<int, Gender>
             {
                 { (int)Gender.Male, Gender.Male },
                 { (int)Gender.Female, Gender.Female },
                 { (int)Gender.NotInformed, Gender.NotInformed }
             };
 
-            _phoneTypes = new Dictionary<int, PhoneType>
+            PhoneTypes = new Dictionary<int, PhoneType>
             {
                 { (int)PhoneType.Cel, PhoneType.Cel },
                 { (int)PhoneType.Business, PhoneType.Business },
@@ -30,9 +31,10 @@ namespace _4oito6.Demonstration.Data.Model
 
         public static Phone ToPhone(this PhoneDto dto)
         {
-            return new Phone(dto.phoneid, _phoneTypes[dto.type], dto.code, dto.number);
+            return new Phone(dto.phoneid, PhoneTypes[dto.type], dto.code, dto.number);
         }
 
+        [ExcludeFromCodeCoverage]
         public static PhoneDto ToPhoneDto(this Phone phone)
         {
             return new PhoneDto
@@ -62,6 +64,7 @@ namespace _4oito6.Demonstration.Data.Model
             );
         }
 
+        [ExcludeFromCodeCoverage]
         public static AddressDto ToAddressDto(this Address address)
         {
             return new AddressDto
@@ -97,7 +100,7 @@ namespace _4oito6.Demonstration.Data.Model
                         email: dto.email,
                         document: dto.document,
 
-                        gender: _genders[dto.gender],
+                        gender: Genders[dto.gender],
                         birthDate: dto.birthdate,
 
                         phones: dtos.Select(d => d.Phone.ToPhone()).ToList(),
@@ -124,7 +127,7 @@ namespace _4oito6.Demonstration.Data.Model
                 email: dto.email,
 
                 document: dto.document,
-                gender: _genders[dto.gender],
+                gender: Genders[dto.gender],
                 birthDate: dto.birthdate,
 
                 phones: phones.Values,
@@ -133,6 +136,7 @@ namespace _4oito6.Demonstration.Data.Model
             );
         }
 
+        [ExcludeFromCodeCoverage]
         public static PersonDto ToPersonDto(this Person person)
         {
             return new PersonDto
