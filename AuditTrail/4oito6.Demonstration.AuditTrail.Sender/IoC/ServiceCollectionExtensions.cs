@@ -1,56 +1,21 @@
-﻿using _4oito6.Demonstration.Config;
-using _4oito6.Demonstration.CrossCutting.AuditTrail;
-using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
-using Amazon;
-using Amazon.SecretsManager;
-using Amazon.SQS;
+﻿using _4oito6.Demonstration.AuditTrail.IoC;
+using _4oito6.Demonstration.Config;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.AuditTrail.Sender.IoC
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAuditTrailSender(this IServiceCollection services)
         {
             // add aws dependencies
-            services.AddSingleton<IAmazonSecretsManager>
-            (
-                sp => new AmazonSecretsManagerClient
-                (
-                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
-                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
-                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
-                )
-            );
+            services.AddAwsDependencies();
 
-            services.AddScoped<IAmazonSQS>
-            (
-                sp => new AmazonSQSClient
-                (
-                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
-                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
-                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
-                )
-            );
-
-            // add config:
-            services.AddSingleton<ICommonConfig, CommonConfig>();
-
-            //
-            //add audit trail
-            services
-                .AddScoped<IAuditTrailSender>
-                (
-                    sp =>
-                    {
-                        var config = sp.GetService<ICommonConfig>();
-                        return new AuditTrailSender
-                        (
-                            sqs: sp.GetService<IAmazonSQS>(),
-                            queue: config.AuditTrailQueueUrl
-                        );
-                    });
+            // add receiver dependencies:
+            services.AddReceiverDependencies();
 
             // add swagger:
             var config = services.BuildServiceProvider().GetService<ICommonConfig>()?.SwaggerConfig;

@@ -19,6 +19,10 @@ Ao iniciar o projeto, acesse a página http://localhost:{porta}/swagger para abr
 Caso queira abrir a interface do swagger minimizada, acessar http://localhost:{porta}/swagger/index.html?docExpansion=none.
 <hr />
 
+Para debugar o Lambda, é necessário a instalação do pacote Lambda Test Tool (vide https://github.com/aws/aws-lambda-dotnet/tree/master/Tools/LambdaTestTool).
+Também é necessária a instalação do .NET Core SDK 3.1 (vide https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.416-windows-x64-installer).
+<hr />
+
 Os projetos utilizas variáveis de ambiente para o funcionamento. 
 Para que o mesmo execute normalmente, será necessário inserir as variáveis abaixo: 
 
@@ -47,5 +51,10 @@ Para que o mesmo execute normalmente, será necessário inserir as variáveis ab
     <td>AwsRegion</td>
     <td>Região dos serviços AWS</td>
     <td>sa-east-1</td>
+  </tr>
+  <tr>
+    <td>AuditTrailQueueUrl</td>
+    <td>Url da fila SQS que será responsável por disparar o Lambda.</td>
+    <td>https://sqs.sa-east-1.amazonaws.com/257893541578/AUDIT-TRAIL</td>
   </tr>
 </table>

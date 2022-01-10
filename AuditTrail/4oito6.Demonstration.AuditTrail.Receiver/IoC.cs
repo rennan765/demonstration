@@ -1,20 +1,14 @@
-﻿using _4oito6.Demonstration.AuditTrail.Receiver.Application;
-using _4oito6.Demonstration.AuditTrail.Receiver.Data;
-using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Data;
-using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
-using _4oito6.Demonstration.Config;
-using _4oito6.Demonstration.CrossCutting.AuditTrail;
-using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
-using Amazon;
-using Amazon.DynamoDBv2;
-using Amazon.SecretsManager;
-using Amazon.SQS;
+﻿using _4oito6.Demonstration.AuditTrail.IoC;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver
 {
+    [ExcludeFromCodeCoverage]
     public static class IoC
     {
         public static ServiceProvider Provider { get; private set; }
@@ -23,58 +17,30 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver
         {
             IServiceCollection services = new ServiceCollection();
 
+            // adding configuration
+            services.AddScoped<IConfiguration>
+            (
+                sp => new ConfigurationBuilder()
+                    .SetBasePath
+                    (
+                        basePath: Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Local") ?
+                            Directory.GetCurrentDirectory().Replace("bin\\Debug\\netcoreapp3.1", string.Empty) :
+                            Directory.GetCurrentDirectory()
+                    )
+                    .AddJsonFile(path: "appsettings.json", optional: true)
+                    .Build()
+            );
+
             // adding aws dependencies
-            services.AddSingleton<IAmazonSecretsManager>
-            (
-                sp => new AmazonSecretsManagerClient
-                (
-                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
-                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
-                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
-                )
-            );
-
-            services.AddScoped<IAmazonSQS>
-            (
-                sp => new AmazonSQSClient
-                (
-                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
-                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
-                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
-                )
-            );
-
-            services.AddScoped<IAmazonDynamoDB>
-            (
-                sp => new AmazonDynamoDBClient
-                (
-                    awsAccessKeyId: Environment.GetEnvironmentVariable("AwsAccessKeyId"),
-                    awsSecretAccessKey: Environment.GetEnvironmentVariable("AwsSecretKey"),
-                    region: RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AwsRegion"))
-                )
-            );
+            services.AddAwsDependencies();
 
             // adding log:
             services.AddLogging();
             services.AddScoped<ILoggerFactory, LoggerFactory>();
             services.AddScoped(typeof(ILogger<>), typeof(Logger<>));
 
-            // adding other dependencies:
-            services.AddScoped<ICommonConfig, CommonConfig>()
-                .AddScoped<IAuditTrailSender>
-                (
-                    sp => new AuditTrailSender
-                    (
-                        sqs: sp.GetService<IAmazonSQS>(),
-                        queue: sp.GetService<ICommonConfig>().AuditTrailQueueUrl
-                    )
-                );
-
-            // adding context services
-            services
-                .AddScoped<IAuditTrailRepository, AuditTrailRepository>()
-                .AddScoped<IAuditTrailServices, AuditTrailServices>()
-                .AddScoped<IAuditTrailAppServices, AuditTrailAppServices>();
+            // add receiver dependencies:
+            services.AddReceiverDependencies();
 
             Provider = services.BuildServiceProvider();
         }

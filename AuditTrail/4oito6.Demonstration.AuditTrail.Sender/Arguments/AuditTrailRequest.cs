@@ -1,5 +1,8 @@
-﻿namespace _4oito6.Demonstration.AuditTrail.Sender.Arguments
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace _4oito6.Demonstration.AuditTrail.Sender.Arguments
 {
+    [ExcludeFromCodeCoverage]
     public class AuditTrailRequest
     {
         public string Code { get; set; }

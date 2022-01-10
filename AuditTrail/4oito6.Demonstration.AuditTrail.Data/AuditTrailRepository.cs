@@ -4,10 +4,12 @@ using _4oito6.Demonstration.Commons;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
 using _4oito6.Demonstration.Data.Connection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver.Data
 {
+    [ExcludeFromCodeCoverage]
     public class AuditTrailRepository : DisposableObject, IAuditTrailRepository
     {
         private readonly IDynamoConnection<AuditTrailDto> _conn;
