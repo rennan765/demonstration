@@ -1,7 +1,9 @@
 using _4oito6.Demonstration.Contact.Application.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Contact.EntryPoint
 {
+    [ExcludeFromCodeCoverage]
     public class Worker : BackgroundService
     {
         private IContactAppServices _appServices;
