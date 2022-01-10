@@ -44,13 +44,13 @@ namespace _4oito6.Demonstration.Application
 
         protected ILogger Logger { get; private set; }
 
-        protected IAuditTrailSender AuditTrail { get; private set; }
+        public virtual IAuditTrailSender AuditTrail { get; private set; }
 
         public HttpStatusCode HttpStatusCode { get; private set; }
 
         public bool IsValid { get; private set; }
 
-        protected Task HandleExceptionAsync(Exception ex, string code = null)
+        public virtual Task HandleExceptionAsync(Exception ex, string code = null)
         {
             HttpStatusCode = HttpStatusCode.InternalServerError;
             _notifications.Add(new Notification("HttpStatusCode", HttpStatusCode.InternalServerError.ToString()));
@@ -63,7 +63,7 @@ namespace _4oito6.Demonstration.Application
             return AuditTrail.SendAsync(message);
         }
 
-        protected void Notify(EntityBase entity)
+        public virtual void Notify(EntityBase entity)
         {
             if (entity is null)
             {
@@ -81,7 +81,7 @@ namespace _4oito6.Demonstration.Application
             }
         }
 
-        protected void HandleEmptyQueue(string message = "Empty queue.")
+        public virtual void HandleEmptyQueue(string message = "Empty queue.")
         {
             var now = DateTime.UtcNow;
 

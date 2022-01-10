@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Commons
 {
+    [ExcludeFromCodeCoverage]
     public class DisposableObject : IDisposable
     {
         private bool _disposedValue;

@@ -102,5 +102,19 @@ namespace _4oito6.Demonstration.CrossCutting.AuditTrail.Model
         {
             return new AuditTrailMessage(Id, Code, Message, Date, AdditionalInformation);
         }
+
+        public bool Match(AuditTrailMessage message, bool isConsiderDate = false)
+        {
+            var result = message.Code == Code &&
+                message.Message == Message &&
+                message.AdditionalInformation == AdditionalInformation;
+
+            if (isConsiderDate)
+            {
+                return result && DateTime.Compare(message.Date, Date) == 0;
+            }
+
+            return result;
+        }
     }
 }

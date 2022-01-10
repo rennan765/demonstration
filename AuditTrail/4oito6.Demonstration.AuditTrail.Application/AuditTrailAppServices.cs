@@ -2,9 +2,7 @@
 using _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
-using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -24,7 +22,7 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public Task ProcessMessageAsync(SQSEvent.SQSMessage message)
+        public async Task ProcessMessageAsync(AuditTrailMessage message)
         {
             try
             {
@@ -33,17 +31,23 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Application
                     throw new ArgumentNullException(nameof(message));
                 }
 
-                var auditTrailMessage = JsonConvert.DeserializeObject<AuditTrailMessage>(message.Body);
-                if (auditTrailMessage is null)
-                {
-                    throw new InvalidOperationException(nameof(message));
-                }
-
-                return _services.ProcessAsync(auditTrailMessage);
+                await _services.ProcessAsync(message).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                return HandleExceptionAsync(ex);
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
+            }
+        }
+
+        public async Task SendAsync(string code, string message, string additionalInformation = null)
+        {
+            try
+            {
+                await AuditTrail.SendAsync(code, message, additionalInformation).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(ex).ConfigureAwait(false);
             }
         }
     }

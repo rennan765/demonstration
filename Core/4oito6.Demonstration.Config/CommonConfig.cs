@@ -5,10 +5,12 @@ using Amazon.SecretsManager.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Config
 {
+    [ExcludeFromCodeCoverage]
     public class CommonConfig : DisposableObject, ICommonConfig
     {
         private readonly IAmazonSecretsManager _secretsManager;
@@ -72,7 +74,7 @@ namespace _4oito6.Demonstration.Config
             }
         }
 
-        public string AuditTrailQueueUrl => _configuration.GetSection("AuditTrailQueueUrl").Value;
+        public virtual string AuditTrailQueueUrl => _configuration.GetSection("AuditTrailQueueUrl").Value;
 
         protected async Task<string> GetSecretString(string secretName)
         {
