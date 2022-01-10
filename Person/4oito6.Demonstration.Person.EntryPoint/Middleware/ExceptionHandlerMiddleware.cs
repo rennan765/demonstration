@@ -1,12 +1,14 @@
 ﻿using _4oito6.Demonstration.Commons;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Interface;
 using _4oito6.Demonstration.CrossCutting.AuditTrail.Model;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using System.Text.Json;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.Middleware
 {
+    [ExcludeFromCodeCoverage]
     public class ExceptionHandlerMiddleware : DisposableObject
     {
         private readonly RequestDelegate _next;

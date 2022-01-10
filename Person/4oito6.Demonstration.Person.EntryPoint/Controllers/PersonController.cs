@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -18,6 +19,7 @@ namespace _4oito6.Demonstration.Person.EntryPoint.Controllers
 {
     [ApiController]
     [Route("person")]
+    [ExcludeFromCodeCoverage]
     public class PersonController : MainController
     {
         private readonly TokenConfig _tokenConfig;
