@@ -93,7 +93,7 @@ namespace _4oito6.Demonstration.Person.Application
                 Email = person.Email,
                 Id = person.Id,
                 Name = person.Name,
-                MainPhone = person.MainPhone.ToPhoneResponse()
+                MainPhone = person.MainPhone?.ToPhoneResponse()
             };
 
             response.Phones.AddRange(person.Phones.Select(p => p.ToPhoneResponse()));

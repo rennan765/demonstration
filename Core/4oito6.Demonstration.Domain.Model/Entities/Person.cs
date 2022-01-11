@@ -228,7 +228,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 birthDate: BirthDate,
 
                 phones: Phones.Select(p => (Phone)p.Clone()),
-                mainPhone: (Phone)MainPhone.Clone(),
+                mainPhone: (Phone)MainPhone?.Clone(),
                 address: (Address?)Address?.Clone()
             );
         }
@@ -263,7 +263,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 }
             }
 
-            if (!MainPhone.Match(person.MainPhone))
+            if (!MainPhone?.Match(person.MainPhone) ?? false)
             {
                 return false;
             }

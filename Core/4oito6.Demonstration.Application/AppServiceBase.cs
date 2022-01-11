@@ -48,7 +48,7 @@ namespace _4oito6.Demonstration.Application
 
         public virtual IAuditTrailSender AuditTrail { get; private set; }
 
-        public HttpStatusCode HttpStatusCode { get; private set; }
+        public HttpStatusCode HttpStatusCode { get; protected set; }
 
         public bool IsValid { get; private set; }
 
