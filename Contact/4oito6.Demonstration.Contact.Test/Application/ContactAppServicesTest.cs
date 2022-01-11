@@ -352,5 +352,89 @@ namespace _4oito6.Demonstration.Contact.Test.Application
             mocker.Verify();
             Mock.Verify(appServiceMock);
         }
+
+        [Fact(DisplayName = "Clone executed successfully.")]
+        public async Task CloneAsync_Success()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appService = mocker.CreateInstance<ContactAppServices>();
+
+            mocker.GetMock<IContactUnitOfWork>()
+                .Setup(u => u.EnableTransactions())
+                .Verifiable();
+
+            mocker.GetMock<ICloningServices>()
+                .Setup(s => s.CloneAsync())
+                .Verifiable();
+
+            mocker.GetMock<IContactUnitOfWork>()
+                .Setup(u => u.Commit())
+                .Verifiable();
+
+            mocker.GetMock<IAuditTrailSender>()
+                .Setup
+                (
+                    s => s.SendAsync
+                    (
+                        ContactAppServices.CloneInformationMessage,
+                        It.Is<string>(str => str.Contains("Processamento de clone finalizado na data UTC")),
+                        null
+                    )
+                )
+                .Verifiable();
+
+            mocker.GetMock<IContactUnitOfWork>()
+                .Setup(u => u.CloseConnections())
+                .Verifiable();
+
+            //act:
+            await appService.CloneAsync().ConfigureAwait(false);
+
+            //assert:
+            mocker.Verify();
+        }
+
+        [Fact(DisplayName = "Handling Exception while attepting to clone.")]
+        public async Task CloneAsync_Exception()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appServiceMock = new Mock<ContactAppServices>
+            (
+                mocker.GetMock<IContactServices>().Object,
+                mocker.GetMock<ICloningServices>().Object,
+
+                mocker.GetMock<IContactUnitOfWork>().Object,
+                mocker.GetMock<ISQSHelper>().Object,
+
+                mocker.GetMock<ILogger<ContactAppServices>>().Object,
+                mocker.GetMock<IAuditTrailSender>().Object
+            );
+
+            mocker.GetMock<ICloningServices>()
+                .Setup(app => app.CloneAsync())
+                .ThrowsAsync(new InvalidOperationException())
+                .Verifiable();
+
+            appServiceMock
+                .Setup(app => app.HandleExceptionAsync(It.IsAny<InvalidOperationException>(), null))
+                .Verifiable();
+
+            mocker.GetMock<IContactUnitOfWork>()
+                .Setup(u => u.Rollback())
+                .Verifiable();
+
+            mocker.GetMock<IContactUnitOfWork>()
+                .Setup(u => u.CloseConnections())
+                .Verifiable();
+
+            //act:
+            await appServiceMock.Object.CloneAsync().ConfigureAwait(false);
+
+            //assert:
+            mocker.Verify();
+            Mock.Verify(appServiceMock);
+        }
     }
 }
