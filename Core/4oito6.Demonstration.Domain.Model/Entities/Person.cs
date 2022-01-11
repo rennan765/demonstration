@@ -3,6 +3,7 @@ using _4oito6.Demonstration.Domain.Model.Enum;
 using _4oito6.Demonstration.Domain.Model.Validators;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
@@ -153,11 +154,6 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             Address = address;
         }
 
-        public void RemoveAddress()
-        {
-            Address = null;
-        }
-
         public void Attach(Phone phone, bool isMainPhone = false)
         {
             if (phone is null)
@@ -209,6 +205,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             Address = null;
         }
 
+        [ExcludeFromCodeCoverage]
         public static Person GetDefaultInstance()
         {
             return new Person
