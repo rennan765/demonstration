@@ -130,7 +130,7 @@ namespace _4oito6.Demonstration.Contact.Application
             {
                 _uow.Rollback();
 
-                message.Code = MaintainInformationMessage;
+                message.Code = WarningMessage;
                 message.Message = "Falha ao realizar a manutenção das informações de contato.";
 
                 Logger.LogWarning(message.Message);
