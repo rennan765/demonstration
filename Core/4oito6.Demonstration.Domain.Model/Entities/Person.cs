@@ -126,14 +126,21 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         }
 
         public int Id { get; private set; }
+
         public string Name { get; private set; }
+
         public string Email { get; private set; }
+
         public string Document { get; private set; }
+
         public Gender Gender { get; private set; }
+
         public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
+
         public IEnumerable<Phone> Phones => _phones.Select(p => p.Value).ToList();
+
         public Phone MainPhone { get; private set; }
 
         public void Attach(Address address)
