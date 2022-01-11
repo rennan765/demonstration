@@ -23,7 +23,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             District = district;
             City = city;
             State = state;
-            PostalCode = postalCode.Replace("-", "");
+            PostalCode = postalCode?.Replace("-", "");
 
             Validate(this, new CreateAddressValidator());
         }
