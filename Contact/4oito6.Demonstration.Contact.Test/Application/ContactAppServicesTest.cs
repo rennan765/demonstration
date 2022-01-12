@@ -163,7 +163,6 @@ namespace _4oito6.Demonstration.Contact.Test.Application
             );
 
             var personId = 10;
-
             appServiceMock
                 .Setup(app => app.MaintainInformationAsync(personId))
                 .Verifiable();
@@ -219,6 +218,36 @@ namespace _4oito6.Demonstration.Contact.Test.Application
             Mock.Verify(appServiceMock);
         }
 
+        [Fact(DisplayName = "It's not time to maintain Person's information by queue yet.")]
+        public async Task MaintainInformationByQueueAsync_Unable()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appServiceMock = new Mock<ContactAppServices>
+            (
+                mocker.GetMock<IContactServices>().Object,
+                mocker.GetMock<ICloningServices>().Object,
+
+                mocker.GetMock<IContactUnitOfWork>().Object,
+                mocker.GetMock<ISQSHelper>().Object,
+
+                mocker.GetMock<ILogger<ContactAppServices>>().Object,
+                mocker.GetMock<IAuditTrailSender>().Object
+            );
+
+            appServiceMock
+                .Setup(app => app.IsAbleToMaintain())
+                .Returns(false)
+                .Verifiable();
+
+            //act:
+            await appServiceMock.Object.MaintainInformationByQueueAsync().ConfigureAwait(false);
+
+            //assert:
+            mocker.Verify();
+            Mock.Verify(appServiceMock);
+        }
+
         [Fact(DisplayName = "Attempting to maintain Person's information by queue, but it's empty.")]
         public async Task MaintainInformationByQueueAsync_Empty()
         {
@@ -235,6 +264,11 @@ namespace _4oito6.Demonstration.Contact.Test.Application
                 mocker.GetMock<ILogger<ContactAppServices>>().Object,
                 mocker.GetMock<IAuditTrailSender>().Object
             );
+
+            appServiceMock
+                .Setup(app => app.IsAbleToMaintain())
+                .Returns(true)
+                .Verifiable();
 
             var request = new MaintainInformationRequest
             {
@@ -284,6 +318,11 @@ namespace _4oito6.Demonstration.Contact.Test.Application
                 PersonId = 10
             };
 
+            appServiceMock
+                .Setup(app => app.IsAbleToMaintain())
+                .Returns(true)
+                .Verifiable();
+
             mocker.GetMock<ISQSHelper>()
                 .Setup(h => h.GetAsync<MaintainInformationRequest>())
                 .ReturnsAsync(request)
@@ -322,6 +361,11 @@ namespace _4oito6.Demonstration.Contact.Test.Application
                 mocker.GetMock<IAuditTrailSender>().Object
             );
 
+            appServiceMock
+                .Setup(app => app.IsAbleToMaintain())
+                .Returns(true)
+                .Verifiable();
+
             var request = new MaintainInformationRequest
             {
                 PersonId = 10
@@ -353,12 +397,56 @@ namespace _4oito6.Demonstration.Contact.Test.Application
             Mock.Verify(appServiceMock);
         }
 
+        [Fact(DisplayName = "It's not time to clone yet.")]
+        public async Task CloneAsync_Unable()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appServiceMock = new Mock<ContactAppServices>
+            (
+                mocker.GetMock<IContactServices>().Object,
+                mocker.GetMock<ICloningServices>().Object,
+
+                mocker.GetMock<IContactUnitOfWork>().Object,
+                mocker.GetMock<ISQSHelper>().Object,
+
+                mocker.GetMock<ILogger<ContactAppServices>>().Object,
+                mocker.GetMock<IAuditTrailSender>().Object
+            );
+
+            appServiceMock
+                .Setup(app => app.IsAbleToClone())
+                .Returns(false)
+                .Verifiable();
+
+            //act:
+            await appServiceMock.Object.CloneAsync().ConfigureAwait(false);
+
+            //assert:
+            Mock.Verify(appServiceMock);
+        }
+
         [Fact(DisplayName = "Clone executed successfully.")]
         public async Task CloneAsync_Success()
         {
             //arrange:
             var mocker = new AutoMocker();
-            var appService = mocker.CreateInstance<ContactAppServices>();
+            var appServiceMock = new Mock<ContactAppServices>
+            (
+                mocker.GetMock<IContactServices>().Object,
+                mocker.GetMock<ICloningServices>().Object,
+
+                mocker.GetMock<IContactUnitOfWork>().Object,
+                mocker.GetMock<ISQSHelper>().Object,
+
+                mocker.GetMock<ILogger<ContactAppServices>>().Object,
+                mocker.GetMock<IAuditTrailSender>().Object
+            );
+
+            appServiceMock
+                .Setup(app => app.IsAbleToClone())
+                .Returns(true)
+                .Verifiable();
 
             mocker.GetMock<IContactUnitOfWork>()
                 .Setup(u => u.EnableTransactions())
@@ -370,6 +458,11 @@ namespace _4oito6.Demonstration.Contact.Test.Application
 
             mocker.GetMock<IContactUnitOfWork>()
                 .Setup(u => u.Commit())
+                .Verifiable();
+
+            appServiceMock
+                .SetupGet(app => app.AuditTrail)
+                .Returns(mocker.GetMock<IAuditTrailSender>().Object)
                 .Verifiable();
 
             mocker.GetMock<IAuditTrailSender>()
@@ -389,7 +482,7 @@ namespace _4oito6.Demonstration.Contact.Test.Application
                 .Verifiable();
 
             //act:
-            await appService.CloneAsync().ConfigureAwait(false);
+            await appServiceMock.Object.CloneAsync().ConfigureAwait(false);
 
             //assert:
             mocker.Verify();
@@ -411,6 +504,11 @@ namespace _4oito6.Demonstration.Contact.Test.Application
                 mocker.GetMock<ILogger<ContactAppServices>>().Object,
                 mocker.GetMock<IAuditTrailSender>().Object
             );
+
+            appServiceMock
+                .Setup(app => app.IsAbleToClone())
+                .Returns(true)
+                .Verifiable();
 
             mocker.GetMock<ICloningServices>()
                 .Setup(app => app.CloneAsync())
