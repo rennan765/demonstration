@@ -9,8 +9,6 @@ namespace _4oito6.Demonstration.Person.Application.Model.Person
 {
     public class PersonRequest : ICloneable
     {
-        private readonly List<PhoneRequest> _phones;
-
         public string Name { get; set; }
 
         public string Document { get; set; }
@@ -25,19 +23,12 @@ namespace _4oito6.Demonstration.Person.Application.Model.Person
 
         public AddressRequest Address { get; set; }
 
-        public IEnumerable<PhoneRequest> Phones
-        {
-            get => _phones;
-            set
-            {
-                _phones.AddRange(value ?? new PhoneRequest[0]);
-            }
-        }
+        public List<PhoneRequest> Phones { get; set; }
 
         public PersonRequest()
         {
             Document = string.Empty;
-            _phones = new List<PhoneRequest>();
+            Phones = new List<PhoneRequest>();
         }
 
         public object Clone()
@@ -50,7 +41,7 @@ namespace _4oito6.Demonstration.Person.Application.Model.Person
                 Email = Email,
                 Gender = Gender,
                 Name = Name,
-                Phones = _phones.Select(p => (PhoneRequest)p.Clone()),
+                Phones = Phones.Select(p => (PhoneRequest)p.Clone()).ToList(),
                 MainPhone = (PhoneRequest)MainPhone.Clone(),
             };
         }

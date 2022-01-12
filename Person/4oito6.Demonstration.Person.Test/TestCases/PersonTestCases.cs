@@ -52,7 +52,7 @@ namespace _4oito6.Demonstration.Person.Test.TestCases
                         Gender = f.PickRandom<Gender>(),
                         Name = f.Random.String(),
                         MainPhone = f.PickRandom(phones),
-                        Phones = phones,
+                        Phones = phones.ToList(),
                         Address = AddressTestCases.GetRequest()
                     };
 

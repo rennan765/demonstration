@@ -1,6 +1,7 @@
 ﻿using _4oito6.Demonstration.Domain.Model.Entities;
 using _4oito6.Demonstration.Domain.Model.Enum;
 using FluentAssertions;
+using KellermanSoftware.CompareNetObjects;
 using Xunit;
 
 namespace _4oito6.Demonstration.Test.Domain.Model.Entities
@@ -38,23 +39,6 @@ namespace _4oito6.Demonstration.Test.Domain.Model.Entities
             expectedResult.Equals(result).Should().BeTrue();
         }
 
-        [Fact(DisplayName = "Validating Equals method.")]
-        public void Equals_Success()
-        {
-            //arrange:
-            var id = 1;
-            var type = PhoneType.Home;
-
-            var code = "21";
-            var number = "27172770";
-
-            var first = new Phone(id, type, code, number);
-            var second = new Phone(id, type, code, number);
-
-            //act and assert:
-            first.Equals(second).Should().BeTrue();
-        }
-
         [Fact(DisplayName = "Validating Clone method.")]
         public void Clone_Success()
         {
@@ -70,7 +54,7 @@ namespace _4oito6.Demonstration.Test.Domain.Model.Entities
             var result = new Phone(id, type, code, number);
 
             //act and assert:
-            expectedResult.Equals(result).Should().BeTrue();
+            new CompareLogic().Compare(expectedResult, result).AreEqual.Should().BeTrue();
         }
 
         [Fact(DisplayName = "Validating Match method.")]

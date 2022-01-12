@@ -44,12 +44,6 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public override string ToString() => $"{(int)Type} - ({Code}) {Number}";
 
-        public override bool Equals(object obj)
-        {
-            var phone = (Phone)obj;
-            return phone.Id == Id && phone.Type == Type && phone.Code == Code && phone.Number == Number;
-        }
-
         public object Clone()
         {
             return new Phone(Id, Type, Code, Number);
