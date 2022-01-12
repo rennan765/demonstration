@@ -9,6 +9,7 @@ using _4oito6.Demonstration.SQS.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,6 +62,7 @@ namespace _4oito6.Demonstration.Contact.Application
 
         public static string WarningMessage => "CONTACT_WA01";
 
+        [ExcludeFromCodeCoverage]
         private bool IsAbleToRun(DateTime? lastRunCheck, int runInterval)
         {
             var now = DateTime.UtcNow;
@@ -79,7 +81,8 @@ namespace _4oito6.Demonstration.Contact.Application
             return false;
         }
 
-        private bool IsAbleToMaintain()
+        [ExcludeFromCodeCoverage]
+        public virtual bool IsAbleToMaintain()
         {
             if (IsAbleToRun(_lastMaintainCheck, _maintainInterval))
             {
@@ -90,7 +93,8 @@ namespace _4oito6.Demonstration.Contact.Application
             return false;
         }
 
-        private bool IsAbleToClone()
+        [ExcludeFromCodeCoverage]
+        public virtual bool IsAbleToClone()
         {
             if (IsAbleToRun(_lastCloneCheck, _cloneInterval))
             {
@@ -130,7 +134,7 @@ namespace _4oito6.Demonstration.Contact.Application
             {
                 _uow.Rollback();
 
-                message.Code = MaintainInformationMessage;
+                message.Code = WarningMessage;
                 message.Message = "Falha ao realizar a manutenção das informações de contato.";
 
                 Logger.LogWarning(message.Message);

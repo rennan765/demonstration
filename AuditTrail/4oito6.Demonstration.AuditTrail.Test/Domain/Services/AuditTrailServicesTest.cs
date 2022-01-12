@@ -16,7 +16,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Domain.Services
     {
         private readonly CompareLogic _comparison = new();
 
-        [Fact(DisplayName = "ProcessAsync_ArgumentNullException")]
+        [Fact(DisplayName = "testing if messae is null.")]
         public async Task ProcessAsync_ArgumentNullException()
         {
             //arrange:
@@ -28,7 +28,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Domain.Services
                 .ConfigureAwait(false);
         }
 
-        [Fact(DisplayName = "ProcessAsync_DefaultCode")]
+        [Fact(DisplayName = "Sending message successfully with default code, due to not informed code.")]
         public async Task ProcessAsync_DefaultCode()
         {
             //arrange:
@@ -58,7 +58,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.Domain.Services
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "ProcessAsync_Success")]
+        [Fact(DisplayName = "Sending message successfully.")]
         public async Task ProcessAsync_Success()
         {
             //arrange:

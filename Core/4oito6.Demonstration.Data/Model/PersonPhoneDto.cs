@@ -1,8 +1,10 @@
 ﻿using Dapper.Contrib.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Data.Model
 {
     [Table("tb_person_phone")]
+    [ExcludeFromCodeCoverage]
     public class PersonPhoneDto
     {
         [Key]

@@ -6,9 +6,11 @@ using _4oito6.Demonstration.Data.Connection.MySql;
 using _4oito6.Demonstration.Data.Transaction;
 using _4oito6.Demonstration.Domain.Data.Transaction.Enuns;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Contact.Data.Transaction
 {
+    [ExcludeFromCodeCoverage]
     public class ContactUnitOfWork : BaseUnitOfWork, IContactUnitOfWork
     {
         private readonly IAsyncDbConnection _relationalDatabase;

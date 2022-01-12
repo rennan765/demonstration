@@ -22,9 +22,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.IoC
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAwsDependencies(this IServiceCollection services)

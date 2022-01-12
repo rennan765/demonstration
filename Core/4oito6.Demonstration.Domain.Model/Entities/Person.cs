@@ -3,6 +3,7 @@ using _4oito6.Demonstration.Domain.Model.Enum;
 using _4oito6.Demonstration.Domain.Model.Validators;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
@@ -126,14 +127,21 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         }
 
         public int Id { get; private set; }
+
         public string Name { get; private set; }
+
         public string Email { get; private set; }
+
         public string Document { get; private set; }
+
         public Gender Gender { get; private set; }
+
         public DateTime BirthDate { get; private set; }
 
         public Address? Address { get; private set; }
+
         public IEnumerable<Phone> Phones => _phones.Select(p => p.Value).ToList();
+
         public Phone MainPhone { get; private set; }
 
         public void Attach(Address address)
@@ -144,11 +152,6 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             }
 
             Address = address;
-        }
-
-        public void RemoveAddress()
-        {
-            Address = null;
         }
 
         public void Attach(Phone phone, bool isMainPhone = false)
@@ -202,6 +205,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             Address = null;
         }
 
+        [ExcludeFromCodeCoverage]
         public static Person GetDefaultInstance()
         {
             return new Person
@@ -228,7 +232,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 birthDate: BirthDate,
 
                 phones: Phones.Select(p => (Phone)p.Clone()),
-                mainPhone: (Phone)MainPhone.Clone(),
+                mainPhone: (Phone)MainPhone?.Clone(),
                 address: (Address?)Address?.Clone()
             );
         }
@@ -263,7 +267,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
                 }
             }
 
-            if (!MainPhone.Match(person.MainPhone))
+            if (!MainPhone?.Match(person.MainPhone) ?? false)
             {
                 return false;
             }

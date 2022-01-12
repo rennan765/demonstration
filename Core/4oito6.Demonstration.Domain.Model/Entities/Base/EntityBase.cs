@@ -2,10 +2,12 @@
 using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities.Base
 {
+    [ExcludeFromCodeCoverage]
     public abstract class EntityBase
     {
         private readonly List<ValidationResult> _validationResults = new List<ValidationResult>();

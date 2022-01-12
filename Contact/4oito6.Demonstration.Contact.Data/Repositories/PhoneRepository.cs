@@ -10,11 +10,13 @@ using _4oito6.Demonstration.Domain.Model.Entities;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Contact.Data.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class PhoneRepository : DisposableObject, IPhoneRepository
     {
         private readonly IAsyncDbConnection _relationalConn;

@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Domain.Model.Validators
 {
+    [ExcludeFromCodeCoverage]
     public class UpdatePersonValidator : CreatePersonValidator
     {
         public UpdatePersonValidator() : base()

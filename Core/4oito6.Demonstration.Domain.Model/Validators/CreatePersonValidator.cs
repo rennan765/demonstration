@@ -2,9 +2,11 @@
 using _4oito6.Demonstration.Domain.Model.Entities;
 using Caelum.Stella.CSharp.Validation;
 using FluentValidation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Domain.Model.Validators
 {
+    [ExcludeFromCodeCoverage]
     public class CreatePersonValidator : AbstractValidator<Person>
     {
         private readonly CPFValidator _cpfValidator = new CPFValidator();
@@ -30,7 +32,7 @@ namespace _4oito6.Demonstration.Domain.Model.Validators
                 .WithMessage("Necessário ser maior de 18 anos.");
 
             RuleFor(p => p.Phones)
-                .NotEmpty().WithMessage("Telefone (s) obsigatório (s).");
+                .NotEmpty().WithMessage("Telefone (s) obrigatório (s).");
 
             RuleFor(p => p.MainPhone)
                 .NotNull().WithMessage("Necessário escolher um telefone principal.");

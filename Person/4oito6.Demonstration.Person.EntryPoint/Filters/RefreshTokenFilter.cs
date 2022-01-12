@@ -1,8 +1,10 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.Filters
 {
+    [ExcludeFromCodeCoverage]
     public class RefreshTokenFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

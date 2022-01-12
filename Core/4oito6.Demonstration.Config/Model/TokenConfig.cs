@@ -1,13 +1,14 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace _4oito6.Demonstration.Config.Model
 {
+    [ExcludeFromCodeCoverage]
     public class TokenConfig
     {
         protected TokenConfig()
         {
-
         }
 
         public TokenConfig(string issuer, string audience, string secretKey, int tokenTime)

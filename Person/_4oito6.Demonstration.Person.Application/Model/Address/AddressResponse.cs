@@ -10,5 +10,13 @@
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
+
+        public bool Match(AddressResponse obj)
+        {
+            return obj.Id == Id && obj.Street == Street &&
+                obj.Number == Number && obj.City == City &&
+                obj.Complement == Complement && obj.District == District &&
+                obj.State == State && obj.PostalCode == PostalCode;
+        }
     }
 }

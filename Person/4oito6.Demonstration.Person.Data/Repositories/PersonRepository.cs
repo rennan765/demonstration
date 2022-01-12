@@ -3,19 +3,21 @@ using _4oito6.Demonstration.Data.Connection;
 using _4oito6.Demonstration.Data.Model;
 using _4oito6.Demonstration.Domain.Data.Transaction;
 using _4oito6.Demonstration.Domain.Data.Transaction.Model;
+using _4oito6.Demonstration.Person.Data.Model;
 using _4oito6.Demonstration.Person.Domain.Data.Repositories;
+using _4oito6.Demonstration.SQS.Interfaces;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Person.Data.Repositories
 {
     using _4oito6.Demonstration.Domain.Model.Entities;
-    using _4oito6.Demonstration.Person.Data.Model;
-    using _4oito6.Demonstration.SQS.Interfaces;
 
+    [ExcludeFromCodeCoverage]
     public class PersonRepository : DisposableObject, IPersonRepository
     {
         private readonly IAsyncDbConnection _conn;

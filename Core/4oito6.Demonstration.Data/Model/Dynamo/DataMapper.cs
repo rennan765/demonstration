@@ -2,9 +2,11 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using Linq2DynamoDb.DataContext.Utils;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Data.Model.Dynamo
 {
+    [ExcludeFromCodeCoverage]
     public static class DataMapper
     {
         public static Document ToDocument<T>(this T document) where T : DynamoEntityDto

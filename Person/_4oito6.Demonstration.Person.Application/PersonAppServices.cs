@@ -61,6 +61,12 @@ namespace _4oito6.Demonstration.Person.Application
         {
             var person = await _services.GetByEmailAsync(email).ConfigureAwait(false);
             _uow.CloseConnections();
+
+            if (person is null)
+            {
+                HttpStatusCode = System.Net.HttpStatusCode.NotFound;
+            }
+
             return person?.ToPersonResponse();
         }
 
@@ -68,6 +74,12 @@ namespace _4oito6.Demonstration.Person.Application
         {
             var person = await _services.GetByIdAsync(id).ConfigureAwait(false);
             _uow.CloseConnections();
+
+            if (person is null)
+            {
+                HttpStatusCode = System.Net.HttpStatusCode.NotFound;
+            }
+
             return person?.ToPersonResponse();
         }
 

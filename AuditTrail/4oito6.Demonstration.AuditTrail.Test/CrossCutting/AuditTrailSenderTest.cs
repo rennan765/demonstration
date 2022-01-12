@@ -18,7 +18,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.CrossCutting
         private readonly CompareLogic _comparison = new();
         private readonly string _queue = "http://sqs.com";
 
-        [Fact(DisplayName = "SendAsync_Success")]
+        [Fact(DisplayName = "Message successfully sended.")]
         public async Task SendAsync_Success()
         {
             //arrange:
@@ -53,7 +53,7 @@ namespace _4oito6.Demonstration.AuditTrail.Test.CrossCutting
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "SendAsync_Parameters_Success")]
+        [Fact(DisplayName = "Parameter method: message successfully sended.")]
         public async Task SendAsync_Parameters_Success()
         {
             //arrange:

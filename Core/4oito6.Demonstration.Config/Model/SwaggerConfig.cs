@@ -1,5 +1,8 @@
-﻿namespace _4oito6.Demonstration.Config.Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace _4oito6.Demonstration.Config.Model
 {
+    [ExcludeFromCodeCoverage]
     public class SwaggerConfig
     {
         public SwaggerConfig(string title, string version, string description, string contactName, string contactEmail, string contactUrl)

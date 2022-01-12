@@ -23,7 +23,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             District = district;
             City = city;
             State = state;
-            PostalCode = postalCode.Replace("-", "");
+            PostalCode = postalCode?.Replace("-", "");
 
             Validate(this, new CreateAddressValidator());
         }
@@ -45,12 +45,19 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         }
 
         public int Id { get; private set; }
+
         public string Street { get; private set; }
+
         public string Number { get; private set; }
+
         public string Complement { get; private set; }
+
         public string District { get; private set; }
+
         public string City { get; private set; }
+
         public string State { get; private set; }
+
         public string PostalCode { get; private set; }
 
         public object Clone()

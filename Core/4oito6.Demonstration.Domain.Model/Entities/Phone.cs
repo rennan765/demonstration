@@ -35,8 +35,11 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
         }
 
         public int Id { get; private set; }
+
         public PhoneType Type { get; private set; }
+
         public string Code { get; private set; }
+
         public string Number { get; private set; }
 
         public override string ToString() => $"{(int)Type} - ({Code}) {Number}";

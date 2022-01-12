@@ -1,9 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Data.Model
 {
     [Table("tb_phone")]
-    public class PhoneDto
+    [ExcludeFromCodeCoverage]
+    public class PhoneDto : ICloneable
     {
         [Key]
         public int phoneid { get; set; }
@@ -11,5 +14,16 @@ namespace _4oito6.Demonstration.Data.Model
         public int type { get; set; }
         public string code { get; set; }
         public string number { get; set; }
+
+        public object Clone()
+        {
+            return new PhoneDto
+            {
+                code = code,
+                number = number,
+                phoneid = phoneid,
+                type = type
+            };
+        }
     }
 }

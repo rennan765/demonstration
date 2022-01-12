@@ -6,9 +6,11 @@ using _4oito6.Demonstration.Person.Domain.Data.Repositories;
 using _4oito6.Demonstration.Person.Domain.Data.Repositories.NonTransactional;
 using _4oito6.Demonstration.Person.Domain.Data.Transaction;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.Data.Transaction
 {
+    [ExcludeFromCodeCoverage]
     public class PersonUnitOfWork : BaseUnitOfWork, IPersonUnitOfWork
     {
         private IAsyncDbConnection _relationalDatabase;

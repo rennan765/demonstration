@@ -7,12 +7,14 @@ using _4oito6.Demonstration.Domain.Model.Entities.Base;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Application
 {
+    [ExcludeFromCodeCoverage]
     public abstract class AppServiceBase : DisposableObject, IAppServiceBase
     {
         private static DateTime? _lastHealthCheck;
@@ -46,7 +48,7 @@ namespace _4oito6.Demonstration.Application
 
         public virtual IAuditTrailSender AuditTrail { get; private set; }
 
-        public HttpStatusCode HttpStatusCode { get; private set; }
+        public HttpStatusCode HttpStatusCode { get; protected set; }
 
         public bool IsValid { get; private set; }
 

@@ -5,9 +5,11 @@ using _4oito6.Demonstration.Domain.Data.Transaction.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Data.Transaction
 {
+    [ExcludeFromCodeCoverage]
     public class BaseUnitOfWork : IBaseUnitOfWork
     {
         private readonly Dictionary<DataSource, IAsyncDbConnection> _connections;

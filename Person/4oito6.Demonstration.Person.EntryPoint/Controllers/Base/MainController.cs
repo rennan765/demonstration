@@ -2,9 +2,11 @@
 using _4oito6.Demonstration.Person.Application.Model.Person;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.EntryPoint.Controllers.Base
 {
+    [ExcludeFromCodeCoverage]
     public class MainController : Controller
     {
         private readonly List<IAppServiceBase> _appServices;

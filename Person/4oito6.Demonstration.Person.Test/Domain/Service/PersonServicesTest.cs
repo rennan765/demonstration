@@ -20,7 +20,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
     {
         private readonly CompareLogic _comparison = new();
 
-        [Fact(DisplayName = "CreateAsync_ArgumentNullException")]
+        [Fact(DisplayName = "Attempting creating Person, testing if person is null.")]
         public async Task CreateAsync_ArgumentNullException()
         {
             //arrange:
@@ -33,7 +33,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                 .ConfigureAwait(false);
         }
 
-        [Fact(DisplayName = "CreateAsync_Conflict")]
+        [Fact(DisplayName = "Attempting to create a new Person, but there is another person with these document or email.")]
         public async Task CreateAsync_Conflict()
         {
             //arrange:
@@ -54,7 +54,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "CreateAsync_Invalid")]
+        [Fact(DisplayName = "Attempting to create with invalid information.")]
         public async Task CreateAsync_Invalid()
         {
             //arrange:
@@ -89,7 +89,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "CreateAsync_Success")]
+        [Fact(DisplayName = "Person created successfully.")]
         public async Task CreateAsync_Success()
         {
             //arrange:
@@ -133,7 +133,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "GetByEmailAsync_Success")]
+        [Fact(DisplayName = "Getting Person by e-mail successfully.")]
         public async Task GetByEmailAsync_Success()
         {
             //arrange:
@@ -155,7 +155,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "GetByIdAsync_Success")]
+        [Fact(DisplayName = "Getting Person by id successfully.")]
         public async Task GetByIdAsync_Success()
         {
             //arrange:
@@ -177,7 +177,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "UpdateAsync_ArgumentNullException")]
+        [Fact(DisplayName = "Attempting to update Person, testing if person is null.")]
         public async Task UpdateAsync_ArgumentNullException()
         {
             //arrange:
@@ -190,7 +190,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
                 .ConfigureAwait(false);
         }
 
-        [Fact(DisplayName = "UpdateAsync_NotFound")]
+        [Fact(DisplayName = "Attempting to update person, but it's not found.")]
         public async Task UpdateAsync_NotFound()
         {
             //arrange:
@@ -211,7 +211,7 @@ namespace _4oito6.Demonstration.Person.Test.Domain.Service
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "UpdateAsync_Success")]
+        [Fact(DisplayName = "Person updated successfully.")]
         public async Task UpdateAsync_Success()
         {
             //arrange:

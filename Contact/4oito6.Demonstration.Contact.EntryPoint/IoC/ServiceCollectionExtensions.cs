@@ -17,9 +17,11 @@ using Amazon.SecretsManager;
 using Amazon.SQS;
 using MySqlConnector;
 using Npgsql;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Contact.EntryPoint.IoC
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAwsDependencies(this IServiceCollection services)

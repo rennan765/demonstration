@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\4oito6.Demonstration.Person.Domain.Services\4oito6.Demonstration.Person.Domain.Services.csproj" />
+    <ProjectReference Include="..\_4oito6.Demonstration.Person.Application\_4oito6.Demonstration.Person.Application.csproj" />
   </ItemGroup>
 
 </Project>
