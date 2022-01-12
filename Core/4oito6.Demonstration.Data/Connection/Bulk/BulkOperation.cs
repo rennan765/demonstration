@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.Bulk
 {
+    [ExcludeFromCodeCoverage]
     public abstract class BulkOperation : DisposableObject, IBulkOperation
     {
-        public BulkOperation(string tableName) : base(new IDisposable[0])
+        protected BulkOperation(string tableName) : base(new IDisposable[0])
         {
             TableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
 

@@ -1,9 +1,11 @@
 ﻿using _4oito6.Demonstration.Data.Connection.Bulk;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.MsSql.Bulk
 {
+    [ExcludeFromCodeCoverage]
     public class MsSqlBulkOperation : BulkOperation, IBulkOperation
     {
         private readonly SqlBulkCopy _bulkCopy;

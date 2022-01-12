@@ -1,9 +1,11 @@
 ﻿using _4oito6.Demonstration.Data.Connection.Bulk;
 using MySqlConnector;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.MySql.Bulk
 {
+    [ExcludeFromCodeCoverage]
     public class MySqlBulkOperation : BulkOperation, IBulkOperation
     {
         private readonly MySqlBulkCopy _bulkCopy;

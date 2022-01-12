@@ -2,10 +2,12 @@
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.NpgSql.Bulk
 {
+    [ExcludeFromCodeCoverage]
     public class NpgSqlBulkOperation : BulkOperation, IBulkOperation
     {
         private NpgsqlBinaryImporter _binaryImporter;
