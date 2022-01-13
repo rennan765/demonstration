@@ -3,6 +3,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace _4oito6.Demonstration.Data.Connection.NpgSql.Bulk
@@ -26,15 +27,15 @@ namespace _4oito6.Demonstration.Data.Connection.NpgSql.Bulk
             base.AddRow(row);
             _binaryImporter.StartRow();
 
-            foreach (var pair in row)
+            foreach (var value in row.Select(p => p.Value))
             {
-                if (pair.Value is null)
+                if (value is null)
                 {
                     _binaryImporter.WriteNull();
                     continue;
                 }
 
-                _binaryImporter.Write(pair.Value);
+                _binaryImporter.Write(value);
             }
         }
 
@@ -43,15 +44,15 @@ namespace _4oito6.Demonstration.Data.Connection.NpgSql.Bulk
             await base.AddRowAsync(row).ConfigureAwait(false);
             await _binaryImporter.StartRowAsync().ConfigureAwait(false);
 
-            foreach (var pair in row)
+            foreach (var value in row.Select(p => p.Value))
             {
-                if (pair.Value is null)
+                if (value is null)
                 {
                     await _binaryImporter.WriteNullAsync().ConfigureAwait(false);
                     continue;
                 }
 
-                await _binaryImporter.WriteAsync(pair.Value).ConfigureAwait(false);
+                await _binaryImporter.WriteAsync(value).ConfigureAwait(false);
             }
         }
 
