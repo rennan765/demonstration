@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.CrossCutting.AuditTrail.Model
 {
     public class AuditTrailMessage : ICloneable
     {
-        private class AdditionalInformationDto
+        private sealed class AdditionalInformationDto
         {
             public string Message { get; set; }
             public string StackTrace { get; set; }
@@ -98,11 +99,13 @@ namespace _4oito6.Demonstration.CrossCutting.AuditTrail.Model
             AdditionalInformation = JsonConvert.SerializeObject(CreateAdditionalInformationDto(ex));
         }
 
+        [ExcludeFromCodeCoverage]
         public object Clone()
         {
             return new AuditTrailMessage(Id, Code, Message, Date, AdditionalInformation);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Match(AuditTrailMessage message, bool isConsiderDate = false)
         {
             var result = message.Code == Code &&

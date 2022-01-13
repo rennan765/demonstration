@@ -1,7 +1,9 @@
 ﻿using _4oito6.Demonstration.Domain.Data.Transaction.Enuns;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Domain.Data.Transaction.Model
 {
+    [ExcludeFromCodeCoverage]
     public class DataOperation
     {
         public static DataOperation RelationalDatabaseRead { get; private set; }

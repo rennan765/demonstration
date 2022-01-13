@@ -104,7 +104,7 @@ namespace _4oito6.Demonstration.Person.Test.Application
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "Attempting to get a Person by its e-mail.")]
+        [Fact(DisplayName = "Getting a Person by its e-mail.")]
         public async Task GetByEmailAsync_Success()
         {
             //arrange:
@@ -131,8 +131,62 @@ namespace _4oito6.Demonstration.Person.Test.Application
             mocker.Verify();
         }
 
-        [Fact(DisplayName = "Attempting to get a Person by its id.")]
+        [Fact(DisplayName = "Attempting to get a Person by its e-mail.")]
+        public async Task GetByEmailAsync_NotFound()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appService = mocker.CreateInstance<PersonAppServices>();
+            var email = "my@gmail.com";
+
+            mocker.GetMock<IPersonServices>()
+                .Setup(s => s.GetByEmailAsync(email))
+                .ReturnsAsync((Person)null)
+                .Verifiable();
+
+            mocker.GetMock<IPersonUnitOfWork>()
+                .Setup(u => u.CloseConnections())
+                .Verifiable();
+
+            //act:
+            var expectedResult = (PersonResponse)null;
+            var result = await appService.GetByEmailAsync(email).ConfigureAwait(false);
+
+            //assert:
+            _comparison.Compare(expectedResult, result).AreEqual.Should().BeTrue();
+            appService.HttpStatusCode.Should().Be(HttpStatusCode.NotFound);
+            mocker.Verify();
+        }
+
+        [Fact(DisplayName = "Getting a Person by its id.")]
         public async Task GetByIdAsync_Success()
+        {
+            //arrange:
+            var mocker = new AutoMocker();
+            var appService = mocker.CreateInstance<PersonAppServices>();
+            var person = PersonTestCases.GetPersons(1).First();
+
+            mocker.GetMock<IPersonServices>()
+                .Setup(s => s.GetByIdAsync(person.Id))
+                .ReturnsAsync((Person)person.Clone())
+                .Verifiable();
+
+            mocker.GetMock<IPersonUnitOfWork>()
+                .Setup(u => u.CloseConnections())
+                .Verifiable();
+
+            //act:
+            var expectedResult = person.ToPersonResponse();
+            var result = await appService.GetByIdAsync(person.Id).ConfigureAwait(false);
+
+            //assert:
+            _comparison.Compare(expectedResult, result).AreEqual.Should().BeTrue();
+            appService.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            mocker.Verify();
+        }
+
+        [Fact(DisplayName = "Attempting to get a Person by its id.")]
+        public async Task GetByIdAsync_NotFound()
         {
             //arrange:
             var mocker = new AutoMocker();

@@ -1,5 +1,8 @@
-﻿namespace _4oito6.Demonstration.Person.Application.Model.Address
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace _4oito6.Demonstration.Person.Application.Model.Address
 {
+    [ExcludeFromCodeCoverage]
     public class AddressResponse
     {
         public int Id { get; set; }

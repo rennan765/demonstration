@@ -3,10 +3,12 @@ using _4oito6.Demonstration.Person.Application.Model.Address;
 using _4oito6.Demonstration.Person.Application.Model.Phone;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace _4oito6.Demonstration.Person.Application.Model.Person
 {
+    [ExcludeFromCodeCoverage]
     public class PersonRequest : ICloneable
     {
         public string Name { get; set; }

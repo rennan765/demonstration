@@ -26,11 +26,6 @@ namespace _4oito6.Demonstration.AuditTrail.Receiver.Domain.Services
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (string.IsNullOrEmpty(message.Id.ToString()))
-            {
-                message.Id = Guid.NewGuid();
-            }
-
             if (string.IsNullOrEmpty(message.Code))
             {
                 message.Code = DefautlCode;

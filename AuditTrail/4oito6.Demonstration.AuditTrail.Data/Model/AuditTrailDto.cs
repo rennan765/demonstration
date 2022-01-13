@@ -1,8 +1,10 @@
 ﻿using _4oito6.Demonstration.Data.Model.Dynamo.Base;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.AuditTrail.Receiver.Data.Model
 {
+    [ExcludeFromCodeCoverage]
     public class AuditTrailDto : DynamoEntityDto
     {
         public override string TableName => "AuditTrail";

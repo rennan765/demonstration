@@ -1,7 +1,9 @@
 ﻿using _4oito6.Demonstration.Domain.Model.Enum;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.Application.Model.Phone
 {
+    [ExcludeFromCodeCoverage]
     public class PhoneResponse
     {
         public int Id { get; set; }

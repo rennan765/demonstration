@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Application\4oito6.Demonstration.Contact.Application.csproj" />
+    <ProjectReference Include="..\4oito6.Demonstration.Contact.Data\4oito6.Demonstration.Contact.Data.csproj" />
     <ProjectReference Include="..\4oito6.Demonstration.Contact.Domain.Services\4oito6.Demonstration.Contact.Domain.Services.csproj" />
   </ItemGroup>
 

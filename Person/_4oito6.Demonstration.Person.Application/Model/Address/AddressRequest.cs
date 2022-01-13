@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Person.Application.Model.Address
 {
@@ -18,6 +19,7 @@ namespace _4oito6.Demonstration.Person.Application.Model.Address
 
         public string PostalCode { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public object Clone()
         {
             return new AddressRequest

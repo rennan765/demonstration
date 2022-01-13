@@ -219,6 +219,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             );
         }
 
+        [ExcludeFromCodeCoverage]
         public object Clone()
         {
             return new Person
@@ -237,6 +238,7 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
             );
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Match(Person person)
         {
             if (person is null)

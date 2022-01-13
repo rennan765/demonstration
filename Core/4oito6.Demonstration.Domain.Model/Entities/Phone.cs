@@ -2,6 +2,7 @@
 using _4oito6.Demonstration.Domain.Model.Enum;
 using _4oito6.Demonstration.Domain.Model.Validators;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
 {
@@ -44,11 +45,13 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public override string ToString() => $"{(int)Type} - ({Code}) {Number}";
 
+        [ExcludeFromCodeCoverage]
         public object Clone()
         {
             return new Phone(Id, Type, Code, Number);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Match(Phone phone)
         {
             return ToString().Equals(phone.ToString());

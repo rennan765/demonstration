@@ -1,6 +1,7 @@
 ﻿using _4oito6.Demonstration.Domain.Model.Entities.Base;
 using _4oito6.Demonstration.Domain.Model.Validators;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace _4oito6.Demonstration.Domain.Model.Entities
 {
@@ -60,11 +61,13 @@ namespace _4oito6.Demonstration.Domain.Model.Entities
 
         public string PostalCode { get; private set; }
 
+        [ExcludeFromCodeCoverage]
         public object Clone()
         {
             return new Address(Id, Street, Number, Complement, District, City, State, PostalCode);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Match(Address address)
         {
             if (address is null)
