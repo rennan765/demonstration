@@ -10,3 +10,4 @@
 */*/aws-beanstalk-tools-defaults.json
 .sonarqube
 */*/coverage.opencover.xml
+sonar-execute.bat
